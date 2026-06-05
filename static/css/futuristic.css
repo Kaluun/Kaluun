@@ -1174,8 +1174,9 @@ select option { background: #fff; color: var(--t-dark); }
    Ensures no horizontal scroll at 375px on any page
    ═══════════════════════════════════════════════════════ */
 
-/* Prevent overflow globally */
-html, body { overflow-x: hidden; }
+/* Prevent overflow globally — NE PAS mettre overflow sur html (casse position:fixed sur iOS Safari) */
+body { overflow-x: hidden; }
+html { overflow-x: clip; }
 img { max-width: 100%; height: auto; }
 
 /* Minimum touch targets */
@@ -1308,5 +1309,178 @@ button, a, input[type="submit"], .k-nav-item, .adm-nav-item { min-height: 44px; 
 /* ── Order confirmation ── */
 @media(max-width:575px) {
   .order-conf-box { padding: 24px 16px; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MOBILE COMPLET — KALUUN
+   Navbar toujours visible + tout fluide sur smartphone
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── NAVBAR mobile — toujours visible ── */
+@media(max-width:991px) {
+  .k-nav {
+    padding: 0 16px;
+    -webkit-transform: translateZ(0); /* force GPU layer iOS */
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  .k-nav-inner {
+    height: 64px;
+    gap: 10px;
+  }
+  .k-logo-text { font-size: 1.1rem; letter-spacing: 3px; }
+  .k-logo img { width: 38px; height: 38px; }
+  .k-ham {
+    display: flex !important;
+    flex-shrink: 0;
+    width: 42px; height: 42px;
+  }
+  /* Panier compact */
+  .k-cart-btn { padding: 8px 12px; gap: 6px; font-size: .82rem; }
+  /* Dropdown user compact */
+  .k-nav-r { gap: 8px; flex-shrink: 0; }
+}
+
+/* ── Hero section mobile ── */
+@media(max-width:575px) {
+  .k-hero-left { padding: 90px 16px 44px; }
+  .k-hero-h1  { font-size: 2rem; letter-spacing: -.5px; }
+  .k-hero-right { height: 260px; }
+  .k-hero-sub { font-size: .9rem; }
+  .k-hero-stats { gap: 0; padding-top: 16px; }
+  .k-hstat { padding: 0 12px; }
+  .k-hstat-n { font-size: 1.4rem; }
+  .k-hstat-l { font-size: .62rem; }
+  .k-hero-ctas { flex-direction: column; gap: 10px; }
+  .cta-primary, .cta-secondary { width: 100%; justify-content: center; padding: 14px 20px; }
+}
+
+/* ── Sections générales ── */
+@media(max-width:575px) {
+  .k-sec { padding: 48px 0; }
+  .k-eyebrow { font-size: .65rem; }
+  h2, .k-sec h2 { font-size: 1.7rem !important; }
+  .container { padding-left: 16px; padding-right: 16px; }
+}
+
+/* ── Catalogue produits ── */
+@media(max-width:575px) {
+  .prod-grid { grid-template-columns: repeat(2,1fr); gap: 12px; }
+  .prod-body { padding: 12px 10px; }
+  .prod-name { font-size: .88rem; }
+  .prod-price { font-size: 1.1rem; }
+  .add-btn { padding: 7px 10px; font-size: .74rem; }
+}
+@media(max-width:360px) {
+  .prod-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Panier panel mobile ── */
+@media(max-width:575px) {
+  .k-cart-panel { width: 100% !important; right: 0 !important; border-radius: 0 !important; }
+}
+
+/* ── Checkout mobile ── */
+@media(max-width:575px) {
+  .co-wrap { padding: 76px 0 40px; }
+  .co-card { padding: 18px 14px; border-radius: 16px; }
+  .co-summary { position: static !important; margin-top: 16px; padding: 18px 14px; }
+  .pay-choice, .wallet-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pay-btn { padding: 16px 10px; }
+  .pay-btn-title { font-size: .88rem; }
+  .co-step-lbl { display: none; }
+  .co-step-num { width: 34px; height: 34px; font-size: .8rem; }
+  .co-step-bar { margin: 0 4px; }
+  .co-nav { flex-wrap: wrap; gap: 8px; }
+  .btn-next, .btn-prev { font-size: .86rem; padding: 12px 16px; }
+}
+
+/* ── Dashboard user mobile ── */
+@media(max-width:575px) {
+  .dash { padding: 72px 0 48px; }
+  .d-stat { padding: 14px 12px; }
+  .d-stat-val { font-size: 1.6rem; }
+  .d-panel { padding: 16px 13px; }
+  .d-tabs { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .d-tab { flex-shrink: 0; padding: 8px 14px; font-size: .77rem; }
+  .d-order { padding: 12px; gap: 8px; flex-wrap: wrap; }
+  .d-order-total, .d-order-date { min-width: auto; }
+  .dash-header-title { font-size: 1.4rem; }
+  .container-fluid { padding: 0 12px !important; }
+}
+
+/* ── Page header (hero gris) ── */
+@media(max-width:575px) {
+  .k-ph { padding: 80px 0 30px !important; }
+  .k-ph h1 { font-size: 1.8rem !important; }
+}
+
+/* ── Footer mobile ── */
+@media(max-width:575px) {
+  .k-footer .row { gap: 24px 0; }
+  .k-footer [class*="col-"] { width: 100%; }
+  .k-fb-line { font-size: .78rem; }
+  .k-fb-line .d-flex { flex-direction: column; gap: 4px; text-align: center; }
+}
+
+/* ── Blog et About mobile ── */
+@media(max-width:575px) {
+  .histoire-photo-col { height: 240px; }
+  .histoire-text-col { padding: 24px 16px; }
+  .histoire-inner { grid-template-columns: 1fr; }
+  .k-feat { padding: 14px; }
+}
+
+/* ── Auth (connexion/inscription) mobile ── */
+@media(max-width:575px) {
+  .k-auth { padding: 80px 12px 48px; }
+  .k-auth-box { padding: 24px 16px; border-radius: 18px; }
+  .k-auth-title { font-size: 1.6rem; }
+}
+
+/* ── Admin mobile ── */
+@media(max-width:575px) {
+  .adm-topbar { height: 56px; padding: 0 12px; }
+  .adm-content { padding: 14px 10px 40px; }
+  .adm-stat { padding: 14px 12px; }
+  .adm-stat-val { font-size: 1.5rem; }
+  .adm-card { padding: 14px 12px; }
+}
+
+/* ── Empêcher le zoom iOS sur les inputs ── */
+@media(max-width:767px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="password"],
+  input[type="url"],
+  select, textarea { font-size: 16px !important; }
+}
+
+/* ── Smooth scroll natif ── */
+html { scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+
+/* ── Touch friendly — espacement minimum 44px ── */
+.k-nl, .k-cart-btn, .k-ham, .btn-solid, .btn-ghost,
+.adm-nav-item, .d-nav-item, button { min-height: 44px; }
+
+/* ── Mobile nav overlay améliorée ── */
+.k-mnav .k-nl {
+  min-height: 60px;
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 12px 32px;
+  border-radius: 12px;
+  margin: 2px 0;
+  justify-content: center;
+}
+.k-mnav .k-nl:hover, .k-mnav .k-nl:active {
+  background: rgba(255,255,255,.1);
+}
+@media(max-width:575px) {
+  .k-mnav { gap: 4px; }
+  .k-mnav .k-nl { font-size: 1.1rem; padding: 10px 24px; }
 }
 
