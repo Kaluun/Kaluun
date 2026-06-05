@@ -64,6 +64,17 @@
   grid-template-columns: repeat(auto-fill, minmax(295px, 1fr));
   gap: 28px;
 }
+@media(max-width:767px) {
+  .prod-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 14px !important; }
+  .prod-body { padding: 12px 10px !important; }
+  .prod-name { font-size: .85rem !important; }
+  .prod-price { font-size: 1rem !important; }
+  .add-btn { padding: 8px 10px !important; font-size: .74rem !important; }
+  .prod-card { border-radius: 14px !important; }
+}
+@media(max-width:360px) {
+  .prod-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+}
 
 /* ── Carte produit ── */
 .prod-card {

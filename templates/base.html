@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}KALUUN — Poissonnerie Premium · Djibouti{% endblock %}</title>
   {% load static %}
-  <link rel="icon" type="image/svg+xml" href="{% static 'images/kaluun-logo.svg' %}">
+  <link rel="icon" type="image/png" href="{% static 'images/logo-light.png' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -51,23 +52,16 @@
 </head>
 <body>
 
-<!-- ── OVERLAY TRANSITION VAGUE ── -->
-<div id="wave-transition">
-  <div id="wave-curtain">
-    <div id="wave-logo">
-      {% load static %}
-      <img src="{% static 'images/kaluun-logo.svg' %}" alt="Kaluun">
-      <span>KALUUN</span>
-    </div>
-  </div>
-</div>
+<!-- ── OVERLAY TRANSITION ── -->
+<div id="wave-transition"></div>
 
 <!-- Canvas particules -->
 <canvas id="ocean-canvas"></canvas>
 
-<!-- Preloader (une seule fois) -->
+<!-- Preloader — vrai logo KALUUN -->
 <div id="preloader">
-  <img src="{% static 'images/kaluun-logo.svg' %}" width="100" alt="Kaluun" style="animation:fishSwim 1s ease-in-out infinite;border-radius:50%;box-shadow:0 0 30px rgba(255,255,255,.3);">
+  <img src="{% static 'images/logo-light.png' %}" width="110" height="110" alt="Kaluun"
+       style="border-radius:50%;box-shadow:0 0 40px rgba(255,255,255,.35);object-fit:cover;animation:fishSwim 1.2s ease-in-out infinite;">
   <div class="pl-name">KALUUN</div>
   <div class="pl-bar"><div class="pl-fill"></div></div>
 </div>
