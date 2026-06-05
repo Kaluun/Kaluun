@@ -19,18 +19,29 @@ else:
     print("Superuser existe déjà")
 EOF
 
-echo "=== Chargement données production (si table vide) ==="
+echo "=== Chargement données de production ==="
 python manage.py shell << 'EOF'
-from store.models import Product
-if Product.objects.count() == 0:
-    import subprocess
+from store.models import Product, Category
+import subprocess
+
+# Charger si aucun produit, ou si les produits n'ont pas d'image_url (vieux fixtures)
+needs_reload = (
+    Product.objects.count() == 0 or
+    not Product.objects.filter(image_url__isnull=False).exclude(image_url='').exists()
+)
+
+if needs_reload:
+    print("Chargement des données de production...")
+    Product.objects.all().delete()
+    Category.objects.all().delete()
     r = subprocess.run(
         ['python', 'manage.py', 'loaddata', 'store/fixtures/production_data.json'],
         capture_output=True, text=True
     )
-    print(r.stdout or r.stderr)
+    print(r.stdout.strip() or r.stderr.strip())
+    print(f"Produits chargés : {Product.objects.count()}")
 else:
-    print(f"Données déjà présentes : {Product.objects.count()} produits")
+    print(f"Données OK : {Product.objects.count()} produits avec images")
 EOF
 
 echo "=== Démarrage Gunicorn ==="
