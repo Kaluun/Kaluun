@@ -5,55 +5,9 @@
     "fields": {
       "name": "Poissons frais",
       "slug": "poissons-frais",
-      "description": "Poissons p�ch�s dans la Mer Rouge et le Golfe d Aden",
-      "image": "",
+      "description": "Poissons pêchés dans la Mer Rouge et le Golfe d Aden",
+      "image": null,
       "icon": "fas fa-fish"
-    }
-  },
-  {
-    "model": "store.product",
-    "pk": 22,
-    "fields": {
-      "category": 7,
-      "name": "Thazard (Wahoo)",
-      "slug": "thazard",
-      "description": "Le Thazard, appel� aussi Wahoo, est l'un des poissons les plus pris�s du Golfe d'Aden. Sa chair blanche, maigre et d�licate fond en bouche. Excellent grill� avec des �pices locales ou pr�par� en carpaccio.",
-      "price": "1000",
-      "image": null,
-      "image_url": "https://images.pexels.com/photos/3296393/pexels-photo-3296393.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "stock": 35,
-      "unit": "kg",
-      "min_order": "0.5",
-      "is_featured": true,
-      "is_available": true,
-      "origin": "Golfe d'Aden, Djibouti",
-      "season": "Toute ann�e",
-      "nutritional_info": "Prot�ines: 24g | Om�ga-3: 0.9g | Phosphore: 35% AJR | 100 kcal/100g",
-      "created_at": "2026-05-28T14:34:19.308Z",
-      "updated_at": "2026-06-04T15:39:02.587Z"
-    }
-  },
-  {
-    "model": "store.product",
-    "pk": 23,
-    "fields": {
-      "category": 7,
-      "name": "Bar de mer",
-      "slug": "thon-rouge",
-      "description": "Le Bar de mer (Loup) est un poisson noble appr�ci� pour sa chair blanche, fine et d�licatement parfum�e. P�ch� la nuit dans les eaux claires du Golfe d'Aden, il est exceptionnel simplement grill� au sel.",
-      "price": "1200",
-      "image": null,
-      "image_url": "https://images.pexels.com/photos/6107787/pexels-photo-6107787.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "stock": 28,
-      "unit": "kg",
-      "min_order": "0.5",
-      "is_featured": false,
-      "is_available": true,
-      "origin": "Mer Rouge, Djibouti",
-      "season": "Octobre � Avril",
-      "nutritional_info": "Prot�ines: 20g | Om�ga-3: 1.4g | S�l�nium: 45% AJR | 115 kcal/100g",
-      "created_at": "2026-05-28T14:34:19.32Z",
-      "updated_at": "2026-06-04T15:39:02.599Z"
     }
   },
   {
@@ -63,43 +17,43 @@
       "category": 7,
       "name": "Capitaine",
       "slug": "capitaine",
-      "description": "Le Capitaine est le poisson roi des tables djiboutiennes. Chair ferme, blanche et savoureuse, il se pr�te � toutes les pr�parations : grill�, en sauce, frit ou au four. P�ch� dans le Golfe d'Aden, il offre une fra�cheur incomparable.",
+      "description": "Le Capitaine est le poisson roi des tables djiboutiennes. Chair ferme, blanche et savoureuse, il se prête à toutes les préparations : grillé, en sauce, frit ou au four. Pêché dans le Golfe d'Aden, il offre une fraîcheur incomparable.",
       "price": "1100",
       "image": null,
-      "image_url": "https://images.pexels.com/photos/1446821/pexels-photo-1446821.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "image_url": "/static/images/products/capitaine-frais.jpg",
       "stock": 45,
       "unit": "kg",
       "min_order": "0.5",
       "is_featured": true,
       "is_available": true,
       "origin": "Golfe d'Aden, Djibouti",
-      "season": "Novembre � Mars",
-      "nutritional_info": "Prot�ines: 22g | Om�ga-3: 1.1g | Vitamine D: 30% AJR | 110 kcal/100g",
-      "created_at": "2026-05-28T14:34:19.332Z",
-      "updated_at": "2026-06-04T15:39:02.559Z"
+      "season": "Novembre – Mars",
+      "nutritional_info": "Protéines: 22g | Oméga-3: 1.1g | Vitamine D: 30% AJR | 110 kcal/100g",
+      "created_at": "2026-05-28T14:34:19.332273+00:00",
+      "updated_at": "2026-06-04T15:39:02.559352+00:00"
     }
   },
   {
     "model": "store.product",
-    "pk": 25,
+    "pk": 28,
     "fields": {
       "category": 7,
-      "name": "M�rou tachet�",
-      "slug": "merou",
-      "description": "Le M�rou tachet� est le poisson des connaisseurs. Reconnaissable � ses taches caract�ristiques, il vit dans les fonds rocheux du Golfe d'Aden. Sa chair blanche, g�n�reuse et juteuse est incomparable en court-bouillon ou au four.",
-      "price": "1600",
+      "name": "Carangue Dorée",
+      "slug": "carangue",
+      "description": "La Carangue dorée est l'un des poissons les plus populaires à Djibouti. Reconnaissable à sa bande jaune dorée sur les flancs, elle offre une chair ferme et savoureuse, parfaite en friture, grillée ou en ragoût épicé.",
+      "price": "950",
       "image": null,
-      "image_url": "https://images.pexels.com/photos/3629537/pexels-photo-3629537.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "stock": 15,
+      "image_url": "/static/images/products/carangue-doree.jpg",
+      "stock": 55,
       "unit": "kg",
       "min_order": "0.5",
-      "is_featured": false,
+      "is_featured": true,
       "is_available": true,
-      "origin": "Fonds rocheux Golfe d'Aden",
-      "season": "Toute ann�e",
-      "nutritional_info": "Prot�ines: 26g | Om�ga-3: 1.1g | Calcium: 18% AJR | 95 kcal/100g",
-      "created_at": "2026-05-28T14:34:19.348Z",
-      "updated_at": "2026-06-04T15:39:02.646Z"
+      "origin": "Côte djiboutienne",
+      "season": "Toute année",
+      "nutritional_info": "Protéines: 23g | Oméga-3: 1.6g | Magnésium: 22% AJR | 118 kcal/100g",
+      "created_at": "2026-05-28T14:34:19.397949+00:00",
+      "updated_at": "2026-06-04T15:39:02.623065+00:00"
     }
   },
   {
@@ -109,20 +63,20 @@
       "category": 7,
       "name": "Dorade Royale",
       "slug": "dorade-royale",
-      "description": "La Dorade Royale est le fleuron de nos eaux. Avec sa robe argent�e et ses joues dor�es, elle symbolise la qualit� premium KALUUN. Sa chair blanche et ferme est un r�gal grill�e enti�re au charbon, avec citron et herbes fra�ches.",
+      "description": "La Dorade Royale est le fleuron de nos eaux. Avec sa robe argentée et ses joues dorées, elle symbolise la qualité premium KALUUN. Sa chair blanche et ferme est un régal grillée entière au charbon, avec citron et herbes fraîches.",
       "price": "1400",
       "image": null,
-      "image_url": "https://images.pexels.com/photos/3629541/pexels-photo-3629541.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "image_url": "/static/images/products/dorade-royale.jpg",
       "stock": 22,
       "unit": "kg",
       "min_order": "0.5",
       "is_featured": true,
       "is_available": true,
       "origin": "Golfe d'Aden, Djibouti",
-      "season": "D�cembre � Juin",
-      "nutritional_info": "Prot�ines: 21g | Om�ga-3: 1.5g | Vitamine D: 42% AJR | 107 kcal/100g",
-      "created_at": "2026-05-28T14:34:19.365Z",
-      "updated_at": "2026-06-04T15:39:02.634Z"
+      "season": "Décembre – Juin",
+      "nutritional_info": "Protéines: 21g | Oméga-3: 1.5g | Vitamine D: 42% AJR | 107 kcal/100g",
+      "created_at": "2026-05-28T14:34:19.365900+00:00",
+      "updated_at": "2026-06-04T15:39:02.634820+00:00"
     }
   },
   {
@@ -132,89 +86,66 @@
       "category": 7,
       "name": "Poisson Perroquet",
       "slug": "barracuda",
-      "description": "Le Poisson Perroquet, reconnaissable � ses magnifiques reflets bleu-vert, est une sp�cialit� des r�cifs coralliens de la Mer Rouge. Sa chair rose et l�g�rement sucr�e est une d�licatesse rare que peu de plateformes proposent.",
+      "description": "Le Poisson Perroquet, reconnaissable à ses magnifiques reflets bleu-vert, est une spécialité des récifs coralliens de la Mer Rouge. Sa chair rose et légèrement sucrée est une délicatesse rare que peu de plateformes proposent.",
       "price": "1300",
       "image": null,
-      "image_url": "https://images.pexels.com/photos/3296434/pexels-photo-3296434.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "image_url": "/static/images/products/perroquet-tropical.jpg",
       "stock": 18,
       "unit": "kg",
       "min_order": "0.5",
       "is_featured": true,
       "is_available": true,
-      "origin": "R�cifs Mer Rouge, Djibouti",
-      "season": "Septembre � F�vrier",
-      "nutritional_info": "Prot�ines: 21g | Om�ga-3: 1.3g | Vitamine B6: 28% AJR | 105 kcal/100g",
-      "created_at": "2026-05-28T14:34:19.381Z",
-      "updated_at": "2026-06-04T15:39:02.61Z"
+      "origin": "Récifs Mer Rouge, Djibouti",
+      "season": "Septembre – Février",
+      "nutritional_info": "Protéines: 21g | Oméga-3: 1.3g | Vitamine B6: 28% AJR | 105 kcal/100g",
+      "created_at": "2026-05-28T14:34:19.381879+00:00",
+      "updated_at": "2026-06-04T15:39:02.610105+00:00"
     }
   },
   {
     "model": "store.product",
-    "pk": 28,
+    "pk": 22,
     "fields": {
       "category": 7,
-      "name": "Carangue Dor�e",
-      "slug": "carangue",
-      "description": "La Carangue dor�e est l'un des poissons les plus populaires � Djibouti. Reconnaissable � sa bande jaune dor�e sur les flancs, elle offre une chair ferme et savoureuse, parfaite en friture, grill�e ou en rago�t �pic�.",
-      "price": "950",
+      "name": "Thazard (Wahoo)",
+      "slug": "thazard",
+      "description": "Le Thazard, appelé aussi Wahoo, est l'un des poissons les plus prisés du Golfe d'Aden. Sa chair blanche, maigre et délicate fond en bouche. Excellent grillé avec des épices locales ou préparé en carpaccio.",
+      "price": "1000",
       "image": null,
-      "image_url": "https://images.pexels.com/photos/2553651/pexels-photo-2553651.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "stock": 55,
+      "image_url": "/static/images/products/thon-marche.jpg",
+      "stock": 35,
       "unit": "kg",
       "min_order": "0.5",
       "is_featured": true,
       "is_available": true,
-      "origin": "C�te djiboutienne",
-      "season": "Toute ann�e",
-      "nutritional_info": "Prot�ines: 23g | Om�ga-3: 1.6g | Magn�sium: 22% AJR | 118 kcal/100g",
-      "created_at": "2026-05-28T14:34:19.397Z",
-      "updated_at": "2026-06-04T15:39:02.623Z"
+      "origin": "Golfe d'Aden, Djibouti",
+      "season": "Toute année",
+      "nutritional_info": "Protéines: 24g | Oméga-3: 0.9g | Phosphore: 35% AJR | 100 kcal/100g",
+      "created_at": "2026-05-28T14:34:19.308032+00:00",
+      "updated_at": "2026-06-04T15:39:02.587042+00:00"
     }
   },
   {
     "model": "store.product",
-    "pk": 29,
+    "pk": 23,
     "fields": {
       "category": 7,
-      "name": "Thon Bonite",
-      "slug": "marlin-bleu",
-      "description": "La Bonite (Thon listao) est une esp�ce aux reflets argent�s et bleut�s, tr�s appr�ci�e pour sa chair ferme et go�teuse. P�ch�e en haute mer, elle est id�ale grill�e, en brochettes ou en sashimi.",
-      "price": "900",
+      "name": "Bar de mer",
+      "slug": "thon-rouge",
+      "description": "Le Bar de mer (Loup) est un poisson noble apprécié pour sa chair blanche, fine et délicatement parfumée. Pêché la nuit dans les eaux claires du Golfe d'Aden, il est exceptionnel simplement grillé au sel.",
+      "price": "1200",
       "image": null,
-      "image_url": "https://images.pexels.com/photos/3296271/pexels-photo-3296271.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "stock": 60,
-      "unit": "kg",
-      "min_order": "0.5",
-      "is_featured": false,
-      "is_available": true,
-      "origin": "Oc�an Indien, Djibouti",
-      "season": "Novembre � Mars",
-      "nutritional_info": "Prot�ines: 28g | Om�ga-3: 1.8g | Vitamine B12: 95% AJR | 130 kcal/100g",
-      "created_at": "2026-05-28T14:34:19.411Z",
-      "updated_at": "2026-06-04T15:39:02.573Z"
-    }
-  },
-  {
-    "model": "store.product",
-    "pk": 30,
-    "fields": {
-      "category": 7,
-      "name": "Vivaneau rouge",
-      "slug": "sardine-fraiche",
-      "description": "Le Vivaneau rouge (Bourgeois) est un poisson de fond aux couleurs vives : rouge-rose avec des reflets argent�s. Sa chair blanche et ferme, l�g�rement sucr�e, est exceptionnelle en friture, en papillote ou au curry de coco.",
-      "price": "1300",
-      "image": null,
-      "image_url": "https://images.pexels.com/photos/3296279/pexels-photo-3296279.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "stock": 20,
+      "image_url": "/static/images/products/bar-argente.jpg",
+      "stock": 28,
       "unit": "kg",
       "min_order": "0.5",
       "is_featured": false,
       "is_available": true,
       "origin": "Mer Rouge, Djibouti",
-      "season": "Toute ann�e",
-      "nutritional_info": "Prot�ines: 22g | Om�ga-3: 1.2g | S�l�nium: 52% AJR | 103 kcal/100g",
-      "created_at": "2026-05-28T14:34:19.425Z",
-      "updated_at": "2026-06-04T15:39:02.668Z"
+      "season": "Octobre – Avril",
+      "nutritional_info": "Protéines: 20g | Oméga-3: 1.4g | Sélénium: 45% AJR | 115 kcal/100g",
+      "created_at": "2026-05-28T14:34:19.320048+00:00",
+      "updated_at": "2026-06-04T15:39:02.599303+00:00"
     }
   },
   {
@@ -224,110 +155,89 @@
       "category": 7,
       "name": "Mulet Vert",
       "slug": "poisson-lune",
-      "description": "Le Mulet vert (Djarjaara en somali) est tr�s populaire dans les foyers djiboutiens. P�ch� en bancs dans le Golfe d'Aden, son prix accessible en fait le poisson du quotidien. Savoureux frit ou en sauce tomate �pic�e.",
+      "description": "Le Mulet vert (Djarjaara en somali) est très populaire dans les foyers djiboutiens. Pêché en bancs dans le Golfe d'Aden, son prix accessible en fait le poisson du quotidien. Savoureux frit ou en sauce tomate épicée.",
       "price": "700",
       "image": null,
-      "image_url": "https://images.pexels.com/photos/213399/pexels-photo-213399.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "image_url": "/static/images/products/mulet-vert.jpg",
       "stock": 80,
       "unit": "kg",
       "min_order": "0.5",
       "is_featured": false,
       "is_available": true,
       "origin": "Golfe d'Aden, Djibouti",
-      "season": "Mars � Novembre",
-      "nutritional_info": "Prot�ines: 18g | Om�ga-3: 0.8g | Potassium: 15% AJR | 90 kcal/100g",
-      "created_at": "2026-05-28T14:34:19.44Z",
-      "updated_at": "2026-06-04T15:39:02.657Z"
+      "season": "Mars – Novembre",
+      "nutritional_info": "Protéines: 18g | Oméga-3: 0.8g | Potassium: 15% AJR | 90 kcal/100g",
+      "created_at": "2026-05-28T14:34:19.440898+00:00",
+      "updated_at": "2026-06-04T15:39:02.657848+00:00"
     }
   },
   {
-    "model": "blog.post",
-    "pk": 1,
+    "model": "store.product",
+    "pk": 25,
     "fields": {
-      "author": null,
-      "title": "Les Fruits de Mer : Votre Alli� Bien-�tre",
-      "slug": "fruits-de-mer-allie-bien-etre",
-      "excerpt": "D�couvrez pourquoi les fruits de mer sont un super-aliment incontournable pour votre sant� et votre bien-�tre au quotidien.",
-      "content": "Les fruits de mer sont bien plus qu'un simple aliment : ils sont une source exceptionnelle de nutriments essentiels pour votre organisme.\n\nRiches en prot�ines de haute qualit�, en om�ga-3, en zinc, en s�l�nium et en iode, les crevettes, crabes et homards contribuent � maintenir une sant� optimale. Les om�ga-3 en particulier jouent un r�le crucial dans la sant� cardiovasculaire et la fonction c�r�brale.\n\nDjibouti, gr�ce � sa position g�ographique exceptionnelle entre la Mer Rouge et le Golfe d'Aden, b�n�ficie d'une richesse marine unique. Nos fruits de mer sont p�ch�s quotidiennement dans ces eaux pour vous garantir une fra�cheur incomparable.\n\nComment les consommer ? En salade fra�che avec du citron, en brochettes grill�es au charbon, dans un curry �pic� djiboutien, ou tout simplement � la vapeur pour pr�server tous leurs nutriments.\n\nLa recommandation des nutritionnistes est de consommer des fruits de mer au moins deux fois par semaine pour b�n�ficier de tous leurs bienfaits.",
-      "cover_image": "",
-      "is_published": true,
-      "published_at": "2024-01-25T08:00:00Z",
-      "updated_at": "2024-01-25T08:00:00Z",
-      "tags": [
-        1,
-        3
-      ]
+      "category": 7,
+      "name": "Mérou tacheté",
+      "slug": "merou",
+      "description": "Le Mérou tacheté est le poisson des connaisseurs. Reconnaissable à ses taches caractéristiques, il vit dans les fonds rocheux du Golfe d'Aden. Sa chair blanche, généreuse et juteuse est incomparable en court-bouillon ou au four.",
+      "price": "1600",
+      "image": null,
+      "image_url": "/static/images/products/merou-tachete.jpg",
+      "stock": 15,
+      "unit": "kg",
+      "min_order": "0.5",
+      "is_featured": false,
+      "is_available": true,
+      "origin": "Fonds rocheux Golfe d'Aden",
+      "season": "Toute année",
+      "nutritional_info": "Protéines: 26g | Oméga-3: 1.1g | Calcium: 18% AJR | 95 kcal/100g",
+      "created_at": "2026-05-28T14:34:19.348708+00:00",
+      "updated_at": "2026-06-04T15:39:02.646343+00:00"
     }
   },
   {
-    "model": "blog.post",
-    "pk": 2,
+    "model": "store.product",
+    "pk": 29,
     "fields": {
-      "author": null,
-      "title": "Le Tazard : Poisson M�connu aux Saveurs Exceptionnelles",
-      "slug": "tazard-poisson-meconnu-saveurs-exceptionnelles",
-      "excerpt": "Le Tazard (Wahoo) est l'un des poissons les plus savoureux de l'Oc�an Indien. D�couvrez ses caract�ristiques et comment le cuisiner.",
-      "content": "Le Tazard, connu internationalement sous le nom de Wahoo (Acanthocybium solandri), est un poisson p�lagique qui fr�quente les eaux chaudes de l'Oc�an Indien et de la Mer Rouge.\n\nCe poisson est particuli�rement appr�ci� des gastronomes pour sa chair ferme, blanche et d�licatement parfum�e. Contrairement � certains autres poissons, le Tazard poss�de tr�s peu d'ar�tes, ce qui facilite sa d�gustation.\n\nNutritivement, le Tazard est excellent : riche en prot�ines (environ 23g pour 100g), faible en mati�res grasses, et source d'om�ga-3, de vitamines B12 et de s�l�nium.\n\nComment cuisiner le Tazard ?\n- Grill� sur charbon avec citron et �pices\n- En darnes au four avec tomates et herbes\n- En brochettes marin�es � l'huile d'olive et ail\n- En carpaccio pour les amateurs de poisson cru\n\nLe Tazard est disponible toute l'ann�e chez Kaluun, p�ch� fra�chement dans le Golfe d'Aden.",
-      "cover_image": "",
-      "is_published": true,
-      "published_at": "2024-01-15T08:00:00Z",
-      "updated_at": "2024-01-15T08:00:00Z",
-      "tags": [
-        2,
-        4
-      ]
+      "category": 7,
+      "name": "Thon Bonite",
+      "slug": "marlin-bleu",
+      "description": "La Bonite (Thon listao) est une espèce aux reflets argentés et bleutés, très appréciée pour sa chair ferme et goûteuse. Pêchée en haute mer, elle est idéale grillée, en brochettes ou en sashimi.",
+      "price": "900",
+      "image": null,
+      "image_url": "/static/images/products/thon-bonite.jpg",
+      "stock": 60,
+      "unit": "kg",
+      "min_order": "0.5",
+      "is_featured": false,
+      "is_available": true,
+      "origin": "Océan Indien, Djibouti",
+      "season": "Novembre – Mars",
+      "nutritional_info": "Protéines: 28g | Oméga-3: 1.8g | Vitamine B12: 95% AJR | 130 kcal/100g",
+      "created_at": "2026-05-28T14:34:19.411535+00:00",
+      "updated_at": "2026-06-04T15:39:02.573742+00:00"
     }
   },
   {
-    "model": "blog.post",
-    "pk": 3,
+    "model": "store.product",
+    "pk": 30,
     "fields": {
-      "author": null,
-      "title": "Le Thon : Roi des Oc�ans et Champion de la Nutrition",
-      "slug": "thon-roi-oceans-champion-nutrition",
-      "excerpt": "Le thon est l'un des poissons les plus consomm�s au monde. D�couvrez pourquoi il est un champion nutritionnel et comment le choisir frais.",
-      "content": "Le thon est sans conteste l'un des rois des oc�ans et un champion incontest� de la nutrition. Mais saviez-vous que le thon frais est infiniment sup�rieur au thon en conserve ?\n\nLe thon frais de Djibouti est p�ch� dans les eaux pures de la Mer Rouge et du Golfe d'Aden. Ces eaux, parmi les plus poissonneuses au monde, donnent au thon djiboutien des qualit�s gustatives exceptionnelles.\n\nComposition nutritionnelle du thon frais (100g) :\n- Prot�ines : 25-30g\n- Om�ga-3 : 1.5-2g\n- Vitamine D : 40% des AJR\n- Vitamine B12 : 150% des AJR\n- S�l�nium : 90% des AJR\n\nComment reconna�tre un thon frais ? La chair doit �tre d'un rouge vif et brillant, sans odeur forte, ferme au toucher, avec un aspect humide mais pas visqueux.\n\nRecette recommand�e : Thon grill� djiboutien\nMarinades avec ail, gingembre, citron et �pices somali, puis grill� sur charbon pendant 4-5 minutes de chaque c�t�. Servir avec du riz basmati et des l�gumes saut�s.\n\nChaque semaine, Kaluun re�oit des arrivages frais de thon directement des p�cheurs du port.",
-      "cover_image": "",
-      "is_published": true,
-      "published_at": "2024-01-20T08:00:00Z",
-      "updated_at": "2024-01-20T08:00:00Z",
-      "tags": [
-        1,
-        2,
-        4
-      ]
-    }
-  },
-  {
-    "model": "blog.tag",
-    "pk": 1,
-    "fields": {
-      "name": "Nutrition",
-      "slug": "nutrition"
-    }
-  },
-  {
-    "model": "blog.tag",
-    "pk": 2,
-    "fields": {
-      "name": "Recettes",
-      "slug": "recettes"
-    }
-  },
-  {
-    "model": "blog.tag",
-    "pk": 3,
-    "fields": {
-      "name": "Bien-�tre",
-      "slug": "bien-etre"
-    }
-  },
-  {
-    "model": "blog.tag",
-    "pk": 4,
-    "fields": {
-      "name": "P�che locale",
-      "slug": "peche-locale"
+      "category": 7,
+      "name": "Vivaneau rouge",
+      "slug": "sardine-fraiche",
+      "description": "Le Vivaneau rouge (Bourgeois) est un poisson de fond aux couleurs vives : rouge-rose avec des reflets argentés. Sa chair blanche et ferme, légèrement sucrée, est exceptionnelle en friture, en papillote ou au curry de coco.",
+      "price": "1300",
+      "image": null,
+      "image_url": "/static/images/products/vivaneau-rouge.jpg",
+      "stock": 20,
+      "unit": "kg",
+      "min_order": "0.5",
+      "is_featured": false,
+      "is_available": true,
+      "origin": "Mer Rouge, Djibouti",
+      "season": "Toute année",
+      "nutritional_info": "Protéines: 22g | Oméga-3: 1.2g | Sélénium: 52% AJR | 103 kcal/100g",
+      "created_at": "2026-05-28T14:34:19.425074+00:00",
+      "updated_at": "2026-06-04T15:39:02.668488+00:00"
     }
   }
 ]
