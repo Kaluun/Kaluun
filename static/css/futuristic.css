@@ -1318,28 +1318,36 @@ button, a, input[type="submit"], .k-nav-item, .adm-nav-item { min-height: 44px; 
 
 /* ── NAVBAR mobile — toujours visible ── */
 @media(max-width:991px) {
+  /* Force GPU layer — fix position:fixed sur Android/iOS */
   .k-nav {
-    padding: 0 16px;
-    -webkit-transform: translateZ(0); /* force GPU layer iOS */
-    transform: translateZ(0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
+    padding: 0 14px;
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+    will-change: transform;
+    position: fixed !important;
   }
-  .k-nav-inner {
-    height: 64px;
-    gap: 10px;
-  }
-  .k-logo-text { font-size: 1.1rem; letter-spacing: 3px; }
-  .k-logo img { width: 38px; height: 38px; }
+  .k-nav-inner { height: 60px; gap: 8px; }
+  .k-logo-text  { font-size: 1rem; letter-spacing: 2.5px; }
+  .k-logo img   { width: 36px; height: 36px; }
+  .k-nav-r      { gap: 8px; flex-shrink: 0; margin-left: auto; }
+  /* Bouton panier compact */
+  .k-cart-btn   { padding: 7px 11px; gap: 5px; font-size: .8rem; min-height: 40px; }
+  #cart-total-badge { display: none; }
+  /* Auth desktop caché sur mobile — tout dans le menu hamburger */
+  .k-nav-auth-desktop { display: none !important; }
+  /* Hamburger toujours visible */
   .k-ham {
     display: flex !important;
+    width: 42px; height: 42px; min-height: 42px;
     flex-shrink: 0;
-    width: 42px; height: 42px;
+    border-radius: 10px;
   }
-  /* Panier compact */
-  .k-cart-btn { padding: 8px 12px; gap: 6px; font-size: .82rem; }
-  /* Dropdown user compact */
-  .k-nav-r { gap: 8px; flex-shrink: 0; }
+}
+@media(max-width:400px) {
+  .k-nav { padding: 0 10px; }
+  .k-nav-inner { gap: 6px; }
+  .k-logo-text { display: none; }
+  .k-logo img  { width: 34px; height: 34px; }
 }
 
 /* ── Hero section mobile ── */
