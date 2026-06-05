@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}Blog & Actualités — KALUUN{% endblock %}
+
+{% block content %}
+<div class="k-ph">
+  <div class="container">
+    <div class="k-eyebrow">Notre blog</div>
+    <h1>Actualités <em style="background:linear-gradient(135deg,#3D8EFF,#00CFFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-style:normal;">KALUUN</em></h1>
+    <div class="k-bc mt-2"><a href="{% url 'store:home' %}">Accueil</a><span>›</span><span class="cur">Blog</span></div>
+  </div>
+</div>
+
+<section class="k-sec k-sec-ink">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Articles -->
+      <div class="col-lg-8">
+        <div class="row g-4">
+          {% for post in posts %}
+          <div class="col-md-6 aos" style="transition-delay:{{ forloop.counter0 }}00ms;">
+            <div class="k-pc" style="height:100%;">
+              <div class="k-pc-img">
+                {% if post.cover_image %}
+                <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" loading="lazy">
+                {% else %}
+                <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600" alt="{{ post.title }}" loading="lazy">
+                {% endif %}
+                <div class="k-pc-img-overlay"></div>
+                <span style="position:absolute;bottom:14px;left:14px;background:var(--blue);color:#fff;font-size:.7rem;font-weight:700;padding:4px 12px;border-radius:20px;">
+                  {{ post.published_at|date:"d M Y" }}
+                </span>
+                {% for tag in post.tags.all %}<span style="position:absolute;top:14px;left:14px;background:rgba(0,207,255,.15);border:1px solid rgba(0,207,255,.3);color:var(--cyan);font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:20px;">{{ tag.name }}</span>{% endfor %}
+              </div>
+              <div class="k-pc-body">
+                <div class="k-pc-cat"><i class="fas fa-user me-1"></i>Équipe KALUUN</div>
+                <div class="k-pc-name" style="font-size:1rem;"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></div>
+                <div class="k-pc-desc">{{ post.excerpt|default:post.content|truncatewords:22 }}</div>
+                <a href="{{ post.get_absolute_url }}" style="color:var(--cyan);font-size:.82rem;font-weight:600;">
+                  Lire la suite <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="col-12" style="text-align:center;padding:80px 20px;">
+            <i class="fas fa-newspaper" style="font-size:4rem;opacity:.1;display:block;margin-bottom:20px;"></i>
+            <h5 style="color:var(--white);">Aucun article publié</h5>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <!-- Search -->
+        <div class="k-card mb-4 aos">
+          <div class="k-ct" style="font-size:.95rem;"><i class="fas fa-search"></i>Recherche</div>
+          <form action="" method="GET">
+            <div class="k-search" style="max-width:100%;">
+              <i class="fas fa-search k-search-icon"></i>
+              <input type="search" name="q" placeholder="Rechercher..." value="{{ search_query }}" style="width:100%;">
+            </div>
+          </form>
+        </div>
+
+        <!-- Tags -->
+        {% if tags %}
+        <div class="k-card aos">
+          <div class="k-ct" style="font-size:.95rem;"><i class="fas fa-tags"></i>Catégories</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            {% for tag in tags %}
+            <a href="?tag={{ tag.slug }}"
+               style="background:{% if selected_tag.slug == tag.slug %}var(--blue){% else %}var(--white-5){% endif %};border:1px solid {% if selected_tag.slug == tag.slug %}var(--blue){% else %}var(--b1){% endif %};color:{% if selected_tag.slug == tag.slug %}var(--white){% else %}var(--white-60){% endif %};padding:5px 14px;border-radius:20px;font-size:.78rem;font-weight:600;transition:.2s;">
+              {{ tag.name }}
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- CTA commander -->
+        <div class="k-card mt-4 aos" style="background:linear-gradient(135deg,rgba(26,111,255,.12),rgba(0,207,255,.06));border-color:var(--b2);">
+          <div class="k-ct" style="font-size:.95rem;"><i class="fas fa-fish"></i>Nos produits</div>
+          <p style="font-size:.85rem;color:var(--white-60);margin-bottom:16px;">Découvrez notre sélection de poissons ultra-frais.</p>
+          <a href="{% url 'store:product_list' %}" class="btn-cyan" style="padding:10px 20px;border-radius:10px;font-size:.85rem;justify-content:center;width:100%;">
+            Voir le catalogue
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}KALUUN — Poissonnerie Premium · Djibouti{% endblock %}</title>
+  {% load static %}
+  <link rel="icon" type="image/svg+xml" href="{% static 'images/kaluun-logo.svg' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/futuristic.css' %}?v=ocean-final">
+  {% block extra_css %}{% endblock %}
+
+  <style>
+    /* ── Global mobile resets ── */
+    img { max-width: 100%; height: auto; }
+    * { -webkit-tap-highlight-color: transparent; }
+    @media (max-width: 575px) {
+      .k-footer .col-lg-2, .k-footer .col-lg-3 { margin-bottom: 0; }
+      .k-f-nl input { font-size: 16px; } /* prevent iOS zoom */
+    }
+
+    /* ── TRANSITION PAGE — simple fade, AUCUN dôme ── */
+    #wave-transition {
+      position: fixed; inset: 0; z-index: 99999;
+      pointer-events: none;
+      /* Caché par défaut — AUCUNE forme visible */
+      opacity: 0;
+      visibility: hidden;
+      background: linear-gradient(160deg, #023E8A 0%, #0077B6 50%, #00B4D8 100%);
+      transition: opacity .35s ease, visibility .35s ease;
+    }
+    #wave-transition.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    #wave-curtain { display: none; }
+    #wave-logo { display: none; }
+
+    /* Preloader */
+    #preloader {
+      background: linear-gradient(160deg, #023E8A 0%, #0077B6 40%, #00B4D8 100%);
+    }
+    .pl-name { color: #fff !important; -webkit-text-fill-color: #fff !important; letter-spacing: 8px; }
+    .pl-bar { background: rgba(255,255,255,.2) !important; }
+    .pl-fill { background: linear-gradient(90deg, #fff, #90E0EF) !important; }
+  </style>
+</head>
+<body>
+
+<!-- ── OVERLAY TRANSITION VAGUE ── -->
+<div id="wave-transition">
+  <div id="wave-curtain">
+    <div id="wave-logo">
+      {% load static %}
+      <img src="{% static 'images/kaluun-logo.svg' %}" alt="Kaluun">
+      <span>KALUUN</span>
+    </div>
+  </div>
+</div>
+
+<!-- Canvas particules -->
+<canvas id="ocean-canvas"></canvas>
+
+<!-- Preloader (une seule fois) -->
+<div id="preloader">
+  <img src="{% static 'images/kaluun-logo.svg' %}" width="100" alt="Kaluun" style="animation:fishSwim 1s ease-in-out infinite;border-radius:50%;box-shadow:0 0 30px rgba(255,255,255,.3);">
+  <div class="pl-name">KALUUN</div>
+  <div class="pl-bar"><div class="pl-fill"></div></div>
+</div>
+
+<!-- ══════════ NAVBAR ══════════ -->
+<nav class="k-nav" id="k-nav">
+  <div class="k-nav-inner">
+
+    <!-- Logo réel Kaluun -->
+    <a href="{% url 'store:home' %}" class="k-logo" style="text-decoration:none;">
+      <img src="{% static 'images/kaluun-logo.svg' %}" alt="Kaluun" width="48" height="48"
+           style="border-radius:50%;box-shadow:0 0 20px rgba(26,111,255,.4);">
+      <span class="k-logo-text">KALUUN</span>
+    </a>
+
+    <!-- Nav links -->
+    <div class="k-nav-links">
+      <a href="{% url 'store:home' %}" class="k-nl {% if request.resolver_match.url_name == 'home' %}on{% endif %}">Accueil</a>
+      <a href="{% url 'store:product_list' %}" class="k-nl {% if 'product' in request.resolver_match.url_name|default:'' %}on{% endif %}">Catalogue</a>
+      <a href="{% url 'store:about' %}" class="k-nl {% if request.resolver_match.url_name == 'about' %}on{% endif %}">À propos</a>
+      <a href="{% url 'store:contact' %}" class="k-nl {% if request.resolver_match.url_name == 'contact' %}on{% endif %}">Contact</a>
+    </div>
+
+    <!-- Actions droite -->
+    <div class="k-nav-r">
+      <!-- Panier -->
+      <button class="k-cart-btn" id="cart-open" aria-label="Ouvrir le panier">
+        <i class="fas fa-shopping-bag"></i>
+        <span id="cart-count-badge" class="k-cart-dot" style="{% if not cart_count %}display:none;{% endif %}">{{ cart_count }}</span>
+        <span id="cart-total-badge" style="font-family:'Space Grotesk',sans-serif;font-size:.82rem;font-weight:600;">{{ cart_total|floatformat:0 }} FDJ</span>
+      </button>
+
+      <!-- Auth -->
+      {% if user.is_authenticated %}
+      <div class="dropdown">
+        <button class="dropdown-toggle" data-bs-toggle="dropdown"
+          style="border:1.5px solid rgba(255,255,255,.35);padding:7px 16px 7px 7px;gap:9px;border-radius:30px;background:rgba(255,255,255,.10);display:flex;align-items:center;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:.84rem;font-weight:700;color:rgba(255,255,255,.88);transition:.2s;" onmouseover="this.style.background='rgba(255,255,255,.20)';this.style.borderColor='rgba(255,255,255,.55)'" onmouseout="this.style.background='rgba(255,255,255,.10)';this.style.borderColor='rgba(255,255,255,.35)'"
+          id="user-dropdown-btn">
+          <!-- Mini avatar -->
+          <span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#F5A623,#FFD060);display:inline-flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:.78rem;font-weight:800;color:#03045E;flex-shrink:0;">
+            {{ user.first_name|first|default:user.username|first|upper }}
+          </span>
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:.84rem;color:#fff;">{{ user.first_name|default:user.username }}</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end"
+          style="background:#fff;border:1.5px solid rgba(0,119,182,.15);border-radius:14px;padding:8px;min-width:200px;box-shadow:0 12px 48px rgba(0,119,182,.18);">
+          <li>
+            <a class="dropdown-item" href="{% url 'accounts:dashboard' %}"
+               style="color:#0353A4;padding:10px 14px;border-radius:8px;font-size:.87rem;display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:600;">
+              <i class="fas fa-th-large" style="color:#0077B6;width:16px;"></i>Mon tableau de bord
+            </a>
+          </li>
+          {% if user.is_staff %}
+          <li>
+            <a class="dropdown-item" href="{% url 'gestadmin:dashboard' %}"
+               style="color:#0353A4;padding:10px 14px;border-radius:8px;font-size:.87rem;display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:600;background:rgba(0,119,182,.06);">
+              <i class="fas fa-tachometer-alt" style="color:#F5A623;width:16px;"></i>Dashboard Admin
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="/admin/"
+               style="color:#0353A4;padding:10px 14px;border-radius:8px;font-size:.87rem;display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:600;">
+              <i class="fas fa-cog" style="color:#0077B6;width:16px;"></i>Admin Django
+            </a>
+          </li>
+          {% endif %}
+          <li><hr style="border-color:rgba(0,119,182,.1);margin:6px 0;"></li>
+          <li>
+            <a class="dropdown-item" href="{% url 'accounts:logout' %}"
+               style="color:#E63946;padding:10px 14px;border-radius:8px;font-size:.87rem;display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:600;">
+              <i class="fas fa-sign-out-alt" style="width:16px;"></i>Déconnexion
+            </a>
+          </li>
+        </ul>
+      </div>
+      {% else %}
+      <a href="{% url 'accounts:login' %}" class="k-nav-login-btn" style="display:inline-flex;align-items:center;gap:7px;border:1.5px solid rgba(255,255,255,.45);background:rgba(255,255,255,.08);color:#fff;padding:8px 18px;border-radius:30px;font-family:'Space Grotesk',sans-serif;font-size:.84rem;font-weight:700;text-decoration:none;transition:.2s;" onmouseover="this.style.background='rgba(255,255,255,.18)';this.style.borderColor='rgba(255,255,255,.70)'" onmouseout="this.style.background='rgba(255,255,255,.08)';this.style.borderColor='rgba(255,255,255,.45)'">
+        <i class="fas fa-sign-in-alt" style="font-size:.78rem;"></i>Connexion
+      </a>
+      {% endif %}
+
+      <button class="k-ham" id="ham-btn" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile nav -->
+<div class="k-mnav" id="k-mnav">
+  <button class="mnav-close" id="mnav-close"><i class="fas fa-times"></i></button>
+  <img src="{% static 'images/kaluun-logo.svg' %}" width="72" alt="Kaluun" style="border-radius:50%;margin-bottom:16px;">
+  <a href="{% url 'store:home' %}" class="k-nl" onclick="closeMnav()">Accueil</a>
+  <a href="{% url 'store:product_list' %}" class="k-nl" onclick="closeMnav()">Catalogue</a>
+  <a href="{% url 'store:about' %}" class="k-nl" onclick="closeMnav()">À propos</a>
+  <a href="{% url 'store:contact' %}" class="k-nl" onclick="closeMnav()">Contact</a>
+  <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;justify-content:center;">
+    {% if user.is_authenticated %}
+    <a href="{% url 'accounts:profile' %}" class="btn-solid" style="text-decoration:none;padding:10px 20px;">Mes commandes</a>
+    <a href="{% url 'accounts:logout' %}" style="color:#FF4757;font-size:.9rem;padding:10px 16px;border:1px solid rgba(255,71,87,.3);border-radius:30px;">Déconnexion</a>
+    {% else %}
+    <a href="{% url 'accounts:login' %}" class="btn-solid" style="text-decoration:none;">Connexion</a>
+    <a href="{% url 'accounts:register' %}" class="btn-ghost" style="text-decoration:none;">S'inscrire</a>
+    {% endif %}
+  </div>
+</div>
+
+<!-- ══════════ CART PANEL ══════════ -->
+<div class="k-cart-bg" id="cart-bg"></div>
+<div class="k-cart-panel" id="cart-panel">
+  <div class="cph">
+    <div class="cph-title">
+      <i class="fas fa-shopping-bag" style="color:#00CFFF;"></i>
+      Mon Panier
+      <span id="panel-cart-count" class="k-cart-dot" style="{% if not cart_count %}display:none;{% endif %}">{{ cart_count }}</span>
+    </div>
+    <button class="cph-close" id="cart-close"><i class="fas fa-times"></i></button>
+  </div>
+
+  <div class="cpb" id="cart-items-container">
+    {% if cart_items_list %}
+    {% for item in cart_items_list %}
+    <div class="ci" id="ci-{{ item.id }}">
+      {% if item.image %}
+      <img src="{{ item.image }}" alt="{{ item.name }}" class="ci-img"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+      <div class="ci-img-ph" style="display:none;">🐟</div>
+      {% else %}
+      <div class="ci-img-ph">🐟</div>
+      {% endif %}
+      <div class="ci-info">
+        <div class="ci-name">{{ item.name }}</div>
+        <div class="ci-price" id="ci-price-{{ item.id }}">{{ item.subtotal|floatformat:0 }} FDJ</div>
+        <div class="ci-controls">
+          <button class="ci-qbtn" onclick="cartUpdate('{{ item.id }}', -1)"><i class="fas fa-minus"></i></button>
+          <span class="ci-qnum" id="ci-qty-{{ item.id }}">{{ item.quantity }}</span>
+          <button class="ci-qbtn" onclick="cartUpdate('{{ item.id }}', 1)"><i class="fas fa-plus"></i></button>
+          <button class="ci-del ms-auto" onclick="cartRemove('{{ item.id }}')"><i class="fas fa-trash-alt"></i></button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="cp-empty" id="cart-empty">
+      <i class="fas fa-shopping-bag"></i>
+      <p>Votre panier est vide</p>
+      <button class="btn-ghost mt-3" onclick="closeCart();window.location='{% url 'store:product_list' %}'">
+        Explorer le catalogue
+      </button>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="cpf" id="cart-footer" {% if not cart_count %}style="display:none;"{% endif %}>
+    <div class="cpf-total">
+      <span class="cpf-total-lbl">Total</span>
+      <span class="cpf-total-amt" id="cart-total-panel">{{ cart_total|floatformat:0 }} FDJ</span>
+    </div>
+    <a href="{% url 'store:checkout' %}" class="cpf-cta" onclick="closeCart();">
+      <i class="fas fa-lock"></i>Commander ({{ cart_total|floatformat:0 }} FDJ)
+    </a>
+    <button class="cpf-cont" onclick="closeCart()">← Continuer mes achats</button>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div id="k-toast" style="position:fixed;bottom:30px;right:24px;z-index:9999;transform:translateY(120px);transition:transform .35s cubic-bezier(.23,1,.32,1);max-width:340px;">
+  <div style="background:rgba(13,22,40,.95);backdrop-filter:blur(20px);border:1px solid rgba(0,230,118,.3);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 40px rgba(0,0,0,.5);">
+    <div style="width:38px;height:38px;border-radius:10px;background:rgba(0,230,118,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <i class="fas fa-check" style="color:#00E676;font-size:.9rem;"></i>
+    </div>
+    <div>
+      <div id="toast-msg" style="font-family:'Space Grotesk',sans-serif;font-size:.88rem;font-weight:600;color:#fff;"></div>
+      <div style="font-size:.75rem;color:rgba(255,255,255,.4);margin-top:2px;">Ajouté au panier</div>
+    </div>
+  </div>
+</div>
+
+<!-- Messages Django -->
+{% if messages %}
+<div style="position:fixed;top:88px;right:20px;z-index:1500;max-width:360px;display:flex;flex-direction:column;gap:8px;" id="dj-msgs">
+  {% for message in messages %}
+  <div class="k-msg k-msg-{% if message.tags == 'success' %}s{% elif message.tags == 'error' or message.tags == 'danger' %}e{% else %}i{% endif %}">
+    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' or message.tags == 'danger' %}times-circle{% else %}info-circle{% endif %}"></i>
+    <span>{{ message }}</span>
+    <button class="k-msg-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="k-footer">
+  <div style="margin-bottom:-1px;line-height:0;">
+    <svg viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;">
+      <path d="M0,25 C240,50 480,0 720,25 C960,50 1200,0 1440,25 L1440,0 L0,0 Z" fill="#ffffff"/>
+    </svg>
+  </div>
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-4">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <img src="{% static 'images/kaluun-logo.svg' %}" alt="Kaluun" width="52" style="border-radius:50%;">
+          <span class="k-f-brand">KALUUN</span>
+        </div>
+        <p>Poissons ultra-frais de nos pêcheurs locaux, livrés dans le respect des normes d'hygiène les plus strictes.</p>
+        <div class="k-f-social">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <form action="{% url 'store:home' %}" method="POST" class="k-f-nl mt-3">
+          {% csrf_token %}<input type="hidden" name="newsletter" value="1">
+          <input type="email" name="email" placeholder="Votre email...">
+          <button type="submit"><i class="fas fa-paper-plane"></i></button>
+        </form>
+      </div>
+      <div class="col-lg-2 col-sm-6">
+        <div class="k-fh">Navigation</div>
+        <ul class="k-fl-list list-unstyled">
+          <li><a href="{% url 'store:home' %}">Accueil</a></li>
+          <li><a href="{% url 'store:product_list' %}">Catalogue</a></li>
+          <li><a href="{% url 'store:about' %}">À propos</a></li>
+          <li><a href="{% url 'store:contact' %}">Contact</a></li>
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'accounts:profile' %}">Mes commandes</a></li>
+          {% else %}
+          <li><a href="{% url 'accounts:login' %}">Connexion</a></li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="k-fh">Contact</div>
+        <ul class="k-f-ci list-unstyled">
+          <li><i class="fas fa-map-marker-alt"></i>Port de pêche, Djibouti</li>
+          <li><i class="fas fa-phone-alt"></i><a href="tel:+25377150789">+253 77 15 07 89</a></li>
+          <li><i class="fas fa-envelope"></i><a href="mailto:kaluunexpresse@gmail.com">kaluunexpresse@gmail.com</a></li>
+          <li><i class="fas fa-clock"></i>Lun–Sam : 6h00–20h00</li>
+        </ul>
+      </div>
+      <div class="col-lg-3">
+        <div class="k-fh">Commander rapidement</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <a href="{% url 'store:product_list' %}" style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:rgba(255,255,255,.7);font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:600;transition:.2s;" onmouseover="this.style.background='rgba(0,150,255,.15)';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='rgba(255,255,255,.7)'">
+            <i class="fas fa-fish" style="color:#00CFFF;width:16px;"></i>Voir le catalogue
+          </a>
+          <a href="{% url 'store:about' %}" style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:rgba(255,255,255,.7);font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:600;transition:.2s;" onmouseover="this.style.background='rgba(0,150,255,.15)';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='rgba(255,255,255,.7)'">
+            <i class="fas fa-book-open" style="color:#00CFFF;width:16px;"></i>Notre histoire
+          </a>
+          <a href="{% url 'store:contact' %}" style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:rgba(255,255,255,.7);font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:600;transition:.2s;" onmouseover="this.style.background='rgba(0,150,255,.15)';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='rgba(255,255,255,.7)'">
+            <i class="fas fa-headset" style="color:#00CFFF;width:16px;"></i>Nous contacter
+          </a>
+          <a href="tel:+25377150789" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:linear-gradient(135deg,#0072CE,#00CFFF);border-radius:10px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:800;transition:.2s;margin-top:4px;">
+            <i class="fas fa-phone-alt" style="width:16px;"></i>+253 77 15 07 89
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="k-fb-line">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <p>&copy; {% now "Y" %} KALUUN — Poissonnerie fraîche, Djibouti.</p>
+        <p>Fait avec ❤️ à Djibouti</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ── TRANSITION PAGE — simple fade ─────────────────────────
+(function(){
+  const overlay = document.getElementById('wave-transition');
+  if(!overlay) return;
+  let navigating = false;
+
+  function fadeNavigate(url){
+    if(navigating) return;
+    navigating = true;
+    overlay.classList.add('active');
+    setTimeout(()=>{ window.location = url; }, 380);
+  }
+
+  window.addEventListener('pageshow', function(){
+    overlay.classList.remove('active');
+    navigating = false;
+  });
+
+  document.addEventListener('click', function(e){
+    const a = e.target.closest('a[href]');
+    if(!a) return;
+    const href = a.getAttribute('href');
+    if(!href || href.startsWith('#') || href.startsWith('javascript') || href.startsWith('mailto') || href.startsWith('tel')) return;
+    if(a.target === '_blank' || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if(href.startsWith('http') && !href.includes(window.location.hostname)) return;
+    e.preventDefault();
+    fadeNavigate(a.href);
+  });
+})();
+
+// ── Ocean Canvas (bubbles bleu) ────────────────────────────
+(function(){
+  const c=document.getElementById('ocean-canvas');if(!c)return;
+  const ctx=c.getContext('2d');
+  function resize(){c.width=innerWidth;c.height=innerHeight;}resize();
+  window.addEventListener('resize',resize,{passive:true});
+  const pts=Array.from({length:60},()=>({
+    x:Math.random()*innerWidth,y:Math.random()*innerHeight,
+    vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,
+    r:Math.random()*2+.5,a:Math.random()*.15+.03,
+    hue:Math.random()<.6?205:190
+  }));
+  function frame(){
+    ctx.clearRect(0,0,c.width,c.height);
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;
+      if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`hsla(${p.hue},80%,60%,${p.a})`;ctx.fill();
+    });
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);
+      if(d<130){
+        ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);
+        ctx.strokeStyle=`rgba(0,128,200,${.06*(1-d/130)})`;
+        ctx.lineWidth=.4;ctx.stroke();
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// Bulles gérées dans home.html directement
+
+// ── Preloader ─────────────────────────────────────────────
+window.addEventListener('load',()=>setTimeout(()=>document.getElementById('preloader').classList.add('out'),900));
+
+// ── Navbar scroll — always dark navy, glass adds depth on scroll ──
+const nav=document.getElementById('k-nav');
+function updateNav(){
+  // Always dark navy. 'glass' class adds slightly more shadow on scroll.
+  nav.classList.toggle('glass', scrollY > 60);
+}
+window.addEventListener('scroll',updateNav,{passive:true});
+updateNav();
+
+// ── Mobile nav ────────────────────────────────────────────
+document.getElementById('ham-btn').onclick=()=>document.getElementById('k-mnav').classList.add('open');
+document.getElementById('mnav-close').onclick=()=>document.getElementById('k-mnav').classList.remove('open');
+function closeMnav(){document.getElementById('k-mnav').classList.remove('open');}
+
+// ── Cart panel ────────────────────────────────────────────
+function openCart(){document.getElementById('cart-bg').classList.add('on');document.getElementById('cart-panel').classList.add('on');document.body.style.overflow='hidden';}
+function closeCart(){document.getElementById('cart-bg').classList.remove('on');document.getElementById('cart-panel').classList.remove('on');document.body.style.overflow='';}
+document.getElementById('cart-open').onclick=openCart;
+document.getElementById('cart-close').onclick=closeCart;
+document.getElementById('cart-bg').onclick=closeCart;
+
+// ── Toast ─────────────────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('k-toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.style.transform='translateY(0)';
+  clearTimeout(t._tid);
+  t._tid=setTimeout(()=>{t.style.transform='translateY(120px)';},3000);
+}
+
+// ── AJAX add to cart ──────────────────────────────────────
+function addToCart(form) {
+  const btn = form.querySelector('button[type=submit],.k-add-btn');
+  const originalHTML = btn ? btn.innerHTML : '';
+  if(btn){btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>';}
+
+  const fd = new FormData(form);
+  fetch(form.action, {
+    method:'POST', body:fd,
+    headers:{'X-Requested-With':'XMLHttpRequest'}
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    if(data.success){
+      // Mettre à jour badges
+      const count = data.cart_count;
+      ['cart-count-badge','panel-cart-count'].forEach(id=>{
+        const el = document.getElementById(id);
+        if(el){el.textContent=count;el.style.display=count>0?'flex':'none';}
+      });
+      const tb = document.getElementById('cart-total-badge');
+      if(tb) tb.textContent = data.cart_total+' FDJ';
+
+      // Toast
+      showToast(data.product_name+' ajouté au panier !');
+
+      // Recharger le contenu du panel panier
+      refreshCartPanel();
+
+      // Ouvrir le panier
+      setTimeout(openCart, 200);
+    }
+  })
+  .catch(()=>{form.submit();})
+  .finally(()=>{ if(btn){btn.disabled=false;btn.innerHTML=originalHTML;} });
+  return false;
+}
+
+// ── Rafraîchir le panel panier via AJAX ────────────────────
+function refreshCartPanel() {
+  fetch('/panier/json/')
+  .then(r=>r.json())
+  .then(data=>{
+    const body = document.getElementById('cart-items-container');
+    const footer = document.getElementById('cart-footer');
+    if(!body) return;
+
+    if(data.items.length === 0) {
+      body.innerHTML = `<div class="cp-empty"><i class="fas fa-shopping-bag"></i><p>Votre panier est vide</p><button class="btn-ghost mt-3" onclick="closeCart();window.location='/produits/'">Explorer le catalogue</button></div>`;
+      if(footer) footer.style.display='none';
+      return;
+    }
+
+    let html = '';
+    data.items.forEach(item => {
+      const imgHtml = item.image
+        ? `<img src="${item.image}" alt="${item.name}" class="ci-img" onerror="this.style.display='none'">`
+        : `<div class="ci-img-ph">🐟</div>`;
+
+      html += `<div class="ci" id="ci-${item.id}">
+        ${imgHtml}
+        <div class="ci-info">
+          <div class="ci-name">${item.name}</div>
+          <div class="ci-price" id="ci-price-${item.id}">${Math.round(item.subtotal).toLocaleString()} FDJ</div>
+          <div class="ci-controls">
+            <form action="/panier/modifier/${item.id}/" method="POST" style="display:flex;align-items:center;gap:6px;" id="cart-form-${item.id}">
+              <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+              <button type="button" class="ci-qbtn" onclick="cartUpdate('${item.id}',-1)"><i class="fas fa-minus"></i></button>
+              <span class="ci-qnum" id="ci-qty-${item.id}">${item.quantity}</span>
+              <input type="hidden" name="quantity" id="qhid-${item.id}" value="${item.quantity}">
+              <button type="button" class="ci-qbtn" onclick="cartUpdate('${item.id}',1)"><i class="fas fa-plus"></i></button>
+            </form>
+            <form action="/panier/retirer/${item.id}/" method="POST" style="display:inline;margin-left:auto;">
+              <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+              <button type="submit" class="ci-del"><i class="fas fa-trash-alt"></i></button>
+            </form>
+          </div>
+        </div>
+      </div>`;
+    });
+
+    body.innerHTML = html;
+
+    if(footer) {
+      footer.style.display='block';
+      const totalEl = document.getElementById('cart-total-panel');
+      if(totalEl) totalEl.textContent = data.total.toLocaleString()+' FDJ';
+
+      // Mettre à jour le lien commander
+      const cta = footer.querySelector('.cpf-cta');
+      if(cta) cta.innerHTML = `<i class="fas fa-lock"></i> Commander (${data.total.toLocaleString()} FDJ)`;
+    }
+  });
+}
+
+// ── Cart update (quantité) ────────────────────────────────
+function cartUpdate(itemId, delta) {
+  const qSpan = document.getElementById('ci-qty-'+itemId);
+  if(!qSpan) return;
+  const newQty = Math.max(1, parseInt(qSpan.textContent)+delta);
+
+  const formData = new FormData();
+  formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+  formData.append('quantity', newQty);
+
+  fetch(`/panier/modifier/${itemId}/`, {method:'POST', body:formData})
+  .then(()=>location.reload());
+}
+
+// ── Cart remove ───────────────────────────────────────────
+function cartRemove(itemId) {
+  const fd = new FormData();
+  fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+  fetch(`/panier/retirer/${itemId}/`, {method:'POST', body:fd})
+  .then(()=>location.reload());
+}
+
+// ── AOS ───────────────────────────────────────────────────
+function checkAOS(){document.querySelectorAll('.aos:not(.visible)').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight*.92)el.classList.add('visible');});}
+window.addEventListener('scroll',checkAOS,{passive:true});setTimeout(checkAOS,100);
+
+// ── Auto dismiss Django messages ──────────────────────────
+setTimeout(()=>{const m=document.getElementById('dj-msgs');if(m){m.style.opacity='0';m.style.transition='opacity .4s';setTimeout(()=>m?.remove(),400);}},5000);
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

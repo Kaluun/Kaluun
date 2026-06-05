@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %}Contact — KALUUN{% endblock %}
+
+{% block content %}
+<div class="k-ph">
+  <div class="container">
+    <div class="k-eyebrow">Nous contacter</div>
+    <h1>Contact</h1>
+    <div class="k-bc mt-2"><a href="{% url 'store:home' %}">Accueil</a><span>›</span><span class="cur">Contact</span></div>
+  </div>
+</div>
+
+<section class="k-sec k-sec-ink">
+  <div class="container">
+    <div class="row g-5">
+
+      <!-- Infos -->
+      <div class="col-lg-4">
+        <div class="k-ci-box">
+          <h4 style="font-family:var(--f-ui);font-size:1.2rem;font-weight:700;color:var(--white);margin-bottom:24px;">Nos coordonnées</h4>
+          <div class="k-ci">
+            <div class="k-ci-ic"><i class="fas fa-map-marker-alt"></i></div>
+            <div><h6>Adresse</h6><p>Port de pêche, Djibouti</p></div>
+          </div>
+          <div class="k-ci">
+            <div class="k-ci-ic"><i class="fas fa-phone-alt"></i></div>
+            <div><h6>Téléphone</h6><a href="tel:+25377150789">+253 77 15 07 89</a></div>
+          </div>
+          <div class="k-ci">
+            <div class="k-ci-ic"><i class="fas fa-envelope"></i></div>
+            <div><h6>Email</h6><a href="mailto:kaluunexpresse@gmail.com">kaluunexpresse@gmail.com</a></div>
+          </div>
+          <div class="k-ci">
+            <div class="k-ci-ic"><i class="fas fa-clock"></i></div>
+            <div><h6>Horaires</h6><p>Lun–Sam : 6h00–20h00<br>Dim : 7h00–14h00</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulaire -->
+      <div class="col-lg-8">
+        <div class="k-card">
+          <div class="k-ct"><i class="fas fa-paper-plane"></i>Envoyez-nous un message</div>
+          <form method="POST" novalidate>
+            {% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="k-fg">
+                  <label class="k-fl">Nom complet *</label>
+                  {% render_field form.name class="k-fi" %}
+                  {% if form.name.errors %}<div style="color:var(--red);font-size:.78rem;margin-top:4px;">{{ form.name.errors.0 }}</div>{% endif %}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="k-fg">
+                  <label class="k-fl">Email *</label>
+                  {% render_field form.email class="k-fi" %}
+                  {% if form.email.errors %}<div style="color:var(--red);font-size:.78rem;margin-top:4px;">{{ form.email.errors.0 }}</div>{% endif %}
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="k-fg">
+                  <label class="k-fl">Sujet *</label>
+                  {% render_field form.subject class="k-fi" %}
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="k-fg">
+                  <label class="k-fl">Message *</label>
+                  {% render_field form.message class="k-fi" rows="5" %}
+                </div>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn-cyan" style="padding:13px 32px;border-radius:28px;">
+                  <i class="fas fa-paper-plane"></i>Envoyer le message
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

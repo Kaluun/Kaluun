@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Admin — KALUUN{% endblock %}</title>
+  {% load static %}
+  <link rel="icon" type="image/svg+xml" href="{% static 'images/kaluun-logo.svg' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+  /* ═══════════════════════════════════════════════════════════
+     KALUUN ADMINISTRATION — Premium v2
+     Sidebar: deep navy | Background: #EFF3F8 | Accent: gold
+     ═══════════════════════════════════════════════════════════ */
+
+  :root {
+    --an:     #03045E;
+    --an2:    #023E8A;
+    --ao:     #0077B6;
+    --aw:     #0096C7;
+    --ask:    #48CAE4;
+    --ag:     #F5A623;
+    --agl:    #FFD060;
+    --agreen: #00A86B;
+    --ared:   #E63946;
+    --apurple:#6B48FF;
+    --abg:    #E0EEF8;
+    --acard:  #EBF5FF;
+    --abdr:   rgba(0,119,182,.13);
+    --at:     #03045E;
+    --atm:    #0353A4;
+    --ats:    #4E6A8A;
+    --sw:     260px;
+    --f:      'Plus Jakarta Sans', sans-serif;
+    --fu:     'Space Grotesk', sans-serif;
+    --fd:     'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--f);
+    background: linear-gradient(150deg, #D8ECF8 0%, #E5F3FB 45%, #DCF0FA 100%);
+    background-attachment: fixed;
+    color: var(--at);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  a { color: var(--ao); text-decoration: none; transition: .2s; }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: var(--abg); }
+  ::-webkit-scrollbar-thumb { background: rgba(3,4,94,.2); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ao); }
+
+  /* ══════════════════════════════
+     LAYOUT
+  ══════════════════════════════ */
+  .adm-wrap { display: flex; min-height: 100vh; }
+
+  /* ══════════════════════════════
+     SIDEBAR
+  ══════════════════════════════ */
+  .adm-side {
+    width: var(--sw);
+    background: linear-gradient(185deg, #020336 0%, var(--an) 30%, var(--an2) 70%, #013A80 100%);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: transform .3s cubic-bezier(.4,0,.2,1);
+    border-right: 1px solid rgba(245,166,35,.1);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.12) transparent;
+  }
+  .adm-side::-webkit-scrollbar { width: 3px; }
+  .adm-side::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); }
+
+  /* Subtle dot grid */
+  .adm-side::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sw);
+    height: 100vh;
+    background-image: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 22px 22px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Logo area ── */
+  .adm-logo-area {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(0,0,0,.2);
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+  .adm-logo-area img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid rgba(245,166,35,.45);
+    box-shadow: 0 0 0 4px rgba(245,166,35,.1), 0 6px 20px rgba(0,0,0,.3);
+    flex-shrink: 0;
+  }
+  .adm-logo-text {
+    font-family: var(--fd);
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 3px;
+    line-height: 1.1;
+  }
+  .adm-logo-badge {
+    display: inline-block;
+    font-size: .55rem;
+    background: rgba(245,166,35,.18);
+    color: var(--ag);
+    border: 1px solid rgba(245,166,35,.32);
+    padding: 2px 8px;
+    border-radius: 7px;
+    font-family: var(--fu);
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* ── Nav ── */
+  .adm-nav {
+    padding: 16px 12px;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+  }
+  .adm-nav-sec {
+    font-size: .58rem;
+    font-weight: 700;
+    color: rgba(255,255,255,.25);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 16px 10px 7px;
+    font-family: var(--fu);
+  }
+  .adm-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 11px 14px;
+    border-radius: 12px;
+    margin-bottom: 2px;
+    font-family: var(--fu);
+    font-size: .85rem;
+    font-weight: 500;
+    color: rgba(255,255,255,.55);
+    transition: all .22s cubic-bezier(.4,0,.2,1);
+    position: relative;
+    border-left: 3px solid transparent;
+    overflow: hidden;
+  }
+  /* Hover slide fill effect */
+  .adm-nav-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,.07);
+    transform: translateX(-100%);
+    transition: transform .22s cubic-bezier(.4,0,.2,1);
+    border-radius: 12px;
+  }
+  .adm-nav-item:hover::after { transform: translateX(0); }
+  .adm-nav-item:hover {
+    color: rgba(255,255,255,.9);
+    border-left-color: rgba(245,166,35,.4);
+    padding-left: 18px;
+  }
+  .adm-nav-item.on {
+    background: linear-gradient(135deg, rgba(245,166,35,.2) 0%, rgba(245,166,35,.07) 100%);
+    color: var(--agl);
+    font-weight: 700;
+    border-left-color: var(--ag);
+    padding-left: 18px;
+  }
+  .adm-nav-item.on::after { display: none; }
+  .adm-nav-item i { width: 17px; text-align: center; font-size: .87rem; flex-shrink: 0; position: relative; z-index: 1; }
+  .adm-nav-item span { position: relative; z-index: 1; flex: 1; }
+  .adm-badge {
+    margin-left: auto;
+    background: rgba(230,57,70,.22);
+    color: #FF8080;
+    font-size: .62rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 20px;
+    border: 1px solid rgba(230,57,70,.3);
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+  .adm-ext-icon {
+    font-size: .6rem;
+    opacity: .35;
+    margin-left: auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Sidebar footer ── */
+  .adm-side-footer {
+    padding: 14px;
+    border-top: 1px solid rgba(255,255,255,.07);
+    background: rgba(0,0,0,.15);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .adm-user-card {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.09);
+    margin-bottom: 8px;
+  }
+  .adm-user-av {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--ag), var(--agl));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .85rem;
+    font-weight: 800;
+    color: var(--an);
+    box-shadow: 0 0 0 2px rgba(245,166,35,.3);
+  }
+  .adm-user-name { font-family: var(--fu); font-size: .82rem; font-weight: 700; color: #fff; line-height: 1.3; }
+  .adm-user-role { font-size: .62rem; color: var(--ag); margin-top: 2px; font-family: var(--fu); }
+  .adm-logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 14px;
+    border-radius: 11px;
+    color: rgba(230,80,80,.65);
+    font-size: .8rem;
+    font-family: var(--fu);
+    font-weight: 600;
+    transition: all .2s;
+    border: 1px solid transparent;
+  }
+  .adm-logout-btn:hover {
+    color: #FF8080;
+    background: rgba(230,57,70,.1);
+    border-color: rgba(230,57,70,.2);
+  }
+
+  /* ══════════════════════════════
+     MAIN CONTENT AREA
+  ══════════════════════════════ */
+  .adm-main { margin-left: var(--sw); flex: 1; min-width: 0; }
+
+  /* ── Topbar ── */
+  .adm-topbar {
+    height: 64px;
+    background: var(--acard);
+    border-bottom: 1.5px solid var(--abdr);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 18px rgba(3,4,94,.07);
+  }
+  .adm-page-title {
+    font-family: var(--fd);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--an);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .adm-page-title i { color: var(--ag); font-size: 1rem; }
+  .adm-topbar-r { display: flex; align-items: center; gap: 10px; }
+  .adm-icon-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: var(--abg);
+    border: 1.5px solid var(--abdr);
+    color: var(--ats);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .87rem;
+    cursor: pointer;
+    transition: all .2s;
+    text-decoration: none;
+    position: relative;
+  }
+  .adm-icon-btn:hover { background: rgba(245,166,35,.1); color: var(--ag); border-color: rgba(245,166,35,.3); }
+  .adm-notif-dot {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 16px;
+    height: 16px;
+    background: var(--ared);
+    border-radius: 50%;
+    font-size: .55rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    border: 2px solid var(--abg);
+    font-family: var(--fu);
+  }
+  .adm-topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 6px 14px;
+    border-radius: 22px;
+    background: rgba(245,166,35,.08);
+    border: 1px solid rgba(245,166,35,.2);
+  }
+  .adm-topbar-av {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ag), var(--agl));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .74rem;
+    font-weight: 800;
+    color: var(--an);
+  }
+  .adm-topbar-uname { font-family: var(--fu); font-size: .82rem; color: var(--atm); font-weight: 600; }
+
+  /* ── Content ── */
+  .adm-content { padding: 28px 32px 56px; }
+
+  /* ══════════════════════════════
+     STAT CARDS
+  ══════════════════════════════ */
+  .adm-stat {
+    background: var(--acard);
+    border: 1.5px solid var(--abdr);
+    border-radius: 20px;
+    padding: 22px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: all .28s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 2px 12px rgba(3,4,94,.06), 0 1px 3px rgba(3,4,94,.03);
+  }
+  .adm-stat:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(3,4,94,.13), 0 4px 12px rgba(3,4,94,.05);
+    border-color: rgba(3,4,94,.12);
+  }
+  /* Colored top border */
+  .adm-stat::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--stat-grad, linear-gradient(90deg, var(--ag), var(--agl)));
+    border-radius: 20px 20px 0 0;
+  }
+  .adm-stat-ico {
+    font-size: 1.55rem;
+    margin-bottom: 14px;
+    display: block;
+  }
+  .adm-stat-val {
+    font-family: var(--fd);
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: var(--at);
+    line-height: 1;
+    letter-spacing: -.5px;
+  }
+  .adm-stat-lbl {
+    font-size: .74rem;
+    color: var(--ats);
+    margin-top: 6px;
+    font-family: var(--fu);
+    font-weight: 500;
+  }
+  .adm-stat-sub {
+    font-size: .71rem;
+    margin-top: 7px;
+    font-family: var(--fu);
+    font-weight: 600;
+  }
+
+  /* Stat variants */
+  .adm-stat-pending  { --stat-grad: linear-gradient(90deg, #F5A623, #FFD060); }
+  .adm-stat-total    { --stat-grad: linear-gradient(90deg, #0077B6, #48CAE4); }
+  .adm-stat-revenue  { --stat-grad: linear-gradient(90deg, #00A86B, #34D399); }
+  .adm-stat-users    { --stat-grad: linear-gradient(90deg, #6B48FF, #A78BFA); }
+
+  /* ══════════════════════════════
+     GENERIC CARD
+  ══════════════════════════════ */
+  .adm-card {
+    background: var(--acard);
+    border: 1.5px solid var(--abdr);
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 2px 12px rgba(3,4,94,.05);
+  }
+  .adm-card-title {
+    font-family: var(--fu);
+    font-size: .92rem;
+    font-weight: 700;
+    color: var(--at);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1.5px solid var(--abdr);
+  }
+  .adm-card-title i { color: var(--ag); }
+
+  /* ══════════════════════════════
+     TABLE
+  ══════════════════════════════ */
+  .adm-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 4px;
+  }
+  .adm-table thead th {
+    font-family: var(--fu);
+    font-size: .66rem;
+    font-weight: 700;
+    color: var(--ats);
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    padding: 8px 16px 10px;
+    background: transparent;
+  }
+  .adm-table tbody tr {
+    background: var(--acard);
+    transition: all .18s;
+    cursor: pointer;
+  }
+  .adm-table tbody tr:hover { background: #D2E9F8; }
+  .adm-table tbody td {
+    padding: 13px 16px;
+    font-size: .84rem;
+    color: var(--atm);
+    border-top: 1.5px solid var(--abdr);
+    border-bottom: 1.5px solid var(--abdr);
+    vertical-align: middle;
+  }
+  .adm-table tbody td:first-child {
+    border-left: 1.5px solid var(--abdr);
+    border-radius: 12px 0 0 12px;
+    font-family: var(--fd);
+    font-weight: 800;
+    color: var(--an);
+  }
+  .adm-table tbody td:last-child {
+    border-right: 1.5px solid var(--abdr);
+    border-radius: 0 12px 12px 0;
+  }
+
+  /* ══════════════════════════════
+     STATUS BADGES
+  ══════════════════════════════ */
+  .sb {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-family: var(--fu);
+    font-size: .67rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    white-space: nowrap;
+    border: 1px solid;
+    display: inline-block;
+  }
+  .sb-pending    { background: rgba(245,166,35,.10); color: #B87000;       border-color: rgba(245,166,35,.28); }
+  .sb-confirmed  { background: rgba(0,87,168,.07);   color: var(--ao);     border-color: rgba(0,87,168,.2); }
+  .sb-processing { background: rgba(107,72,255,.07); color: #6B48FF;       border-color: rgba(107,72,255,.22); }
+  .sb-delivering { background: rgba(0,150,200,.08);  color: var(--aw);     border-color: rgba(0,150,200,.22); }
+  .sb-delivered  { background: rgba(0,168,107,.08);  color: var(--agreen); border-color: rgba(0,168,107,.22); }
+  .sb-cancelled  { background: rgba(230,57,70,.07);  color: var(--ared);   border-color: rgba(230,57,70,.22); }
+  .sb-rejected   { background: rgba(230,57,70,.07);  color: var(--ared);   border-color: rgba(230,57,70,.22); }
+
+  /* ══════════════════════════════
+     BUTTONS
+  ══════════════════════════════ */
+  .btn-adm {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-family: var(--fu);
+    font-size: .78rem;
+    font-weight: 700;
+    border: 1.5px solid;
+    cursor: pointer;
+    transition: all .2s cubic-bezier(.4,0,.2,1);
+    text-decoration: none;
+    line-height: 1;
+  }
+  .btn-adm:hover { transform: translateY(-2px); }
+
+  /* Primary — navy gradient */
+  .btn-adm-primary {
+    background: linear-gradient(135deg, var(--an), var(--ao));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 3px 12px rgba(3,4,94,.25);
+  }
+  .btn-adm-primary:hover { box-shadow: 0 7px 22px rgba(3,4,94,.35); color: #fff; }
+
+  /* Success — green gradient */
+  .btn-adm-success {
+    background: linear-gradient(135deg, var(--agreen), #34D399);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 3px 12px rgba(0,168,107,.25);
+  }
+  .btn-adm-success:hover { box-shadow: 0 7px 22px rgba(0,168,107,.35); color: #fff; }
+
+  /* Danger — red gradient */
+  .btn-adm-danger {
+    background: linear-gradient(135deg, var(--ared), #FF6B6B);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 3px 12px rgba(230,57,70,.25);
+  }
+  .btn-adm-danger:hover { box-shadow: 0 7px 22px rgba(230,57,70,.35); color: #fff; }
+
+  /* Gold — soft */
+  .btn-adm-gold {
+    background: rgba(245,166,35,.1);
+    color: #B87000;
+    border-color: rgba(245,166,35,.3);
+  }
+  .btn-adm-gold:hover {
+    background: linear-gradient(135deg, var(--ag), var(--agl));
+    color: var(--an);
+    border-color: transparent;
+    box-shadow: 0 5px 18px rgba(245,166,35,.35);
+  }
+
+  /* Outline blue */
+  .btn-adm-outline {
+    background: rgba(0,87,168,.06);
+    color: var(--ao);
+    border-color: rgba(0,87,168,.2);
+  }
+  .btn-adm-outline:hover {
+    background: linear-gradient(135deg, var(--an), var(--ao));
+    color: #fff;
+    border-color: transparent;
+  }
+
+  /* Small variant */
+  .btn-adm-sm { padding: 5px 12px; font-size: .73rem; border-radius: 8px; }
+
+  /* Aliases (legacy compat) */
+  .btn-adm-green { background:linear-gradient(135deg,var(--agreen),#34D399);color:#fff;border-color:transparent;box-shadow:0 3px 12px rgba(0,168,107,.25); }
+  .btn-adm-green:hover { box-shadow:0 7px 22px rgba(0,168,107,.35);color:#fff; }
+  .btn-adm-red { background:linear-gradient(135deg,var(--ared),#FF6B6B);color:#fff;border-color:transparent;box-shadow:0 3px 12px rgba(230,57,70,.25); }
+  .btn-adm-red:hover { box-shadow:0 7px 22px rgba(230,57,70,.35);color:#fff; }
+  .btn-adm-blue { background:linear-gradient(135deg,var(--an),var(--ao));color:#fff;border-color:transparent;box-shadow:0 3px 12px rgba(3,4,94,.22); }
+  .btn-adm-blue:hover { box-shadow:0 7px 22px rgba(3,4,94,.35);color:#fff; }
+  .btn-adm-cyan { background:linear-gradient(135deg,var(--aw),#48CAE4);color:#fff;border-color:transparent;box-shadow:0 3px 12px rgba(0,150,199,.22); }
+  .btn-adm-cyan:hover { box-shadow:0 7px 22px rgba(0,150,199,.35);color:#fff; }
+
+  /* ══════════════════════════════
+     INPUTS & SELECTS
+  ══════════════════════════════ */
+  .adm-input {
+    background: var(--abg);
+    border: 1.5px solid var(--abdr);
+    color: var(--at);
+    padding: 9px 14px;
+    border-radius: 11px;
+    font-size: .84rem;
+    outline: none;
+    font-family: var(--f);
+    transition: all .2s;
+  }
+  .adm-input:focus {
+    border-color: var(--ag);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(245,166,35,.13);
+  }
+  .adm-input::placeholder { color: #A8BFCE; }
+
+  .adm-select {
+    background: var(--abg);
+    border: 1.5px solid var(--abdr);
+    color: var(--at);
+    padding: 8px 12px;
+    border-radius: 11px;
+    font-size: .82rem;
+    outline: none;
+    font-family: var(--fu);
+    transition: all .2s;
+    cursor: pointer;
+  }
+  .adm-select:focus { border-color: var(--ag); box-shadow: 0 0 0 3px rgba(245,166,35,.1); }
+
+  /* ══════════════════════════════
+     FLASH MESSAGES
+  ══════════════════════════════ */
+  .adm-msgs {
+    position: fixed;
+    top: 74px;
+    right: 20px;
+    z-index: 9999;
+    max-width: 380px;
+  }
+  .adm-msg {
+    padding: 13px 18px;
+    border-radius: 14px;
+    margin-bottom: 8px;
+    font-family: var(--fu);
+    font-size: .83rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: msgIn .3s cubic-bezier(.4,0,.2,1);
+    border: 1.5px solid;
+    background: var(--acard);
+    box-shadow: 0 6px 28px rgba(3,4,94,.14);
+  }
+  @keyframes msgIn { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  .adm-msg-s { border-color: rgba(0,168,107,.3); color: var(--agreen); }
+  .adm-msg-w { border-color: rgba(245,166,35,.3); color: #C17D00; }
+  .adm-msg-e { border-color: rgba(230,57,70,.3);  color: var(--ared); }
+  .adm-msg-i { border-color: rgba(0,87,168,.25);  color: var(--ao); }
+
+  /* ══════════════════════════════
+     PROGRESS BAR
+  ══════════════════════════════ */
+  .adm-prog-wrap {
+    height: 6px;
+    background: var(--abg);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .adm-prog-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--ag), var(--agl));
+    transition: width 1.2s ease;
+  }
+
+  /* ══════════════════════════════
+     MISC UTILITIES
+  ══════════════════════════════ */
+  .text-gold { color: var(--ag); }
+  .text-navy { color: var(--an); }
+  .font-syne { font-family: var(--fd); }
+  .font-grotesk { font-family: var(--fu); }
+
+  /* ══════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════ */
+  @media (max-width: 991px) {
+    .adm-side { transform: translateX(-100%); }
+    .adm-side.open { transform: translateX(0); }
+    .adm-main { margin-left: 0; }
+    .adm-content { padding: 20px 16px 48px; }
+    .adm-topbar { padding: 0 16px; }
+    .adm-topbar-user { display: none; }
+    .adm-ham-btn { display: flex !important; }
+    .adm-stat-val { font-size: 1.55rem; }
+    .adm-stat { padding: 16px 14px; }
+    .adm-card { padding: 16px; }
+    .adm-table thead th, .adm-table tbody td { padding: 10px 12px; }
+  }
+  @media (max-width: 575px) {
+    .adm-page-title { font-size: .95rem; }
+    .adm-page-title i { font-size: .8rem; }
+  }
+
+  /* Sidebar overlay backdrop */
+  .adm-side-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(3,4,94,.45);
+    z-index: 199;
+    backdrop-filter: blur(2px);
+  }
+  .adm-side-overlay.show { display: block; }
+
+  /* Hamburger in topbar — visible only on mobile */
+  .adm-ham-btn {
+    display: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: var(--abg);
+    border: 1.5px solid var(--abdr);
+    color: var(--ats);
+    align-items: center;
+    justify-content: center;
+    font-size: .87rem;
+    cursor: pointer;
+    transition: all .2s;
+    flex-shrink: 0;
+    order: -1;
+  }
+  .adm-ham-btn:hover { background: rgba(245,166,35,.1); color: var(--ag); border-color: rgba(245,166,35,.3); }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+<!-- Sidebar overlay (mobile) -->
+<div class="adm-side-overlay" id="admOverlay" onclick="closeAdmSide()"></div>
+
+<div class="adm-wrap">
+
+  <!-- ═══════════════════════════
+       SIDEBAR
+  ═══════════════════════════ -->
+  <aside class="adm-side" id="admSide">
+
+    <!-- Logo / brand -->
+    <div class="adm-logo-area">
+      <img src="{% static 'images/kaluun-logo.svg' %}" alt="KALUUN logo">
+      <div>
+        <div class="adm-logo-text">KALUUN</div>
+        <div class="adm-logo-badge">Administration</div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="adm-nav" aria-label="Administration navigation">
+
+      <div class="adm-nav-sec">Tableau de bord</div>
+      <a href="{% url 'gestadmin:dashboard' %}"
+         class="adm-nav-item {% if request.resolver_match.url_name == 'dashboard' %}on{% endif %}">
+        <i class="fas fa-chart-line"></i>
+        <span>Vue d'ensemble</span>
+      </a>
+
+      <div class="adm-nav-sec">Gestion</div>
+      <a href="{% url 'gestadmin:orders' %}"
+         class="adm-nav-item {% if request.resolver_match.url_name == 'orders' %}on{% endif %}">
+        <i class="fas fa-shopping-bag"></i>
+        <span>Commandes</span>
+        {% if pending_orders_count %}<span class="adm-badge">{{ pending_orders_count }}</span>{% endif %}
+      </a>
+      <a href="{% url 'gestadmin:products' %}"
+         class="adm-nav-item {% if request.resolver_match.url_name == 'products' %}on{% endif %}">
+        <i class="fas fa-fish"></i>
+        <span>Produits</span>
+      </a>
+      <a href="{% url 'gestadmin:users' %}"
+         class="adm-nav-item {% if request.resolver_match.url_name == 'users' %}on{% endif %}">
+        <i class="fas fa-users"></i>
+        <span>Utilisateurs</span>
+      </a>
+
+      <div class="adm-nav-sec">Site public</div>
+      <a href="{% url 'store:home' %}" class="adm-nav-item" target="_blank" rel="noopener">
+        <i class="fas fa-globe"></i>
+        <span>Voir le site</span>
+        <i class="fas fa-external-link-alt adm-ext-icon"></i>
+      </a>
+      <a href="{% url 'store:product_list' %}" class="adm-nav-item" target="_blank" rel="noopener">
+        <i class="fas fa-tags"></i>
+        <span>Catalogue public</span>
+        <i class="fas fa-external-link-alt adm-ext-icon"></i>
+      </a>
+    </nav>
+
+    <!-- Sidebar footer: user card + logout -->
+    <div class="adm-side-footer">
+      <div class="adm-user-card">
+        <div class="adm-user-av">{{ request.user.first_name|first|default:request.user.username|first|upper }}</div>
+        <div>
+          <div class="adm-user-name">{{ request.user.get_full_name|default:request.user.username }}</div>
+          <div class="adm-user-role">Administrateur</div>
+        </div>
+      </div>
+      <a href="{% url 'accounts:logout' %}" class="adm-logout-btn">
+        <i class="fas fa-sign-out-alt"></i>Déconnexion
+      </a>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════
+       MAIN
+  ═══════════════════════════ -->
+  <main class="adm-main">
+
+    <!-- Topbar -->
+    <header class="adm-topbar">
+      <!-- Mobile hamburger (left of title) -->
+      <button class="adm-ham-btn" id="admHamBtn" aria-label="Ouvrir le menu" onclick="toggleAdmSide()">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <div class="adm-page-title">
+        <i class="fas fa-anchor"></i>
+        {% block page_title %}Dashboard{% endblock %}
+      </div>
+      <div class="adm-topbar-r">
+
+        <!-- Notification bell -->
+        {% if pending_orders_count %}
+        <a href="{% url 'gestadmin:orders' %}?status=pending"
+           class="adm-icon-btn"
+           title="{{ pending_orders_count }} commande{% if pending_orders_count > 1 %}s{% endif %} en attente"
+           style="background:rgba(245,166,35,.1);border-color:rgba(245,166,35,.3);">
+          <i class="fas fa-bell" style="color:var(--ag);"></i>
+          <span class="adm-notif-dot">{{ pending_orders_count }}</span>
+        </a>
+        {% else %}
+        <a href="{% url 'gestadmin:orders' %}" class="adm-icon-btn" title="Commandes">
+          <i class="fas fa-bell"></i>
+        </a>
+        {% endif %}
+
+        <!-- External link to store (hidden on very small screens) -->
+        <a href="{% url 'store:product_list' %}" class="adm-icon-btn d-none d-sm-flex" target="_blank" title="Voir le catalogue">
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+
+        <!-- User pill (hidden on mobile — shown in sidebar footer) -->
+        <div class="adm-topbar-user">
+          <div class="adm-topbar-av">{{ request.user.first_name|first|default:request.user.username|first|upper }}</div>
+          <span class="adm-topbar-uname">{{ request.user.first_name|default:request.user.username }}</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Flash messages -->
+    {% if messages %}
+    <div class="adm-msgs" id="admMsgs">
+      {% for message in messages %}
+      <div class="adm-msg adm-msg-{% if message.tags == 'success' %}s{% elif message.tags == 'warning' %}w{% elif message.tags == 'error' or message.tags == 'danger' %}e{% else %}i{% endif %}">
+        <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'warning' %}exclamation-triangle{% elif message.tags == 'error' or message.tags == 'danger' %}times-circle{% else %}info-circle{% endif %}"></i>
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Page content -->
+    <div class="adm-content">
+      {% block content %}{% endblock %}
+    </div>
+
+  </main>
+</div><!-- /adm-wrap -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Auto-dismiss flash messages
+(function() {
+  setTimeout(function() {
+    var msgs = document.querySelectorAll('.adm-msg');
+    msgs.forEach(function(m) {
+      m.style.transition = 'opacity .45s, transform .45s';
+      m.style.opacity = '0';
+      m.style.transform = 'translateX(110%)';
+      setTimeout(function() { m.remove(); }, 460);
+    });
+  }, 4500);
+})();
+
+// Admin sidebar toggle with overlay
+function toggleAdmSide() {
+  var side = document.getElementById('admSide');
+  var overlay = document.getElementById('admOverlay');
+  var isOpen = side.classList.toggle('open');
+  if (overlay) overlay.classList.toggle('show', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+function closeAdmSide() {
+  var side = document.getElementById('admSide');
+  var overlay = document.getElementById('admOverlay');
+  if (side) side.classList.remove('open');
+  if (overlay) overlay.classList.remove('show');
+  document.body.style.overflow = '';
+}
+// Close sidebar when a nav link is clicked on mobile
+(function() {
+  var navItems = document.querySelectorAll('.adm-nav-item');
+  navItems.forEach(function(item) {
+    item.addEventListener('click', function() {
+      if (window.innerWidth < 992) closeAdmSide();
+    });
+  });
+})();
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Modifier mon profil — KALUUN{% endblock %}
+{% block extra_css %}
+<style>
+@media(max-width:575px) {
+  .profile-edit-wrap { padding: 90px 0 40px !important; }
+  .profile-edit-box { padding: 24px 16px !important; border-radius: 16px !important; }
+  .profile-edit-btn { width: 100%; justify-content: center; }
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="profile-edit-wrap" style="padding:100px 0 60px;">
+  <div class="container" style="max-width:600px;">
+    <a href="{% url 'accounts:dashboard' %}" style="color:rgba(0,207,255,.7);font-size:.85rem;display:inline-flex;align-items:center;gap:6px;margin-bottom:24px;">
+      <i class="fas fa-arrow-left"></i>Retour au tableau de bord
+    </a>
+    <div class="profile-edit-box" style="background:rgba(15,26,48,.9);border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:32px;">
+      <h2 style="font-family:'Syne',sans-serif;font-weight:800;color:#fff;margin-bottom:24px;">Modifier mon profil</h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-sm-6 col-12"><label style="font-size:.75rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;font-family:'Space Grotesk',sans-serif;display:block;margin-bottom:6px;">Prénom</label>
+          <input name="first_name" class="co-input" value="{{ request.user.first_name }}"></div>
+          <div class="col-sm-6 col-12"><label style="font-size:.75rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;font-family:'Space Grotesk',sans-serif;display:block;margin-bottom:6px;">Nom</label>
+          <input name="last_name" class="co-input" value="{{ request.user.last_name }}"></div>
+          <div class="col-12"><label style="font-size:.75rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;font-family:'Space Grotesk',sans-serif;display:block;margin-bottom:6px;">Email</label>
+          <input type="email" name="email" class="co-input" value="{{ request.user.email }}"></div>
+          <div class="col-sm-6 col-12"><label style="font-size:.75rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;font-family:'Space Grotesk',sans-serif;display:block;margin-bottom:6px;">Téléphone</label>
+          <input name="phone" class="co-input" value="{{ profile.phone }}"></div>
+          <div class="col-sm-6 col-12"><label style="font-size:.75rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;font-family:'Space Grotesk',sans-serif;display:block;margin-bottom:6px;">Quartier</label>
+          <input name="wilaya" class="co-input" value="{{ profile.wilaya }}"></div>
+          <div class="col-12"><label style="font-size:.75rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;font-family:'Space Grotesk',sans-serif;display:block;margin-bottom:6px;">Adresse</label>
+          <input name="address" class="co-input" value="{{ profile.address }}"></div>
+          <div class="col-12 mt-2">
+            <button type="submit" class="btn-cyan profile-edit-btn" style="padding:12px 28px;border-radius:28px;">
+              <i class="fas fa-save"></i>Enregistrer
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

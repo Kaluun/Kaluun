@@ -1,0 +1,678 @@
+{% extends 'base.html' %}
+{% load static widget_tweaks %}
+{% block title %}Commander — KALUUN{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ══════════════════════════════════════════════════
+   CHECKOUT — Marine Premium Light 2025
+   ══════════════════════════════════════════════════ */
+.co-wrap { padding: 90px 0 60px; min-height: 100vh; background: #F0F8FF; }
+
+/* ── Étapes ── */
+.co-step-row { display:flex; align-items:center; gap:0; margin-bottom:40px; }
+.co-step { display:flex; align-items:center; flex:1; }
+.co-step-num {
+  width:42px; height:42px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Space Grotesk',sans-serif; font-size:.9rem; font-weight:700;
+  background:#fff; border:2px solid rgba(0,119,182,.2); color:#9BBCD8; transition:.3s;
+  box-shadow:0 2px 8px rgba(3,4,94,.08);
+}
+.co-step.act .co-step-num {
+  background:linear-gradient(135deg,#03045E,#0077B6);
+  border-color:transparent; color:#03045E;
+  box-shadow:0 4px 18px rgba(3,4,94,.3);
+}
+.co-step.done .co-step-num {
+  background:linear-gradient(135deg,#F5A623,#FFD060);
+  border-color:transparent; color:#03045E;
+}
+.co-step-lbl { font-size:.8rem; color:#9BBCD8; margin-left:10px; font-family:'Space Grotesk',sans-serif; font-weight:600; }
+.co-step.act .co-step-lbl { color:#0077B6; font-weight:700; }
+.co-step.done .co-step-lbl { color:#C17D00; }
+.co-step-bar { flex:1; height:2px; background:rgba(0,119,182,.12); margin:0 10px; border-radius:2px; }
+.co-step.done + .co-step .co-step-bar { background:linear-gradient(90deg,#F5A623,#FFD060); }
+
+/* ── Cards ── */
+.co-card {
+  background:#fff; border:1.5px solid rgba(0,119,182,.12);
+  border-radius:22px; padding:32px; margin-bottom:20px;
+  box-shadow:0 2px 18px rgba(3,4,94,.07);
+}
+.co-card-title {
+  font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#03045E;
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:24px; padding-bottom:16px;
+  border-bottom:1.5px solid rgba(0,119,182,.1);
+}
+.co-card-title i { color:#F5A623; }
+
+/* ── Boutons paiement ── */
+.pay-choice { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.pay-btn {
+  position:relative; padding:28px 20px; border-radius:18px;
+  border:2px solid rgba(0,119,182,.15); background:#F8FBFF;
+  cursor:pointer; transition:.25s; text-align:center;
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+  box-shadow:0 2px 12px rgba(3,4,94,.06);
+}
+.pay-btn:hover { border-color:rgba(0,119,182,.35); background:#EAF5FF; transform:translateY(-3px); box-shadow:0 8px 28px rgba(3,4,94,.1); }
+.pay-btn.selected {
+  border-color:#0077B6 !important; background:#EAF5FF !important;
+  box-shadow:0 4px 22px rgba(0,119,182,.2);
+}
+.pay-btn.selected::after {
+  content:'✓'; position:absolute; top:12px; right:14px;
+  width:26px; height:26px; border-radius:50%;
+  background:linear-gradient(135deg,#F5A623,#FFD060); color:#03045E;
+  font-size:.82rem; font-weight:900; display:flex; align-items:center; justify-content:center;
+}
+.pay-btn-icon { font-size:2.5rem; }
+.pay-btn-title { font-family:'Space Grotesk',sans-serif; font-size:1rem; font-weight:700; color:#03045E; }
+.pay-btn-sub { font-size:.8rem; color:#5580A0; }
+
+/* ── Wallets ── */
+.wallet-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+.wallet-btn {
+  border:2px solid rgba(0,119,182,.12); border-radius:14px; padding:16px 12px;
+  cursor:pointer; transition:.25s; background:#F8FBFF;
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  box-shadow:0 1px 8px rgba(3,4,94,.05);
+}
+.wallet-btn:hover { border-color:rgba(0,119,182,.35); background:#EAF5FF; transform:translateY(-2px); }
+.wallet-btn.selected {
+  border-color:#0077B6; background:#EAF5FF;
+  box-shadow:0 4px 18px rgba(0,119,182,.18);
+}
+.wallet-btn img { height:52px; width:100%; object-fit:contain; border-radius:8px; }
+.wallet-btn span { font-family:'Space Grotesk',sans-serif; font-size:.82rem; font-weight:700; color:#03045E; }
+
+/* ── Box numéro paiement ── */
+.pay-number-box {
+  background:#EAF5FF; border:1.5px solid rgba(0,119,182,.25);
+  border-radius:16px; padding:22px; margin-top:20px; display:none;
+}
+.pay-number-box.show { display:block; animation:fadeUp .3s ease; }
+.pay-number-big {
+  font-family:'Syne',sans-serif; font-size:2rem; font-weight:800;
+  color:#0077B6; letter-spacing:2px;
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+}
+.copy-btn {
+  background:rgba(0,119,182,.1); border:1.5px solid rgba(0,119,182,.3);
+  color:#0077B6; padding:7px 16px; border-radius:8px;
+  font-size:.78rem; font-weight:700; cursor:pointer; transition:.2s;
+  font-family:'Space Grotesk',sans-serif;
+}
+.copy-btn:hover { background:linear-gradient(135deg,#0077B6,#00B4D8); color:#03045E; border-color:transparent; }
+
+/* ── Upload ── */
+.upload-zone {
+  border:2px dashed rgba(0,119,182,.22); border-radius:14px; padding:36px 24px;
+  text-align:center; cursor:pointer; transition:.25s; background:#F8FBFF;
+}
+.upload-zone:hover,.upload-zone.drag { border-color:#0077B6; background:#EAF5FF; }
+.upload-zone.has-file { border-color:#00A86B; border-style:solid; background:#F0FFF8; }
+
+/* ── Champs formulaire ── */
+.co-label {
+  font-family:'Space Grotesk',sans-serif; font-size:.72rem; font-weight:700;
+  color:#5580A0; letter-spacing:1.5px; text-transform:uppercase;
+  display:block; margin-bottom:7px;
+}
+.co-input {
+  width:100%; background:#F0F8FF; border:1.5px solid rgba(0,119,182,.18);
+  color:#03045E; padding:13px 16px; border-radius:12px; font-size:.92rem;
+  outline:none; transition:.2s; font-family:'Plus Jakarta Sans',sans-serif;
+}
+.co-input:focus {
+  border-color:#F5A623; background:#fff;
+  box-shadow:0 0 0 3px rgba(245,166,35,.12);
+}
+.co-input::placeholder { color:#9BBCD8; }
+.co-input.prefilled { border-color:rgba(0,119,182,.3); background:#EAF5FF; }
+textarea.co-input { resize:vertical; min-height:88px; }
+
+/* ── Résumé commande ── */
+.co-summary {
+  background:#fff; border:1.5px solid rgba(0,119,182,.12);
+  border-radius:22px; padding:26px; position:sticky; top:90px;
+  box-shadow:0 4px 24px rgba(3,4,94,.08);
+}
+.co-sum-row {
+  display:flex; justify-content:space-between; padding:10px 0;
+  border-bottom:1px solid rgba(0,119,182,.08); font-size:.88rem; color:#0353A4;
+  font-family:'Space Grotesk',sans-serif;
+}
+.co-sum-row span:last-child { color:#0077B6; font-weight:700; }
+.co-sum-total {
+  display:flex; justify-content:space-between; align-items:center;
+  padding-top:18px; margin-top:4px; border-top:2px solid rgba(0,119,182,.1);
+}
+.co-sum-total-lbl { font-family:'Space Grotesk',sans-serif; font-weight:700; color:#03045E; font-size:1rem; }
+.co-sum-total-amt {
+  font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:800;
+  background:linear-gradient(135deg,#F5A623,#FFD060);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+
+/* ── Navigation boutons ── */
+.co-nav { display:flex; justify-content:space-between; align-items:center; margin-top:24px; gap:12px; }
+.btn-prev {
+  background:#fff; border:1.5px solid rgba(0,119,182,.2); color:#0353A4;
+  padding:12px 24px; border-radius:30px;
+  font-family:'Space Grotesk',sans-serif; font-size:.87rem; font-weight:700; cursor:pointer; transition:.2s;
+}
+.btn-prev:hover { background:#EAF5FF; border-color:#0077B6; }
+.btn-next {
+  flex:1; padding:14px;
+  background:linear-gradient(135deg,#03045E,#0077B6);
+  color:#03045E; border:none; border-radius:14px;
+  font-family:'Space Grotesk',sans-serif; font-size:.95rem; font-weight:800;
+  cursor:pointer; transition:.25s; display:flex; align-items:center; justify-content:center; gap:8px;
+  box-shadow:0 4px 18px rgba(3,4,94,.25);
+}
+.btn-next:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(3,4,94,.35); }
+.btn-confirm {
+  background:linear-gradient(135deg,#F5A623,#FFD060) !important;
+  color:#03045E !important;
+  box-shadow:0 4px 18px rgba(245,166,35,.35) !important;
+}
+.btn-confirm:hover { box-shadow:0 8px 28px rgba(245,166,35,.5) !important; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+@media(max-width:576px){
+  .pay-choice,.wallet-grid{grid-template-columns:1fr;}
+  .co-wrap { padding: 80px 0 40px; }
+  .co-card { padding: 20px 14px; border-radius: 16px; }
+  .co-step-row { margin-bottom: 24px; }
+  .co-step-lbl { display:none; }
+  .co-step-num { width:34px; height:34px; font-size:.82rem; }
+  .co-step-bar { margin:0 6px; }
+  .co-summary { position:static; padding:20px 16px; margin-top:20px; }
+  .pay-btn { padding:20px 14px; }
+  .pay-btn-icon { font-size:2rem; }
+  .pay-number-big { font-size:1.5rem; }
+  .btn-next, .btn-prev { padding:12px 16px; font-size:.88rem; }
+  .co-nav { flex-wrap:wrap; }
+  .btn-prev { flex:0 0 auto; }
+  .upload-zone { padding:24px 16px; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="co-wrap">
+  <div class="container">
+
+    <!-- Titre -->
+    <div class="text-center mb-4">
+      <div style="font-size:.75rem;color:#5580A0;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">
+        <i class="fas fa-lock me-1" style="color:#0077B6;"></i>Commande sécurisée
+      </div>
+      <h1 style="font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:#03045E;">
+        Finaliser ma <span style="background:linear-gradient(135deg,#3D8EFF,#00CFFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Commande</span>
+      </h1>
+    </div>
+
+    <!-- Étapes -->
+    <div class="co-step-row" id="steps">
+      <div class="co-step act" id="si-1">
+        <div class="co-step-num">1</div>
+        <span class="co-step-lbl">Paiement</span>
+        <div class="co-step-bar"></div>
+      </div>
+      <div class="co-step" id="si-2">
+        <div class="co-step-num">2</div>
+        <span class="co-step-lbl">Livraison</span>
+        <div class="co-step-bar"></div>
+      </div>
+      <div class="co-step" id="si-3">
+        <div class="co-step-num">3</div>
+        <span class="co-step-lbl">Confirmation</span>
+      </div>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" id="order-form">
+      {% csrf_token %}
+      <!-- Champs cachés -->
+      <input type="hidden" name="payment_method" id="pm_field" value="cash">
+      <input type="hidden" name="full_name" id="hd_name">
+      <input type="hidden" name="email" id="hd_email">
+      <input type="hidden" name="phone" id="hd_phone">
+      <input type="hidden" name="delivery_address" id="hd_addr">
+      <input type="hidden" name="wilaya" id="hd_wilaya">
+      <input type="hidden" name="notes" id="hd_notes">
+
+      <div class="row g-4">
+        <!-- Gauche -->
+        <div class="col-lg-8">
+
+          <!-- ══ STEP 1 : PAIEMENT ══ -->
+          <div id="step1">
+            <div class="co-card">
+              <div class="co-card-title"><i class="fas fa-credit-card"></i>Comment souhaitez-vous payer ?</div>
+
+              <div class="pay-choice">
+                <!-- CASH -->
+                <div class="pay-btn selected" id="btn-cash" onclick="selectPay('cash')">
+                  <div class="pay-btn-icon">💵</div>
+                  <div class="pay-btn-title">Payer en Cash</div>
+                  <div class="pay-btn-sub">À la livraison — aucun frais</div>
+                </div>
+                <!-- MOBILE -->
+                <div class="pay-btn" id="btn-mobile" onclick="selectPay('mobile')">
+                  <div class="pay-btn-icon">📱</div>
+                  <div class="pay-btn-title">Payer par Mobile</div>
+                  <div class="pay-btn-sub">Waafi · CAC · D-Money · Saba</div>
+                </div>
+              </div>
+
+              <!-- Sélection wallet (cachée par défaut) -->
+              <div id="wallet-section" style="display:none;margin-top:28px;">
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:700;color:#5580A0;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;">
+                  <i class="fas fa-arrow-down me-1" style="color:#0077B6;"></i>Choisissez votre wallet :
+                </div>
+                <div class="wallet-grid">
+                  <div class="wallet-btn" id="w-waafi" onclick="selectWallet('waafi','Waafi Mobile')">
+                    <img src="{% static 'images/wallets/waafi.webp' %}" alt="Waafi"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                    <div style="display:none;font-size:2.5rem;">💚</div>
+                    <span>Waafi</span>
+                  </div>
+                  <div class="wallet-btn" id="w-cac" onclick="selectWallet('cac','CAC')">
+                    <img src="{% static 'images/wallets/cac.webp' %}" alt="CAC"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                    <div style="display:none;font-size:2.5rem;">🏦</div>
+                    <span>CAC</span>
+                  </div>
+                  <div class="wallet-btn" id="w-dmoney" onclick="selectWallet('dmoney','D-Money')">
+                    <img src="{% static 'images/wallets/d-money.webp' %}" alt="D-Money"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                    <div style="display:none;font-size:2.5rem;">💛</div>
+                    <span>D-Money</span>
+                  </div>
+                  <div class="wallet-btn" id="w-saba" onclick="selectWallet('saba','Saba')">
+                    <img src="{% static 'images/wallets/saba.webp' %}" alt="Saba"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                    <div style="display:none;font-size:2.5rem;">🟢</div>
+                    <span>Saba</span>
+                  </div>
+                </div>
+
+                <!-- Numéro à payer -->
+                <div class="pay-number-box" id="pay-num-box">
+                  <div style="font-size:.75rem;color:#0077B6;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;font-family:'Space Grotesk',sans-serif;font-weight:700;">
+                    📤 Envoyez votre paiement à ce numéro :
+                  </div>
+                  <div class="pay-number-big">
+                    <img id="w-logo-display" src="" alt="" style="height:36px;object-fit:contain;border-radius:6px;display:none;">
+                    <span>+253 77 15 07 89</span>
+                    <button type="button" class="copy-btn" onclick="doCopy()">
+                      <i class="fas fa-copy me-1"></i>Copier
+                    </button>
+                  </div>
+                  <div id="w-name-display" style="font-size:.85rem;color:#5580A0;margin-top:8px;font-family:'Space Grotesk',sans-serif;"></div>
+                  <div style="margin-top:16px;padding:12px 16px;background:#EAF5FF;border-radius:10px;border-left:3px solid #00CFFF;">
+                    <p style="font-size:.82rem;color:#0077B6;margin:0;line-height:1.6;">
+                      ✅ Après le transfert, téléversez la <strong>capture d'écran</strong> ci-dessous pour confirmer votre paiement.
+                    </p>
+                  </div>
+
+                  <!-- Upload screenshot -->
+                  <div style="margin-top:20px;">
+                    <label class="co-label">Capture d'écran de la transaction *</label>
+                    <!-- Input fichier direct (non caché par CSS) -->
+                    <input type="file" name="transaction_screenshot" id="screenshot_file"
+                           accept="image/png,image/jpeg,image/jpg,image/webp"
+                           style="position:absolute;opacity:0;width:0;height:0;pointer-events:none;">
+                    <div class="upload-zone" id="upz" onclick="document.getElementById('screenshot_file').click()">
+                      <i class="fas fa-cloud-upload-alt" style="font-size:2.2rem;color:#0077B6;display:block;margin-bottom:10px;"></i>
+                      <div id="upz-text" style="font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:600;color:#0353A4;">
+                        Cliquez ou glissez votre capture ici
+                      </div>
+                      <div style="font-size:.75rem;color:#5580A0;margin-top:4px;">PNG · JPG · WEBP · max 5MB</div>
+                    </div>
+                    <img id="screenshot-preview" style="display:none;max-width:100%;border-radius:12px;margin-top:12px;border:1px solid rgba(0,207,255,.2);">
+                  </div>
+
+                  <!-- Référence -->
+                  <div style="margin-top:16px;">
+                    <label class="co-label">Référence / N° de transaction (optionnel)</label>
+                    <input type="text" name="transaction_ref" id="txn_ref_input" class="co-input" placeholder="Ex: TXN-123456">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Info cash -->
+            <div id="cash-info" style="background:#F0FFF8;border:1.5px solid rgba(0,168,107,.25);border-radius:14px;padding:18px 20px;display:flex;align-items:flex-start;gap:14px;">
+              <i class="fas fa-info-circle" style="color:#00A86B;font-size:1.2rem;margin-top:2px;flex-shrink:0;"></i>
+              <div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#03045E;font-size:.9rem;margin-bottom:4px;">Paiement à la livraison</div>
+                <p style="color:#5580A0;font-size:.84rem;margin:0;line-height:1.6;">Préparez le montant exact en espèces. Notre livreur passera selon votre créneau horaire choisi.</p>
+              </div>
+            </div>
+
+            <div class="co-nav mt-3">
+              <div></div>
+              <button type="button" class="btn-next" onclick="goStep(2)" id="btn-next-1">
+                Continuer <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- ══ STEP 2 : LIVRAISON ══ -->
+          <div id="step2" style="display:none;">
+            <div class="co-card">
+              <div class="co-card-title"><i class="fas fa-map-marker-alt"></i>Informations de livraison</div>
+
+              <div style="background:#EAF5FF;border:1.5px solid rgba(0,119,182,.2);border-radius:12px;padding:14px 16px;margin-bottom:24px;display:flex;align-items:center;gap:10px;">
+                <i class="fas fa-magic" style="color:#0077B6;"></i>
+                <p style="font-size:.83rem;color:#0077B6;margin:0;font-family:'Space Grotesk',sans-serif;">
+                  Vos informations ont été pré-remplies depuis votre profil. Modifiez si nécessaire.
+                </p>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="co-label">Nom complet *</label>
+                  <input type="text" class="co-input prefilled" id="f-name" value="{{ request.user.get_full_name|default:request.user.username }}" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="co-label">Téléphone *</label>
+                  <input type="tel" class="co-input prefilled" id="f-phone" value="{% if request.user.profile %}{{ request.user.profile.phone }}{% endif %}" placeholder="+253 77 XX XX XX" required>
+                </div>
+                <div class="col-12">
+                  <label class="co-label">Email *</label>
+                  <input type="email" class="co-input prefilled" id="f-email" value="{{ request.user.email }}">
+                </div>
+                <div class="col-md-5">
+                  <label class="co-label">Quartier / Zone *</label>
+                  <input type="text" class="co-input" id="f-wilaya" value="{% if request.user.profile %}{{ request.user.profile.wilaya }}{% endif %}" placeholder="Ex: Balbala, Plateaux..." required>
+                </div>
+                <div class="col-md-7">
+                  <label class="co-label">Adresse complète *</label>
+                  <textarea class="co-input" id="f-addr" rows="3" placeholder="Rue, immeuble, repère proche..." required>{% if request.user.profile %}{{ request.user.profile.address }}{% endif %}</textarea>
+                </div>
+                <div class="col-12">
+                  <label class="co-label">Instructions (optionnel)</label>
+                  <textarea class="co-input" id="f-notes" rows="2" placeholder="Ex: Appeler avant, portail bleu, 2ème étage..."></textarea>
+                </div>
+
+                <!-- CGV -->
+                <div class="col-12">
+                  <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:14px;background:#F8FBFF;border-radius:12px;border:1.5px solid rgba(0,119,182,.1);">
+                    <input type="checkbox" id="cgv" required
+                      style="width:18px;height:18px;margin-top:2px;accent-color:#0077B6;flex-shrink:0;">
+                    <span style="font-size:.84rem;color:#0353A4;line-height:1.6;">
+                      J'accepte les <a href="#" style="color:#0077B6;">Conditions Générales de Vente</a> de KALUUN. Je certifie que les informations sont exactes et que le paiement a bien été effectué (si mobile).
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="co-nav">
+              <button type="button" class="btn-prev" onclick="goStep(1)">
+                <i class="fas fa-arrow-left me-1"></i>Retour
+              </button>
+              <button type="button" class="btn-next" onclick="goStep(3)">
+                Vérifier <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- ══ STEP 3 : CONFIRMATION ══ -->
+          <div id="step3" style="display:none;">
+            <div class="co-card">
+              <div class="co-card-title"><i class="fas fa-check-double"></i>Vérifiez votre commande</div>
+
+              <div id="recap-box" style="color:#0353A4;font-size:.9rem;line-height:2.2;font-family:'Space Grotesk',sans-serif;">
+                <!-- rempli par JS -->
+              </div>
+
+              <div style="margin-top:20px;padding:16px;background:#F0FFF8;border:1.5px solid rgba(0,168,107,.2);border-radius:12px;">
+                <p style="font-size:.84rem;color:#00A86B;margin:0;line-height:1.6;">
+                  <i class="fas fa-check-circle me-1"></i>
+                  En validant, votre commande sera transmise à notre équipe. Vous serez contacté dans les <strong>30 minutes</strong>.
+                </p>
+              </div>
+            </div>
+
+            <div class="co-nav">
+              <button type="button" class="btn-prev" onclick="goStep(2)">
+                <i class="fas fa-arrow-left me-1"></i>Modifier
+              </button>
+              <button type="submit" class="btn-next btn-confirm" onclick="prepareSubmit()">
+                <i class="fas fa-check-circle"></i>Confirmer ma commande
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /col-8 -->
+
+        <!-- Récap commande -->
+        <div class="col-lg-4">
+          <div class="co-summary">
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#03045E;font-size:1rem;margin-bottom:18px;display:flex;align-items:center;gap:8px;">
+              <i class="fas fa-receipt" style="color:#0077B6;"></i>Votre commande
+            </div>
+
+            {% for item in cart_items %}
+            <div class="co-sum-row">
+              <span>{{ item.name }} × {{ item.quantity }}{% if item.unit %} {{ item.unit }}{% endif %}</span>
+              <span>{{ item.subtotal|floatformat:0 }} FDJ</span>
+            </div>
+            {% endfor %}
+
+            <div class="co-sum-row">
+              <span>Livraison</span>
+              <span style="color:#00A86B !important;">Gratuite 🎉</span>
+            </div>
+
+            <div class="co-sum-total">
+              <span class="co-sum-total-lbl">Total à payer</span>
+              <span class="co-sum-total-amt">{{ total|floatformat:0 }} FDJ</span>
+            </div>
+
+            <!-- Mode paiement sélectionné -->
+            <div id="sum-pay-info" style="margin-top:16px;padding:12px 14px;background:#F8FBFF;border-radius:10px;border:1.5px solid rgba(0,119,182,.1);">
+              <div style="font-size:.75rem;color:#5580A0;font-family:'Space Grotesk',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;">Paiement</div>
+              <div id="sum-pay-mode" style="font-family:'Space Grotesk',sans-serif;font-size:.88rem;font-weight:700;color:#03045E;">💵 Cash à la livraison</div>
+            </div>
+
+            <div style="margin-top:16px;padding:12px;background:#EAF5FF;border-radius:10px;text-align:center;">
+              <i class="fas fa-lock" style="color:#0077B6;margin-right:6px;"></i>
+              <span style="font-size:.78rem;color:#5580A0;font-family:'Space Grotesk',sans-serif;">Commande 100% sécurisée</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /row -->
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const CSRF = '{{ csrf_token }}';
+const WALLETS = {
+  waafi:  {name:'Waafi Mobile',  img:'{% static "images/wallets/waafi.webp" %}'},
+  cac:    {name:'CAC',           img:'{% static "images/wallets/cac.webp" %}'},
+  dmoney: {name:'D-Money',       img:'{% static "images/wallets/d-money.webp" %}'},
+  saba:   {name:'Saba',          img:'{% static "images/wallets/saba.webp" %}'},
+};
+
+let payMode = 'cash';
+let walletKey = null;
+let currentStep = 1;
+
+// ── Sélection paiement ────────────────────────────────────
+function selectPay(mode) {
+  payMode = mode;
+  document.getElementById('pm_field').value = mode;
+
+  document.getElementById('btn-cash').classList.toggle('selected', mode==='cash');
+  document.getElementById('btn-mobile').classList.toggle('selected', mode==='mobile');
+  document.getElementById('wallet-section').style.display = mode==='mobile' ? 'block' : 'none';
+  document.getElementById('cash-info').style.display = mode==='cash' ? 'flex' : 'none';
+
+  updateSummaryPay();
+}
+
+// ── Sélection wallet ──────────────────────────────────────
+function selectWallet(key, name) {
+  walletKey = key;
+  document.getElementById('pm_field').value = key;
+
+  // Déselectionner tous
+  document.querySelectorAll('.wallet-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('w-'+key).classList.add('selected');
+
+  // Afficher numéro
+  const box = document.getElementById('pay-num-box');
+  box.classList.add('show');
+  box.style.display = 'block';
+
+  const logo = document.getElementById('w-logo-display');
+  if(WALLETS[key]) {
+    logo.src = WALLETS[key].img;
+    logo.style.display = 'inline-block';
+    document.getElementById('w-name-display').textContent = 'Compte : ' + WALLETS[key].name;
+  }
+
+  updateSummaryPay();
+}
+
+function updateSummaryPay() {
+  const el = document.getElementById('sum-pay-mode');
+  if(!el) return;
+  if(payMode === 'cash') el.innerHTML = '💵 Cash à la livraison';
+  else if(walletKey && WALLETS[walletKey]) el.innerHTML = '📱 ' + WALLETS[walletKey].name;
+  else el.innerHTML = '📱 Paiement mobile';
+}
+
+function doCopy() {
+  navigator.clipboard.writeText('+253 77 15 07 89').then(() => {
+    const b = event.currentTarget;
+    b.innerHTML = '<i class="fas fa-check me-1"></i>Copié !';
+    setTimeout(() => b.innerHTML = '<i class="fas fa-copy me-1"></i>Copier', 2500);
+  });
+}
+
+// ── Upload preview ────────────────────────────────────────
+// Upload capture de transaction
+const screenshotInput = document.getElementById('screenshot_file');
+if(screenshotInput) {
+  screenshotInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if(!file) return;
+    if(file.size > 5*1024*1024) { alertBox('Fichier trop grand (max 5MB)'); return; }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const prev = document.getElementById('screenshot-preview');
+      prev.src = ev.target.result;
+      prev.style.display = 'block';
+      const upz = document.getElementById('upz');
+      upz.classList.add('has-file');
+      document.getElementById('upz-text').innerHTML = '✅ <strong>' + file.name + '</strong>';
+    };
+    reader.readAsDataURL(file);
+  });
+}
+// Drag & drop
+const upz2 = document.getElementById('upz');
+if(upz2) {
+  upz2.addEventListener('dragover', e => { e.preventDefault(); upz2.classList.add('drag'); });
+  upz2.addEventListener('dragleave', () => upz2.classList.remove('drag'));
+  upz2.addEventListener('drop', e => {
+    e.preventDefault(); upz2.classList.remove('drag');
+    const file = e.dataTransfer.files[0];
+    if(file && screenshotInput) {
+      const dt = new DataTransfer(); dt.items.add(file);
+      screenshotInput.files = dt.files;
+      screenshotInput.dispatchEvent(new Event('change'));
+    }
+  });
+}
+
+// ── Navigation étapes ─────────────────────────────────────
+function goStep(n) {
+  // Validations
+  if(n === 2) {
+    if(payMode === 'mobile') {
+      if(!walletKey) { alertBox('Veuillez choisir un wallet mobile (Waafi, CAC, D-Money ou Saba).'); return; }
+      const sc = document.getElementById('screenshot_file');
+      if(!sc || !sc.files || !sc.files.length) { alertBox('Veuillez téléverser la capture d\'écran de votre transaction mobile.'); return; }
+    }
+  }
+  if(n === 3) {
+    const name = document.getElementById('f-name').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    const addr = document.getElementById('f-addr').value.trim();
+    const wilaya = document.getElementById('f-wilaya').value.trim();
+    const cgv = document.getElementById('cgv').checked;
+    if(!name) { alertBox('Veuillez entrer votre nom complet.'); return; }
+    if(!phone) { alertBox('Veuillez entrer votre numéro de téléphone.'); return; }
+    if(!addr) { alertBox('Veuillez entrer votre adresse de livraison.'); return; }
+    if(!wilaya) { alertBox('Veuillez indiquer votre quartier/zone.'); return; }
+    if(!cgv) { alertBox('Vous devez accepter les Conditions Générales de Vente.'); return; }
+    buildRecap();
+  }
+
+  // Transition
+  for(let i=1;i<=3;i++) {
+    document.getElementById('step'+i).style.display = i===n ? 'block' : 'none';
+    const si = document.getElementById('si-'+i);
+    si.classList.remove('act','done');
+    if(i < n) si.classList.add('done');
+    else if(i === n) si.classList.add('act');
+  }
+  currentStep = n;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function buildRecap() {
+  const pay = payMode==='cash' ? '💵 Cash à la livraison' : '📱 ' + (WALLETS[walletKey]?.name || 'Mobile');
+  const info = [
+    ['Mode de paiement', pay],
+    ['Nom', document.getElementById('f-name').value],
+    ['Téléphone', document.getElementById('f-phone').value],
+    ['Email', document.getElementById('f-email').value],
+    ['Zone/Quartier', document.getElementById('f-wilaya').value],
+    ['Adresse', document.getElementById('f-addr').value],
+  ];
+  const notes = document.getElementById('f-notes').value;
+  if(notes) info.push(['Notes', notes]);
+
+  document.getElementById('recap-box').innerHTML = info.map(([k,v]) =>
+    `<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.04);padding:8px 0;gap:20px;">
+      <span style="color:#0077B6;flex-shrink:0;">${k}</span>
+      <span style="color:#03045E;text-align:right;">${v}</span>
+    </div>`
+  ).join('');
+}
+
+function prepareSubmit() {
+  document.getElementById('hd_name').value = document.getElementById('f-name').value;
+  document.getElementById('hd_email').value = document.getElementById('f-email').value;
+  document.getElementById('hd_phone').value = document.getElementById('f-phone').value;
+  document.getElementById('hd_addr').value = document.getElementById('f-addr').value;
+  document.getElementById('hd_wilaya').value = document.getElementById('f-wilaya').value;
+  document.getElementById('hd_notes').value = document.getElementById('f-notes').value;
+}
+
+function alertBox(msg) {
+  const a = document.createElement('div');
+  a.style.cssText = 'position:fixed;top:100px;left:50%;transform:translateX(-50%);z-index:9999;background:rgba(255,71,87,.15);border:1px solid rgba(255,71,87,.4);color:#FF4757;padding:14px 24px;border-radius:12px;font-family:Space Grotesk,sans-serif;font-weight:600;font-size:.9rem;backdrop-filter:blur(10px);max-width:400px;text-align:center;';
+  a.textContent = '⚠️ ' + msg;
+  document.body.appendChild(a);
+  setTimeout(() => a.remove(), 3500);
+}
+
+selectPay('cash');
+</script>
+{% endblock %}

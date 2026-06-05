@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %}Commande Confirmée — KALUUN{% endblock %}
+
+{% block extra_css %}
+<style>
+@media(max-width:575px) {
+  .order-conf-section { padding: 80px 0 40px !important; }
+  .order-conf-box { padding: 20px 14px !important; border-radius: 14px !important; }
+  .order-conf-btns a { flex: 1 1 auto; justify-content: center; text-align: center; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="order-conf-section" style="min-height:85vh;display:flex;align-items:center;padding:100px 0 60px;background:var(--section-bg);">
+  <div class="container">
+    <div style="max-width:660px;margin:0 auto;">
+
+      <!-- Icône succès animée -->
+      <div style="text-align:center;margin-bottom:36px;">
+        <div class="confirm-check" style="margin-bottom:0;">
+          <i class="fas fa-check"></i>
+        </div>
+      </div>
+
+      <!-- Titre -->
+      <div style="text-align:center;margin-bottom:32px;">
+        <h1 style="font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--ocean-deep);margin-bottom:10px;">
+          Commande <span style="background:linear-gradient(135deg,var(--ocean-mid),var(--ocean-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">confirmée !</span>
+        </h1>
+        <p style="color:var(--text-light);font-size:1rem;line-height:1.7;">
+          Merci <strong style="color:var(--ocean-deep);">{{ order.full_name }}</strong> !<br>
+          Notre équipe vous contactera au <strong style="color:var(--ocean-mid);">{{ order.phone }}</strong> dans les <strong>30 minutes</strong>.
+        </p>
+      </div>
+
+      <!-- Récapitulatif -->
+      <div class="order-conf-box" style="background:var(--white);border-radius:var(--r);border:1px solid var(--border-card);overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:24px;">
+        <div style="background:var(--pale-blue);padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+          <i class="fas fa-receipt" style="color:var(--ocean-mid);"></i>
+          <span style="font-family:var(--fu);font-weight:700;color:var(--ocean-deep);">Récapitulatif — Commande #{{ order.pk }}</span>
+        </div>
+        <div style="padding:20px 22px;">
+          <div class="row g-3">
+            <div class="col-6">
+              <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-family:var(--fu);margin-bottom:4px;">Paiement</div>
+              <div style="font-family:var(--fu);font-weight:700;color:var(--ocean-dark);">{{ order.get_payment_method_display }}</div>
+            </div>
+            <div class="col-6">
+              <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-family:var(--fu);margin-bottom:4px;">Total payé</div>
+              <div style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,var(--ocean-dark),var(--ocean-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">{{ order.total_price|floatformat:0 }} FDJ</div>
+            </div>
+            <div class="col-12" style="border-top:1px solid var(--border);padding-top:12px;">
+              <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-family:var(--fu);margin-bottom:4px;">Adresse de livraison</div>
+              <div style="font-family:var(--fu);color:var(--ocean-dark);font-size:.9rem;">
+                {{ order.delivery_address }}{% if order.wilaya %}, {{ order.wilaya }}{% endif %}
+              </div>
+            </div>
+            {% if order.items.all %}
+            <div class="col-12" style="border-top:1px solid var(--border);padding-top:12px;">
+              <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-family:var(--fu);margin-bottom:8px;">Articles commandés</div>
+              {% for item in order.items.all %}
+              <div style="display:flex;justify-content:space-between;font-size:.85rem;padding:4px 0;color:var(--text-light);">
+                <span>🐟 {{ item.product_name }} × {{ item.quantity }}{{ item.unit }}</span>
+                <span style="font-weight:600;color:var(--ocean-dark);">{{ item.subtotal }} FDJ</span>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Info confirmation -->
+      <div style="background:#F0FFF7;border:1px solid rgba(0,200,83,.25);border-radius:12px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:flex-start;gap:12px;">
+        <i class="fas fa-check-circle" style="color:#00C853;font-size:1.1rem;margin-top:2px;flex-shrink:0;"></i>
+        <div style="font-size:.87rem;color:#1B6B3A;line-height:1.6;font-family:var(--fu);">
+          <strong>Commande enregistrée avec succès.</strong> Notre livreur vous appellera pour confirmer le créneau de livraison. Préparez le montant exact si vous payez en cash.
+        </div>
+      </div>
+
+      <!-- Avertissement email spam -->
+      {% if order.email %}
+      <div style="background:#FFF8EC;border:1.5px solid rgba(245,166,35,.35);border-radius:12px;padding:14px 18px;margin-bottom:24px;display:flex;align-items:flex-start;gap:12px;">
+        <i class="fas fa-envelope" style="color:#F5A623;font-size:1rem;margin-top:2px;flex-shrink:0;"></i>
+        <div style="font-size:.84rem;color:#7A5A00;line-height:1.65;font-family:'Space Grotesk',sans-serif;">
+          Un email de confirmation a été envoyé à <strong>{{ order.email }}</strong>.<br>
+          <span style="font-size:.8rem;color:#9A7A20;">Si vous ne le recevez pas dans 5 minutes, vérifiez votre dossier <strong>Spam / Indésirables</strong> et marquez-le comme <strong>"Non spam"</strong>.</span>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Boutons -->
+      <div class="order-conf-btns" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="{% url 'store:product_list' %}" class="btn-solid" style="text-decoration:none;padding:12px 28px;border-radius:30px;">
+          <i class="fas fa-fish"></i>Continuer mes achats
+        </a>
+        <a href="{% url 'accounts:dashboard' %}" class="btn-ghost" style="text-decoration:none;padding:12px 24px;border-radius:30px;">
+          <i class="fas fa-list-alt"></i>Mes commandes
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

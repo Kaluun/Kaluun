@@ -1,0 +1,1266 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Mon Tableau de Bord — KALUUN{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   DASHBOARD UTILISATEUR — KALUUN Premium v2
+   Background: #EFF3F8 | Navy × Gold × Ocean
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --dn:    #03045E;
+  --dn2:   #023E8A;
+  --do:    #0077B6;
+  --do2:   #0096C7;
+  --dg:    #F5A623;
+  --dgl:   #FFD060;
+  --dgreen:#007A4D;
+  --dred:  #C23B47;
+  --dbg:   #E0EEF8;
+  --dcard: #EBF5FF;
+  --dbdr:  rgba(0,119,182,.13);
+  --dt:    #03045E;
+  --dtm:   #0353A4;
+  --dts:   #4E6A8A;
+  --f:     'Plus Jakarta Sans',sans-serif;
+  --fu:    'Space Grotesk',sans-serif;
+  --fd:    'Syne',sans-serif;
+}
+
+/* ── Page ── */
+.dash {
+  padding: 88px 0 72px;
+  min-height: 100vh;
+  background: linear-gradient(150deg, #D8ECF8 0%, #E5F3FB 45%, #DCF0FA 100%);
+  background-attachment: fixed;
+}
+
+/* ══════════════════════════
+   SIDEBAR
+══════════════════════════ */
+.d-side {
+  background: linear-gradient(175deg, #03045E 0%, #023E8A 55%, #01497C 100%);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 8px 48px rgba(3,4,94,.22), 0 2px 12px rgba(3,4,94,.14);
+  position: sticky;
+  top: 88px;
+  border: 1px solid rgba(245,166,35,.12);
+}
+
+/* Dot-grid texture overlay */
+.d-side-head {
+  padding: 30px 22px 26px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: rgba(0,0,0,.18);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.d-side-head::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size: 18px 18px;
+  pointer-events: none;
+}
+.d-side-head::after {
+  content: '';
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160px;
+  height: 60px;
+  background: radial-gradient(ellipse, rgba(245,166,35,.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.d-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #F5A623 0%, #FFD060 100%);
+  color: #03045E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--fd);
+  font-size: 2.1rem;
+  font-weight: 800;
+  margin: 0 auto 16px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 0 4px rgba(245,166,35,.22), 0 0 0 8px rgba(245,166,35,.08), 0 10px 28px rgba(0,0,0,.3);
+}
+
+.d-user-name {
+  font-family: var(--fd);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+  line-height: 1.3;
+}
+.d-user-email {
+  font-size: .73rem;
+  color: rgba(255,255,255,.5);
+  margin-top: 4px;
+  position: relative;
+  z-index: 1;
+  font-family: var(--fu);
+}
+.d-user-badge {
+  margin-top: 13px;
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(245,166,35,.18);
+  border: 1px solid rgba(245,166,35,.38);
+  color: #FFD060;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: .68rem;
+  font-weight: 700;
+  font-family: var(--fu);
+  letter-spacing: .5px;
+}
+
+/* Nav */
+.d-nav { padding: 16px 12px 8px; }
+.d-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 14px;
+  border-radius: 11px;
+  font-family: var(--fu);
+  font-size: .85rem;
+  font-weight: 500;
+  color: rgba(255,255,255,.58);
+  transition: all .22s cubic-bezier(.4,0,.2,1);
+  text-decoration: none;
+  margin-bottom: 2px;
+  position: relative;
+  border-left: 3px solid transparent;
+}
+.d-nav-item:hover {
+  background: rgba(255,255,255,.09);
+  color: rgba(255,255,255,.92);
+  padding-left: 18px;
+  border-left-color: rgba(245,166,35,.35);
+}
+.d-nav-item.active {
+  background: linear-gradient(135deg, rgba(245,166,35,.2) 0%, rgba(245,166,35,.08) 100%);
+  color: #FFD060;
+  font-weight: 700;
+  border-left-color: #F5A623;
+  padding-left: 18px;
+}
+.d-nav-item i { width: 17px; text-align: center; font-size: .87rem; flex-shrink: 0; }
+.d-nav-item .badge-n {
+  margin-left: auto;
+  background: rgba(245,166,35,.2);
+  color: #FFD060;
+  font-size: .65rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(245,166,35,.3);
+}
+.d-nav-sep {
+  border-top: 1px solid rgba(255,255,255,.07);
+  margin: 8px 6px;
+}
+.d-nav-item.logout-item { color: rgba(220,80,80,.7); }
+.d-nav-item.logout-item:hover { background: rgba(220,57,70,.1); color: #FF8080; border-left-color: rgba(220,57,70,.4); }
+
+/* ══════════════════════════
+   TABS (pill style)
+══════════════════════════ */
+.d-tabs {
+  display: flex;
+  gap: 3px;
+  background: rgba(3,4,94,.07);
+  border-radius: 14px;
+  padding: 4px;
+  margin-bottom: 28px;
+  border: 1.5px solid rgba(3,4,94,.1);
+  width: fit-content;
+}
+.d-tab {
+  padding: 9px 20px;
+  border-radius: 10px;
+  font-family: var(--fu);
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--dts);
+  cursor: pointer;
+  transition: all .22s cubic-bezier(.4,0,.2,1);
+  border: none;
+  background: transparent;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.d-tab.active {
+  background: linear-gradient(135deg, var(--dn), var(--do));
+  color: #fff;
+  box-shadow: 0 3px 14px rgba(3,4,94,.28);
+}
+.d-tab:not(.active):hover {
+  background: rgba(3,4,94,.06);
+  color: var(--dtm);
+}
+
+/* ══════════════════════════
+   STAT CARDS
+══════════════════════════ */
+.d-stat {
+  background: var(--dcard);
+  border-radius: 18px;
+  padding: 22px 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all .28s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 2px 12px rgba(3,4,94,.07), 0 1px 3px rgba(3,4,94,.04);
+  border: 1.5px solid rgba(3,4,94,.07);
+}
+.d-stat:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 48px rgba(3,4,94,.14), 0 4px 12px rgba(3,4,94,.06);
+  border-color: rgba(3,4,94,.12);
+}
+/* Top colored border */
+.d-stat::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--stat-gradient, linear-gradient(90deg, var(--do), var(--do2)));
+  border-radius: 18px 18px 0 0;
+}
+
+.d-stat-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  margin-bottom: 16px;
+  background: var(--stat-icon-bg, rgba(0,119,182,.09));
+  color: var(--stat-icon-color, var(--do));
+}
+.d-stat-val {
+  font-family: var(--fd);
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--dt);
+  line-height: 1;
+  letter-spacing: -.5px;
+}
+.d-stat-lbl {
+  font-size: .74rem;
+  color: var(--dts);
+  margin-top: 6px;
+  font-family: var(--fu);
+  font-weight: 500;
+}
+
+/* ══════════════════════════
+   PANEL
+══════════════════════════ */
+.d-panel {
+  background: var(--dcard);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 2px 14px rgba(3,4,94,.06), 0 1px 3px rgba(3,4,94,.03);
+  border: 1.5px solid rgba(3,4,94,.07);
+}
+.d-sec-title {
+  font-family: var(--fu);
+  font-size: .92rem;
+  font-weight: 700;
+  color: var(--dt);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1.5px solid rgba(3,4,94,.06);
+}
+.d-sec-title i { color: var(--dg); }
+
+/* ══════════════════════════
+   ORDER ROWS
+══════════════════════════ */
+.d-order {
+  background: #E8F4FD;
+  border: 1.5px solid rgba(0,119,182,.13);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  transition: all .22s;
+  box-shadow: 0 1px 5px rgba(3,4,94,.04);
+  cursor: pointer;
+}
+.d-order:hover {
+  border-color: rgba(245,166,35,.4);
+  background: #FFF8E8;
+  box-shadow: 0 6px 22px rgba(245,166,35,.12);
+  transform: translateX(2px);
+}
+.d-order-id {
+  font-family: var(--fd);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--dt);
+  min-width: 58px;
+}
+.d-order-items { font-size: .82rem; color: var(--dts); flex: 1; min-width: 100px; }
+.d-order-items small { display: block; font-size: .72rem; color: #9BBCD8; margin-top: 2px; }
+.d-order-total {
+  font-family: var(--fd);
+  font-size: .95rem;
+  font-weight: 800;
+  color: var(--do);
+  min-width: 90px;
+  text-align: right;
+}
+.d-order-date { font-size: .73rem; color: #9BBCD8; font-family: var(--fu); min-width: 78px; text-align: right; }
+
+/* ══════════════════════════
+   STATUS BADGES
+══════════════════════════ */
+.d-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-family: var(--fu);
+  font-size: .67rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  white-space: nowrap;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+.b-pending    { background: rgba(245,166,35,.10); color: #B87000;  border-color: rgba(245,166,35,.28); }
+.b-confirmed  { background: rgba(0,87,168,.07);   color: var(--do); border-color: rgba(0,87,168,.18); }
+.b-processing { background: rgba(107,72,255,.07); color: #6B48FF;  border-color: rgba(107,72,255,.2); }
+.b-delivering { background: rgba(0,150,200,.08);  color: #0096C7;  border-color: rgba(0,150,200,.22); }
+.b-delivered  { background: rgba(0,122,77,.08);   color: #007A4D;  border-color: rgba(0,122,77,.22); }
+.b-cancelled, .b-rejected { background: rgba(194,59,71,.07); color: #C23B47; border-color: rgba(194,59,71,.2); }
+
+/* ══════════════════════════
+   QUICK ACTIONS
+══════════════════════════ */
+.d-action {
+  background: #E8F4FD;
+  border: 1.5px solid rgba(0,119,182,.14);
+  border-radius: 16px;
+  padding: 20px 14px;
+  text-align: center;
+  transition: all .25s cubic-bezier(.4,0,.2,1);
+  text-decoration: none;
+  display: block;
+  box-shadow: 0 1px 6px rgba(3,4,94,.04);
+}
+.d-action:hover {
+  background: linear-gradient(135deg, var(--dn), var(--do));
+  border-color: transparent;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 32px rgba(3,4,94,.2);
+}
+.d-action-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(245,166,35,.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+  transition: all .25s;
+}
+.d-action-icon i { font-size: 1.1rem; color: var(--dg); transition: color .25s; }
+.d-action span { font-family: var(--fu); font-size: .8rem; font-weight: 600; color: var(--dtm); transition: color .25s; }
+.d-action:hover .d-action-icon { background: rgba(255,255,255,.15); }
+.d-action:hover .d-action-icon i { color: #fff; }
+.d-action:hover span { color: #fff; }
+
+/* ══════════════════════════
+   TIMELINE
+══════════════════════════ */
+.d-tl-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 22px;
+  position: relative;
+}
+.d-tl-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 13px;
+  top: 28px;
+  width: 1px;
+  height: calc(100% + 8px);
+  background: linear-gradient(180deg, rgba(3,4,94,.1), rgba(3,4,94,.03));
+}
+.d-tl-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .7rem;
+  z-index: 1;
+}
+.d-tl-dot.done {
+  background: rgba(245,166,35,.15);
+  border: 2px solid rgba(245,166,35,.45);
+  color: #D49000;
+}
+.d-tl-dot.active {
+  background: linear-gradient(135deg, #F5A623, #FFD060);
+  border: none;
+  color: #03045E;
+  box-shadow: 0 0 0 4px rgba(245,166,35,.2);
+  animation: dotPulse 1.6s ease-in-out infinite;
+}
+.d-tl-dot.pending {
+  background: var(--dbg);
+  border: 2px solid rgba(3,4,94,.12);
+  color: #B0C4D8;
+}
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245,166,35,.35); }
+  50%       { box-shadow: 0 0 0 8px rgba(245,166,35,0); }
+}
+.d-tl-text strong {
+  display: block;
+  font-family: var(--fu);
+  font-size: .84rem;
+  font-weight: 700;
+  color: var(--dt);
+  line-height: 1.4;
+}
+.d-tl-text span { font-size: .73rem; color: #9BBCD8; font-family: var(--fu); }
+
+/* ══════════════════════════
+   PRODUCT MINI CARDS
+══════════════════════════ */
+.d-prod {
+  background: var(--dcard);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1.5px solid rgba(3,4,94,.07);
+  transition: all .26s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 2px 10px rgba(3,4,94,.05);
+}
+.d-prod:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 40px rgba(3,4,94,.13);
+  border-color: rgba(245,166,35,.32);
+}
+.d-prod-img { aspect-ratio: 4/3; overflow: hidden; }
+.d-prod-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.d-prod:hover .d-prod-img img { transform: scale(1.07); }
+.d-prod-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(160deg, #DCE8F8, #C2D8EE);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4rem;
+}
+.d-prod-body { padding: 14px; }
+.d-prod-name {
+  font-family: var(--fu);
+  font-size: .87rem;
+  font-weight: 700;
+  color: var(--dt);
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+.d-prod-price {
+  font-family: var(--fd);
+  font-size: 1rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #F5A623, #FFD060);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ══════════════════════════
+   FORM INPUTS (Profile)
+══════════════════════════ */
+.pf-label {
+  font-family: var(--fu);
+  font-size: .7rem;
+  font-weight: 700;
+  color: var(--dts);
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 7px;
+}
+.pf-input {
+  width: 100%;
+  background: #DCF0FA;
+  border: 1.5px solid rgba(0,119,182,.15);
+  color: var(--dt);
+  padding: 12px 15px;
+  border-radius: 11px;
+  font-size: .89rem;
+  outline: none;
+  transition: all .2s;
+  font-family: var(--f);
+}
+.pf-input:focus {
+  border-color: var(--dg);
+  background: #EBF5FF;
+  box-shadow: 0 0 0 3px rgba(245,166,35,.13);
+}
+.pf-input::placeholder { color: #A8BFCE; }
+
+/* ══════════════════════════
+   INFO CHIPS
+══════════════════════════ */
+.info-chip {
+  background: #DCF0FA;
+  border: 1.5px solid rgba(0,119,182,.13);
+  border-radius: 12px;
+  padding: 12px 18px;
+}
+.info-chip-label {
+  font-size: .66rem;
+  color: #9BBCD8;
+  font-family: var(--fu);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+.info-chip-value { font-weight: 700; color: var(--dt); font-family: var(--fu); font-size: .88rem; }
+
+/* ══════════════════════════
+   EMPTY STATE
+══════════════════════════ */
+.d-empty { text-align: center; padding: 52px 20px; }
+.d-empty i { font-size: 2.6rem; display: block; margin-bottom: 14px; color: #C2D8EA; }
+.d-empty p { font-size: .9rem; color: #9BBCD8; margin-bottom: 20px; font-family: var(--fu); }
+
+/* ══════════════════════════
+   CTA BUTTONS
+══════════════════════════ */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: linear-gradient(135deg, #F5A623, #FFD060);
+  color: #03045E;
+  padding: 10px 22px;
+  border-radius: 22px;
+  font-family: var(--fu);
+  font-size: .83rem;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(245,166,35,.35);
+  transition: all .22s;
+  border: none;
+  cursor: pointer;
+}
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,166,35,.45); color: #03045E; }
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--dcard);
+  border: 1.5px solid rgba(3,4,94,.15);
+  color: var(--do);
+  padding: 10px 20px;
+  border-radius: 22px;
+  font-family: var(--fu);
+  font-size: .83rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all .22s;
+}
+.btn-outline:hover { border-color: var(--dg); color: #D49000; }
+
+/* ══════════════════════════
+   MOBILE SIDEBAR DRAWER
+══════════════════════════ */
+.d-side-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(3,4,94,.5);
+  z-index: 399;
+  backdrop-filter: blur(2px);
+}
+.d-side-overlay.show { display: block; }
+
+.d-side-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  z-index: 400;
+  background: linear-gradient(175deg, #03045E 0%, #023E8A 55%, #01497C 100%);
+  border-radius: 0 22px 22px 0;
+  overflow-y: auto;
+  transform: translateX(-100%);
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+  border-right: 1px solid rgba(245,166,35,.12);
+  box-shadow: 4px 0 32px rgba(3,4,94,.4);
+}
+.d-side-drawer.open { transform: translateX(0); }
+
+.d-drawer-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  color: rgba(255,255,255,.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: .85rem;
+  transition: all .2s;
+  z-index: 1;
+}
+.d-drawer-close:hover { background: rgba(255,255,255,.2); color: #fff; }
+
+/* Mobile topbar toggle button */
+.d-mob-toggle {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.d-ham-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #03045E, #023E8A);
+  border: none;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 3px 14px rgba(3,4,94,.25);
+  transition: all .22s;
+  flex-shrink: 0;
+}
+.d-ham-btn:hover { transform: scale(1.05); box-shadow: 0 5px 20px rgba(3,4,94,.35); }
+
+/* ══════════════════════════
+   RESPONSIVE TWEAKS
+══════════════════════════ */
+@media (max-width: 991px) {
+  .d-mob-toggle { display: flex !important; }
+  .dash { padding: 78px 0 56px; }
+}
+@media (max-width: 575px) {
+  .dash-header-title { font-size: 1.45rem; }
+  .d-stat-val { font-size: 1.7rem; }
+  .d-stat { padding: 16px 14px; }
+  .d-panel { padding: 18px 14px; }
+  .d-tab { padding: 8px 13px; font-size: .76rem; }
+  .d-tabs { overflow-x: auto; max-width: 100%; width: 100%; }
+  .d-order { padding: 12px 14px; }
+  .d-order-total, .d-order-date { min-width: unset; text-align: left; }
+  .btn-gold, .btn-outline { padding: 9px 16px; font-size: .78rem; }
+  .container-fluid { padding: 0 14px !important; }
+}
+
+/* ══════════════════════════
+   PAGE HEADER
+══════════════════════════ */
+.dash-header {
+  margin-bottom: 28px;
+}
+.dash-header-kicker {
+  font-size: .7rem;
+  color: var(--dg);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  font-family: var(--fu);
+  margin-bottom: 7px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dash-header-title {
+  font-family: var(--fd);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--dt);
+  margin: 0 0 18px;
+  letter-spacing: -.5px;
+  line-height: 1.2;
+}
+.dash-header-title .gold-text {
+  background: linear-gradient(135deg, #F5A623, #FFD060);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Mobile sidebar overlay -->
+<div class="d-side-overlay" id="dSideOverlay" onclick="closeDSide()"></div>
+
+<!-- Mobile sidebar drawer -->
+<div class="d-side-drawer" id="dSideDrawer">
+  <button class="d-drawer-close" onclick="closeDSide()" aria-label="Fermer le menu">
+    <i class="fas fa-times"></i>
+  </button>
+  <div class="d-side-head">
+    <div class="d-avatar">{{ user.first_name|first|default:user.username|first|upper }}</div>
+    <div class="d-user-name">{{ user.get_full_name|default:user.username }}</div>
+    <div class="d-user-email">{{ user.email }}</div>
+    <div class="d-user-badge">
+      <i class="fas fa-check-circle" style="font-size:.62rem;"></i>
+      Client vérifié
+    </div>
+  </div>
+  <div class="d-nav">
+    <a href="#" class="d-nav-item" onclick="showTab('overview');closeDSide();return false;">
+      <i class="fas fa-chart-line"></i>Vue d'ensemble
+    </a>
+    <a href="#" class="d-nav-item" onclick="showTab('orders');closeDSide();return false;">
+      <i class="fas fa-box-open"></i>Mes commandes
+      {% if pending_count > 0 %}<span class="badge-n">{{ pending_count }}</span>{% endif %}
+    </a>
+    <a href="#" class="d-nav-item" onclick="showTab('profile');closeDSide();return false;">
+      <i class="fas fa-user-edit"></i>Mon profil
+    </a>
+    <div class="d-nav-sep"></div>
+    <a href="{% url 'store:product_list' %}" class="d-nav-item"><i class="fas fa-fish"></i>Commander</a>
+    <a href="{% url 'store:cart_detail' %}" class="d-nav-item"><i class="fas fa-shopping-bag"></i>Mon panier</a>
+    <div class="d-nav-sep"></div>
+    <a href="{% url 'accounts:logout' %}" class="d-nav-item logout-item"><i class="fas fa-sign-out-alt"></i>Déconnexion</a>
+  </div>
+</div>
+
+<div class="dash">
+  <div class="container-fluid" style="max-width:1480px;padding:0 28px;">
+    <div class="row g-4">
+
+      <!-- ══ SIDEBAR ══ -->
+      <div class="col-xl-2 col-lg-3 d-none d-lg-block">
+        <div class="d-side">
+
+          <!-- Head / avatar -->
+          <div class="d-side-head">
+            <div class="d-avatar">{{ user.first_name|first|default:user.username|first|upper }}</div>
+            <div class="d-user-name">{{ user.get_full_name|default:user.username }}</div>
+            <div class="d-user-email">{{ user.email }}</div>
+            <div class="d-user-badge">
+              <i class="fas fa-check-circle" style="font-size:.62rem;"></i>
+              Client vérifié
+            </div>
+          </div>
+
+          <!-- Nav links -->
+          <div class="d-nav">
+            <a href="#" class="d-nav-item active" onclick="showTab('overview');return false;" id="nt-overview">
+              <i class="fas fa-chart-line"></i>Vue d'ensemble
+            </a>
+            <a href="#" class="d-nav-item" onclick="showTab('orders');return false;" id="nt-orders">
+              <i class="fas fa-box-open"></i>Mes commandes
+              {% if pending_count > 0 %}<span class="badge-n">{{ pending_count }}</span>{% endif %}
+            </a>
+            <a href="#" class="d-nav-item" onclick="showTab('profile');return false;" id="nt-profile">
+              <i class="fas fa-user-edit"></i>Mon profil
+            </a>
+            <div class="d-nav-sep"></div>
+            <a href="{% url 'store:product_list' %}" class="d-nav-item">
+              <i class="fas fa-fish"></i>Commander
+            </a>
+            <a href="{% url 'store:cart_detail' %}" class="d-nav-item">
+              <i class="fas fa-shopping-bag"></i>Mon panier
+            </a>
+            <div class="d-nav-sep"></div>
+            <a href="{% url 'accounts:logout' %}" class="d-nav-item logout-item">
+              <i class="fas fa-sign-out-alt"></i>Déconnexion
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ══ MAIN ══ -->
+      <div class="col-xl-10 col-lg-9">
+
+        <!-- Mobile hamburger toggle (visible < 992px) -->
+        <div class="d-mob-toggle">
+          <button class="d-ham-btn" onclick="openDSide()" aria-label="Ouvrir le menu">
+            <i class="fas fa-bars"></i>
+          </button>
+          <span style="font-family:var(--fu);font-size:.9rem;font-weight:700;color:var(--dt);">Mon Tableau de Bord</span>
+        </div>
+
+        <!-- ───────── TAB: OVERVIEW ───────── -->
+        <div id="tab-overview">
+
+          <!-- Page header + tabs -->
+          <div class="dash-header">
+            <div class="dash-header-kicker">
+              <i class="fas fa-water"></i>Tableau de bord
+            </div>
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:22px;">
+              <h2 class="dash-header-title">
+                Bonjour, <span class="gold-text">{{ user.first_name|default:user.username }}</span> &nbsp;&#128075;
+              </h2>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                <a href="{% url 'store:product_list' %}" class="btn-gold">
+                  <i class="fas fa-fish"></i>Commander
+                </a>
+                <a href="{% url 'store:cart_detail' %}" class="btn-outline">
+                  <i class="fas fa-shopping-bag"></i>Panier
+                </a>
+              </div>
+            </div>
+            <!-- Pill tabs -->
+            <div class="d-tabs">
+              <button class="d-tab active" id="tb-overview" onclick="showTab('overview')">
+                <i class="fas fa-chart-line"></i>Vue d'ensemble
+              </button>
+              <button class="d-tab" id="tb-orders" onclick="showTab('orders')">
+                <i class="fas fa-box-open"></i>Commandes
+                {% if pending_count > 0 %}<span style="background:rgba(245,166,35,.22);color:#D49000;font-size:.63rem;font-weight:800;padding:1px 7px;border-radius:8px;">{{ pending_count }}</span>{% endif %}
+              </button>
+              <button class="d-tab" id="tb-profile" onclick="showTab('profile')">
+                <i class="fas fa-user-edit"></i>Profil
+              </button>
+            </div>
+          </div>
+
+          <!-- Stat cards row -->
+          <div class="row g-3 mb-4">
+            <div class="col-6 col-xl-3">
+              <div class="d-stat" style="--stat-gradient:linear-gradient(90deg,#03045E,#0077B6);--stat-icon-bg:rgba(3,4,94,.08);--stat-icon-color:#03045E;">
+                <div class="d-stat-icon-wrap"><i class="fas fa-shopping-bag"></i></div>
+                <div class="d-stat-val">{{ total_orders }}</div>
+                <div class="d-stat-lbl">Commandes passées</div>
+              </div>
+            </div>
+            <div class="col-6 col-xl-3">
+              <div class="d-stat" style="--stat-gradient:linear-gradient(90deg,#F5A623,#FFD060);--stat-icon-bg:rgba(245,166,35,.1);--stat-icon-color:#C17D00;">
+                <div class="d-stat-icon-wrap"><i class="fas fa-clock"></i></div>
+                <div class="d-stat-val">{{ pending_count }}</div>
+                <div class="d-stat-lbl">En cours</div>
+              </div>
+            </div>
+            <div class="col-6 col-xl-3">
+              <div class="d-stat" style="--stat-gradient:linear-gradient(90deg,#007A4D,#00B67A);--stat-icon-bg:rgba(0,122,77,.09);--stat-icon-color:#007A4D;">
+                <div class="d-stat-icon-wrap"><i class="fas fa-check-circle"></i></div>
+                <div class="d-stat-val">{{ delivered_count }}</div>
+                <div class="d-stat-lbl">Livrées</div>
+              </div>
+            </div>
+            <div class="col-6 col-xl-3">
+              <div class="d-stat" style="--stat-gradient:linear-gradient(90deg,#0077B6,#48CAE4);--stat-icon-bg:rgba(0,119,182,.09);--stat-icon-color:#0077B6;">
+                <div class="d-stat-icon-wrap"><i class="fas fa-wallet"></i></div>
+                <div class="d-stat-val" style="font-size:1.4rem;">{{ total_spent|floatformat:0 }}</div>
+                <div class="d-stat-lbl">FDJ dépensés</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Two-column: recent orders + sidebar -->
+          <div class="row g-4">
+
+            <!-- Recent orders -->
+            <div class="col-lg-7">
+              <div class="d-panel">
+                <div class="d-sec-title">
+                  <i class="fas fa-box-open"></i>Commandes récentes
+                  <a href="#" onclick="showTab('orders');return false;" style="margin-left:auto;font-size:.74rem;color:var(--do);font-family:var(--fu);font-weight:600;display:flex;align-items:center;gap:4px;">
+                    Tout voir <i class="fas fa-arrow-right" style="font-size:.65rem;"></i>
+                  </a>
+                </div>
+                {% if recent_orders %}
+                  {% for order in recent_orders %}
+                  <div class="d-order">
+                    <div class="d-order-id">#{{ order.pk }}</div>
+                    <div class="d-order-items">
+                      {{ order.items.count }} article{{ order.items.count|pluralize }}
+                      <small>{% for item in order.items.all|slice:":2" %}{{ item.product_name }}{% if not forloop.last %}, {% endif %}{% endfor %}</small>
+                    </div>
+                    <span class="d-badge b-{{ order.status }}">{{ order.get_status_display }}</span>
+                    <div class="d-order-total">{{ order.total_price|floatformat:0 }} FDJ</div>
+                    <div class="d-order-date">{{ order.created_at|date:"d/m/Y" }}</div>
+                  </div>
+                  {% endfor %}
+                {% else %}
+                  <div class="d-empty">
+                    <i class="fas fa-box-open"></i>
+                    <p>Aucune commande pour le moment.</p>
+                    <a href="{% url 'store:product_list' %}" class="btn-gold">
+                      <i class="fas fa-fish"></i>Commander maintenant
+                    </a>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Tracking + quick actions -->
+            <div class="col-lg-5">
+              {% if last_order %}
+              <div class="d-panel mb-4">
+                <div class="d-sec-title">
+                  <i class="fas fa-truck"></i>Suivi — Commande #{{ last_order.pk }}
+                  <span class="d-badge b-{{ last_order.status }}" style="margin-left:auto;">{{ last_order.get_status_display }}</span>
+                </div>
+                <div>
+                  {% with s=last_order.status %}
+                  <div class="d-tl-item">
+                    <div class="d-tl-dot {% if s in 'pending confirmed processing delivering delivered' %}done{% else %}pending{% endif %}">
+                      <i class="fas fa-check" style="font-size:.62rem;"></i>
+                    </div>
+                    <div class="d-tl-text">
+                      <strong>Reçue</strong>
+                      <span>Commande enregistrée</span>
+                    </div>
+                  </div>
+                  <div class="d-tl-item">
+                    <div class="d-tl-dot {% if s in 'confirmed processing delivering delivered' %}done{% elif s == 'pending' %}active{% else %}pending{% endif %}">
+                      <i class="fas fa-star" style="font-size:.62rem;"></i>
+                    </div>
+                    <div class="d-tl-text">
+                      <strong>Confirmée</strong>
+                      <span>Équipe KALUUN</span>
+                    </div>
+                  </div>
+                  <div class="d-tl-item">
+                    <div class="d-tl-dot {% if s in 'delivering delivered' %}done{% elif s == 'processing' %}active{% else %}pending{% endif %}">
+                      <i class="fas fa-box" style="font-size:.62rem;"></i>
+                    </div>
+                    <div class="d-tl-text">
+                      <strong>Préparée</strong>
+                      <span>En cours de préparation</span>
+                    </div>
+                  </div>
+                  <div class="d-tl-item" style="margin-bottom:0;">
+                    <div class="d-tl-dot {% if s == 'delivered' %}done{% elif s == 'delivering' %}active{% else %}pending{% endif %}">
+                      <i class="fas fa-truck" style="font-size:.62rem;"></i>
+                    </div>
+                    <div class="d-tl-text">
+                      <strong>Livrée</strong>
+                      <span>Bon appétit !</span>
+                    </div>
+                  </div>
+                  {% endwith %}
+                </div>
+              </div>
+              {% endif %}
+
+              <div class="d-panel">
+                <div class="d-sec-title"><i class="fas fa-bolt"></i>Actions rapides</div>
+                <div class="row g-2">
+                  <div class="col-6">
+                    <a href="{% url 'store:product_list' %}" class="d-action">
+                      <div class="d-action-icon"><i class="fas fa-fish"></i></div>
+                      <span>Catalogue</span>
+                    </a>
+                  </div>
+                  <div class="col-6">
+                    <a href="{% url 'store:cart_detail' %}" class="d-action">
+                      <div class="d-action-icon"><i class="fas fa-shopping-bag"></i></div>
+                      <span>Panier</span>
+                    </a>
+                  </div>
+                  <div class="col-6">
+                    <a href="#" onclick="showTab('profile');return false;" class="d-action">
+                      <div class="d-action-icon"><i class="fas fa-user-edit"></i></div>
+                      <span>Profil</span>
+                    </a>
+                  </div>
+                  <div class="col-6">
+                    <a href="{% url 'store:contact' %}" class="d-action">
+                      <div class="d-action-icon"><i class="fas fa-headset"></i></div>
+                      <span>Support</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Featured products -->
+          {% if featured_products %}
+          <div class="d-panel mt-4">
+            <div class="d-sec-title">
+              <i class="fas fa-star"></i>Produits suggérés pour vous
+              <a href="{% url 'store:product_list' %}" style="margin-left:auto;font-size:.74rem;color:var(--do);font-family:var(--fu);font-weight:600;display:flex;align-items:center;gap:4px;">
+                Voir tout <i class="fas fa-arrow-right" style="font-size:.65rem;"></i>
+              </a>
+            </div>
+            <div class="row g-3">
+              {% for product in featured_products %}
+              <div class="col-6 col-xl-3">
+                <div class="d-prod">
+                  <div class="d-prod-img">
+                    {% if product.get_image_url %}
+                    <img src="{{ product.get_image_url }}" alt="{{ product.name }}" loading="lazy">
+                    {% else %}
+                    <div class="d-prod-placeholder">&#128041;</div>
+                    {% endif %}
+                  </div>
+                  <div class="d-prod-body">
+                    <div class="d-prod-name">{{ product.name }}</div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+                      <div class="d-prod-price">{{ product.price|floatformat:0 }} FDJ</div>
+                      <form action="{% url 'store:cart_add' product.pk %}" method="POST">
+                        {% csrf_token %}<input type="hidden" name="quantity" value="1">
+                        <button type="submit" style="background:linear-gradient(135deg,#F5A623,#FFD060);color:#03045E;border:none;border-radius:9px;padding:6px 13px;font-size:.73rem;font-weight:800;cursor:pointer;font-family:var(--fu);transition:.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform=''">
+                          + Ajouter
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+        </div><!-- /tab-overview -->
+
+
+        <!-- ───────── TAB: ORDERS ───────── -->
+        <div id="tab-orders" style="display:none;">
+          <div class="dash-header">
+            <div class="dash-header-kicker"><i class="fas fa-box-open"></i>Historique</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:22px;">
+              <h2 class="dash-header-title">
+                Mes <span class="gold-text">Commandes</span>
+              </h2>
+            </div>
+            <div class="d-tabs">
+              <button class="d-tab" id="tb-overview2" onclick="showTab('overview')">
+                <i class="fas fa-chart-line"></i>Vue d'ensemble
+              </button>
+              <button class="d-tab active" id="tb-orders2" onclick="showTab('orders')">
+                <i class="fas fa-box-open"></i>Commandes
+              </button>
+              <button class="d-tab" id="tb-profile2" onclick="showTab('profile')">
+                <i class="fas fa-user-edit"></i>Profil
+              </button>
+            </div>
+          </div>
+
+          <div class="d-panel">
+            {% if orders %}
+              {% for order in orders %}
+              <div class="d-order" style="flex-direction:column;align-items:stretch;gap:12px;">
+
+                <!-- Row 1: ID + badge + date + total -->
+                <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                  <div class="d-order-id">#{{ order.pk }}</div>
+                  <span class="d-badge b-{{ order.status }}">{{ order.get_status_display }}</span>
+                  <div style="margin-left:auto;display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
+                    <span style="font-size:.73rem;color:#9BBCD8;font-family:var(--fu);">{{ order.created_at|date:"d/m/Y à H:i" }}</span>
+                    <span style="font-family:var(--fd);font-size:1rem;font-weight:800;background:linear-gradient(135deg,#F5A623,#FFD060);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">{{ order.total_price|floatformat:0 }} FDJ</span>
+                  </div>
+                </div>
+
+                <!-- Row 2: items chips -->
+                <div style="display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px;background:#EFF3F8;border-radius:11px;border:1px solid rgba(3,4,94,.07);">
+                  {% for item in order.items.all %}
+                  <span style="background:#fff;border:1.5px solid rgba(3,4,94,.08);color:var(--dtm);padding:3px 11px;border-radius:8px;font-size:.76rem;font-family:var(--fu);font-weight:600;">
+                    &#128041; {{ item.product_name }} &times; {{ item.quantity }}{{ item.unit }}
+                  </span>
+                  {% endfor %}
+                </div>
+
+                <!-- Row 3: address + payment -->
+                <div style="display:flex;gap:18px;flex-wrap:wrap;font-size:.76rem;color:#9BBCD8;font-family:var(--fu);">
+                  <span><i class="fas fa-map-marker-alt" style="color:var(--dg);margin-right:5px;"></i>{{ order.delivery_address|truncatechars:42 }}</span>
+                  <span><i class="fas fa-credit-card" style="color:var(--dg);margin-right:5px;"></i>{{ order.get_payment_method_display }}</span>
+                </div>
+
+                {% if order.admin_note %}
+                <div style="padding:10px 14px;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.2);border-radius:10px;font-size:.78rem;color:#B87000;font-family:var(--fu);">
+                  <i class="fas fa-comment-dots" style="margin-right:6px;"></i>{{ order.admin_note }}
+                </div>
+                {% endif %}
+
+              </div>
+              {% endfor %}
+            {% else %}
+              <div class="d-empty">
+                <i class="fas fa-box-open"></i>
+                <p>Aucune commande pour le moment.</p>
+                <a href="{% url 'store:product_list' %}" class="btn-gold">
+                  <i class="fas fa-fish"></i>Commander maintenant
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        </div><!-- /tab-orders -->
+
+
+        <!-- ───────── TAB: PROFILE ───────── -->
+        <div id="tab-profile" style="display:none;">
+          <div class="dash-header">
+            <div class="dash-header-kicker"><i class="fas fa-user-edit"></i>Compte</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:22px;">
+              <h2 class="dash-header-title">
+                Mon <span class="gold-text">Profil</span>
+              </h2>
+            </div>
+            <div class="d-tabs">
+              <button class="d-tab" id="tb-overview3" onclick="showTab('overview')">
+                <i class="fas fa-chart-line"></i>Vue d'ensemble
+              </button>
+              <button class="d-tab" id="tb-orders3" onclick="showTab('orders')">
+                <i class="fas fa-box-open"></i>Commandes
+              </button>
+              <button class="d-tab active" id="tb-profile3" onclick="showTab('profile')">
+                <i class="fas fa-user-edit"></i>Profil
+              </button>
+            </div>
+          </div>
+
+          <div class="d-panel">
+            <form method="POST" action="{% url 'accounts:profile_edit' %}">
+              {% csrf_token %}
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="pf-label">Prénom</label>
+                  <input type="text" name="first_name" class="pf-input" value="{{ user.first_name }}" placeholder="Prénom">
+                </div>
+                <div class="col-md-6">
+                  <label class="pf-label">Nom</label>
+                  <input type="text" name="last_name" class="pf-input" value="{{ user.last_name }}" placeholder="Nom">
+                </div>
+                <div class="col-md-6">
+                  <label class="pf-label">Email</label>
+                  <input type="email" name="email" class="pf-input" value="{{ user.email }}" placeholder="email@exemple.com">
+                </div>
+                <div class="col-md-6">
+                  <label class="pf-label">Téléphone</label>
+                  <input type="tel" name="phone" class="pf-input" value="{{ profile.phone }}" placeholder="+253 77 XX XX XX">
+                </div>
+                <div class="col-md-6">
+                  <label class="pf-label">Quartier</label>
+                  <input type="text" name="wilaya" class="pf-input" value="{{ profile.wilaya }}" placeholder="Balbala, Plateaux...">
+                </div>
+                <div class="col-md-6">
+                  <label class="pf-label">Adresse</label>
+                  <input type="text" name="address" class="pf-input" value="{{ profile.address }}" placeholder="Rue, repère...">
+                </div>
+                <div class="col-12 mt-2">
+                  <button type="submit" class="btn-gold" style="font-size:.9rem;padding:12px 30px;">
+                    <i class="fas fa-save"></i>Enregistrer les modifications
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <!-- Account info chips -->
+            <div style="border-top:1.5px solid rgba(3,4,94,.07);margin-top:30px;padding-top:22px;">
+              <div style="font-family:var(--fu);font-size:.68rem;font-weight:700;color:#9BBCD8;margin-bottom:14px;letter-spacing:1.5px;text-transform:uppercase;">
+                Informations du compte
+              </div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                <div class="info-chip">
+                  <div class="info-chip-label">Nom d'utilisateur</div>
+                  <div class="info-chip-value">{{ user.username }}</div>
+                </div>
+                <div class="info-chip">
+                  <div class="info-chip-label">Membre depuis</div>
+                  <div class="info-chip-value">{{ user.date_joined|date:"d/m/Y" }}</div>
+                </div>
+                <div class="info-chip">
+                  <div class="info-chip-label">Commandes</div>
+                  <div class="info-chip-value">{{ total_orders }} passée{{ total_orders|pluralize }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /tab-profile -->
+
+      </div><!-- /col main -->
+    </div><!-- /row -->
+  </div><!-- /container -->
+</div><!-- /dash -->
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Dashboard mobile sidebar drawer
+function openDSide() {
+  document.getElementById('dSideDrawer').classList.add('open');
+  document.getElementById('dSideOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeDSide() {
+  document.getElementById('dSideDrawer').classList.remove('open');
+  document.getElementById('dSideOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function showTab(tab) {
+  var tabs = ['overview', 'orders', 'profile'];
+  tabs.forEach(function(t) {
+    var panel = document.getElementById('tab-' + t);
+    if (panel) panel.style.display = (t === tab) ? 'block' : 'none';
+    // Sync all nav items
+    ['nt-', 'tb-', 'tb-' + tab + '2', 'tb-' + tab + '3'].forEach(function(prefix) {
+      var el = document.getElementById(prefix + t);
+      if (el) el.classList.toggle('active', t === tab);
+    });
+    // Sync duplicate tab bars
+    var suffixes = ['', '2', '3'];
+    suffixes.forEach(function(s) {
+      var el = document.getElementById('tb-' + t + s);
+      if (el) el.classList.toggle('active', t === tab);
+    });
+    var nt = document.getElementById('nt-' + t);
+    if (nt) nt.classList.toggle('active', t === tab);
+  });
+}
+(function() {
+  var h = location.hash.replace('#', '');
+  if (['orders', 'profile'].includes(h)) showTab(h);
+})();
+</script>
+{% endblock %}

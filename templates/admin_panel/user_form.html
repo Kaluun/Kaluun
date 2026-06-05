@@ -1,0 +1,208 @@
+{% extends 'admin_panel/base_admin.html' %}
+{% block title %}Modifier utilisateur — Admin KALUUN{% endblock %}
+{% block page_title %}Modifier un utilisateur{% endblock %}
+
+{% with pending_orders_count=pending_orders_count %}
+{% block content %}
+
+<style>
+.uf-label {
+  font-size: .72rem;
+  color: var(--ats);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--fu);
+  font-weight: 700;
+}
+.uf-hint {
+  font-size: .7rem;
+  color: var(--ats);
+  font-weight: 400;
+  margin-left: 6px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.uf-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 15px;
+  background: var(--abg);
+  border-radius: 11px;
+  border: 1.5px solid var(--abdr);
+  cursor: pointer;
+  transition: border-color .2s;
+}
+.uf-toggle:hover { border-color: rgba(3,4,94,.2); }
+.uf-toggle input[type=checkbox] { width: 17px; height: 17px; flex-shrink: 0; cursor: pointer; }
+.uf-toggle-title { font-family: var(--fu); font-weight: 700; color: var(--at); font-size: .88rem; }
+.uf-toggle-sub   { font-size: .71rem; color: var(--ats); margin-top: 2px; }
+.uf-stat-box {
+  background: var(--abg);
+  border-radius: 10px;
+  padding: 11px 13px;
+  border: 1.5px solid var(--abdr);
+}
+.uf-stat-label { font-size: .62rem; color: var(--ats); font-family: var(--fu); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+.uf-stat-val   { font-family: var(--fd); font-size: 1.1rem; font-weight: 800; color: var(--an); }
+.uf-cancel {
+  background: var(--abg);
+  color: var(--ats);
+  border-color: var(--abdr);
+}
+.uf-cancel:hover { background: #e0e8f4; color: var(--at); border-color: rgba(3,4,94,.18); }
+.uf-order-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1.5px solid var(--abdr);
+}
+.uf-order-row:last-child { border-bottom: none; }
+</style>
+
+<div style="margin-bottom:20px;">
+  <a href="{% url 'gestadmin:users' %}" class="btn-adm btn-adm-outline">
+    <i class="fas fa-arrow-left"></i>Retour aux utilisateurs
+  </a>
+</div>
+
+<div class="row g-4">
+
+  <!-- Formulaire -->
+  <div class="col-lg-7">
+    <form method="POST">
+      {% csrf_token %}
+      <div class="adm-card mb-4">
+        <div class="adm-card-title"><i class="fas fa-user"></i>Informations personnelles</div>
+        <div class="row g-3">
+          <div class="col-6">
+            <label class="uf-label">Prénom</label>
+            <input type="text" name="first_name" class="adm-input w-100" value="{{ u.first_name }}" style="padding:11px 14px;">
+          </div>
+          <div class="col-6">
+            <label class="uf-label">Nom</label>
+            <input type="text" name="last_name" class="adm-input w-100" value="{{ u.last_name }}" style="padding:11px 14px;">
+          </div>
+          <div class="col-12">
+            <label class="uf-label">Email</label>
+            <input type="email" name="email" class="adm-input w-100" value="{{ u.email }}" style="padding:11px 14px;">
+          </div>
+          <div class="col-md-6">
+            <label class="uf-label">Téléphone</label>
+            <input type="text" name="phone" class="adm-input w-100" value="{{ profile.phone }}" style="padding:11px 14px;">
+          </div>
+          <div class="col-md-6">
+            <label class="uf-label">Quartier / Zone</label>
+            <input type="text" name="wilaya" class="adm-input w-100" value="{{ profile.wilaya }}" style="padding:11px 14px;">
+          </div>
+          <div class="col-12">
+            <label class="uf-label">Adresse</label>
+            <input type="text" name="address" class="adm-input w-100" value="{{ profile.address }}" style="padding:11px 14px;">
+          </div>
+          <div class="col-12">
+            <label class="uf-label">Nouveau mot de passe <span class="uf-hint">(laisser vide pour ne pas changer)</span></label>
+            <input type="password" name="password" class="adm-input w-100" placeholder="••••••••" style="padding:11px 14px;">
+          </div>
+        </div>
+      </div>
+
+      <div class="adm-card mb-4">
+        <div class="adm-card-title"><i class="fas fa-shield-alt"></i>Statut du compte</div>
+        <label class="uf-toggle">
+          <input type="checkbox" name="is_active" {% if u.is_active %}checked{% endif %}
+                 style="accent-color:var(--agreen);">
+          <div>
+            <div class="uf-toggle-title">Compte actif</div>
+            <div class="uf-toggle-sub">Décocher pour bloquer l'accès à ce client</div>
+          </div>
+        </label>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <button type="submit" class="btn-adm btn-adm-blue" style="flex:1;padding:12px;justify-content:center;">
+          <i class="fas fa-save"></i>Enregistrer les modifications
+        </button>
+        <a href="{% url 'gestadmin:user_delete' u.pk %}"
+           onclick="return confirm('Supprimer définitivement {{ u.username }} ?')"
+           class="btn-adm btn-adm-red" style="padding:12px 18px;" title="Supprimer">
+          <i class="fas fa-trash"></i>
+        </a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Infos + commandes -->
+  <div class="col-lg-5">
+    <!-- Carte profil -->
+    <div class="adm-card mb-4">
+      <div class="adm-card-title"><i class="fas fa-id-card"></i>Profil du client</div>
+
+      <!-- Avatar + nom -->
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
+        <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--ag),var(--agl));display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:1.3rem;font-weight:800;color:var(--an);flex-shrink:0;">
+          {{ u.first_name|first|default:u.username|first|upper }}
+        </div>
+        <div>
+          <div style="font-family:var(--fd);font-weight:800;color:var(--an);font-size:1rem;">{{ u.get_full_name|default:u.username }}</div>
+          <div style="font-size:.75rem;color:var(--ats);font-family:var(--fu);">@{{ u.username }}</div>
+        </div>
+      </div>
+
+      <!-- Stats grid -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="uf-stat-box">
+          <div class="uf-stat-label">Inscrit le</div>
+          <div class="uf-stat-val" style="font-size:.92rem;">{{ u.date_joined|date:"d/m/Y" }}</div>
+        </div>
+        <div class="uf-stat-box">
+          <div class="uf-stat-label">Statut</div>
+          <div class="uf-stat-val" style="font-size:.92rem;">
+            {% if u.is_active %}
+            <span style="color:var(--agreen);">Actif</span>
+            {% else %}
+            <span style="color:var(--ared);">Bloqué</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="uf-stat-box">
+          <div class="uf-stat-label">Commandes</div>
+          <div class="uf-stat-val">{{ orders.count }}</div>
+        </div>
+        <div class="uf-stat-box">
+          <div class="uf-stat-label">Total dépensé</div>
+          <div class="uf-stat-val" style="font-size:.88rem;{% if total_spent %}background:linear-gradient(135deg,var(--ag),var(--agl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;{% endif %}">
+            {% if total_spent %}{{ total_spent|floatformat:0 }} FDJ{% else %}—{% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Historique commandes -->
+    {% if orders %}
+    <div class="adm-card">
+      <div class="adm-card-title"><i class="fas fa-history"></i>Historique commandes</div>
+      {% for order in orders|slice:":6" %}
+      <div class="uf-order-row">
+        <div>
+          <div style="font-family:var(--fd);font-weight:800;color:var(--an);font-size:.85rem;">#{{ order.pk }}</div>
+          <div style="font-size:.68rem;color:var(--ats);font-family:var(--fu);">{{ order.created_at|date:"d/m/Y" }}</div>
+        </div>
+        <span class="sb sb-{{ order.status }}" style="font-size:.65rem;">{{ order.get_status_display }}</span>
+        <div style="margin-left:auto;font-family:var(--fd);font-size:.88rem;font-weight:800;background:linear-gradient(135deg,var(--ao),var(--aw));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">{{ order.total_price|floatformat:0 }} FDJ</div>
+      </div>
+      {% endfor %}
+      {% if orders.count > 6 %}
+      <div style="text-align:center;margin-top:10px;font-size:.75rem;color:var(--ats);font-family:var(--fu);">
+        + {{ orders.count|add:"-6" }} autre{{ orders.count|add:"-6"|pluralize }} commande{{ orders.count|add:"-6"|pluralize }}
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}
+{% endwith %}

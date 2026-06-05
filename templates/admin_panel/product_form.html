@@ -1,0 +1,233 @@
+{% extends 'admin_panel/base_admin.html' %}
+{% load static %}
+{% block title %}{{ action }} produit — Admin KALUUN{% endblock %}
+{% block page_title %}{{ action }} un produit{% endblock %}
+
+{% with pending_orders_count=pending_orders_count %}
+{% block content %}
+
+<style>
+.pf-label {
+  font-size: .72rem;
+  color: var(--ats);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--fu);
+  font-weight: 700;
+}
+.pf-hint {
+  font-size: .71rem;
+  color: var(--ao);
+  margin-top: 4px;
+  font-family: var(--fu);
+}
+.pf-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 15px;
+  background: var(--abg);
+  border-radius: 11px;
+  border: 1.5px solid var(--abdr);
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: border-color .2s;
+}
+.pf-toggle:hover { border-color: rgba(3,4,94,.18); }
+.pf-toggle input[type=checkbox] { width: 17px; height: 17px; flex-shrink: 0; cursor: pointer; }
+.pf-toggle-title { font-family: var(--fu); font-weight: 700; color: var(--at); font-size: .88rem; }
+.pf-toggle-sub   { font-size: .71rem; color: var(--ats); margin-top: 2px; }
+.pf-img-preview {
+  max-height: 200px;
+  border-radius: 12px;
+  border: 1.5px solid var(--abdr);
+  object-fit: cover;
+}
+.pf-cancel {
+  background: var(--abg);
+  color: var(--ats);
+  border-color: var(--abdr);
+}
+.pf-cancel:hover { background: #e0e8f4; color: var(--at); border-color: rgba(3,4,94,.18); }
+</style>
+
+<div style="margin-bottom:20px;">
+  <a href="{% url 'gestadmin:products' %}" class="btn-adm btn-adm-outline">
+    <i class="fas fa-arrow-left"></i>Retour aux produits
+  </a>
+</div>
+
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="row g-4">
+
+    <!-- Colonne principale -->
+    <div class="col-lg-8">
+      <div class="adm-card mb-4">
+        <div class="adm-card-title"><i class="fas fa-info-circle"></i>Informations principales</div>
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="pf-label">Nom du produit *</label>
+            <input type="text" name="name" class="adm-input w-100" value="{{ product.name|default:'' }}"
+                   placeholder="Ex: Thazard (Wahoo)" required style="padding:12px 14px;font-size:.95rem;">
+          </div>
+          <div class="col-md-6">
+            <label class="pf-label">Catégorie</label>
+            <select name="category" class="adm-select w-100" style="padding:12px 14px;">
+              <option value="">-- Aucune catégorie --</option>
+              {% for cat in categories %}
+              <option value="{{ cat.pk }}" {% if product and product.category_id == cat.pk %}selected{% endif %}>{{ cat.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="pf-label">Unité</label>
+            <select name="unit" class="adm-select w-100" style="padding:12px 14px;">
+              <option value="kg"    {% if not product or product.unit == 'kg'    %}selected{% endif %}>kg</option>
+              <option value="pièce" {% if product and product.unit == 'pièce'   %}selected{% endif %}>pièce</option>
+              <option value="lot"   {% if product and product.unit == 'lot'     %}selected{% endif %}>lot</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="pf-label">Commande min</label>
+            <input type="number" name="min_order" class="adm-input w-100"
+                   value="{{ product.min_order|default:'0.5' }}" step="0.5" min="0" style="padding:12px 14px;">
+          </div>
+          <div class="col-12">
+            <label class="pf-label">Description</label>
+            <textarea name="description" class="adm-input w-100" rows="4"
+                      placeholder="Décrivez le produit : goût, texture, utilisation culinaire..."
+                      style="padding:12px 14px;resize:vertical;">{{ product.description|default:'' }}</textarea>
+          </div>
+          <div class="col-12">
+            <label class="pf-label">Valeurs nutritionnelles (optionnel)</label>
+            <input type="text" name="nutritional_info" class="adm-input w-100"
+                   value="{{ product.nutritional_info|default:'' }}"
+                   placeholder="Ex: Protéines: 23g | Oméga-3: 1.8g | 116 kcal/100g" style="padding:12px 14px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Image -->
+      <div class="adm-card">
+        <div class="adm-card-title"><i class="fas fa-image"></i>Image du produit</div>
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="pf-label">URL d'image externe (recommandé — Pexels, Unsplash...)</label>
+            <input type="url" name="image_url" class="adm-input w-100"
+                   value="{{ product.image_url|default:'' }}"
+                   placeholder="https://images.pexels.com/photos/.../pexels-photo-....jpeg"
+                   style="padding:12px 14px;" oninput="previewImgUrl(this.value)">
+            <div class="pf-hint"><i class="fas fa-info-circle me-1"></i>Coller une URL d'image poisson depuis Pexels ou Unsplash</div>
+          </div>
+          <div class="col-12" id="url-preview-wrap" style="{% if not product or not product.image_url %}display:none{% endif %}">
+            <img id="url-preview" class="pf-img-preview" src="{{ product.image_url|default:'' }}" alt="Preview"
+                 onerror="this.parentElement.style.display='none'">
+          </div>
+          <div class="col-12">
+            <label class="pf-label">Ou téléverser une image (PNG, JPG)</label>
+            <input type="file" name="image" accept="image/*" class="adm-input w-100" style="padding:10px 14px;">
+            {% if product and product.image %}
+            <div style="margin-top:6px;font-size:.76rem;color:var(--agreen);font-family:var(--fu);font-weight:600;">
+              <i class="fas fa-check-circle me-1"></i>Image actuelle : {{ product.image }}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Colonne droite -->
+    <div class="col-lg-4">
+      <div class="adm-card mb-4">
+        <div class="adm-card-title"><i class="fas fa-tag"></i>Prix & Stock</div>
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="pf-label">Prix (FDJ) *</label>
+            <div style="position:relative;">
+              <input type="number" name="price" class="adm-input w-100"
+                     value="{{ product.price|default:'' }}" min="0" required
+                     style="padding:12px 14px 12px 52px;font-size:1.05rem;font-weight:700;">
+              <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:.75rem;color:var(--ao);font-weight:700;font-family:var(--fu);">FDJ</span>
+            </div>
+          </div>
+          <div class="col-12">
+            <label class="pf-label">Stock disponible</label>
+            <input type="number" name="stock" class="adm-input w-100"
+                   value="{{ product.stock|default:50 }}" min="0" style="padding:12px 14px;">
+          </div>
+          <div class="col-12">
+            <label class="pf-label">Origine</label>
+            <input type="text" name="origin" class="adm-input w-100"
+                   value="{{ product.origin|default:'Djibouti' }}" style="padding:12px 14px;">
+          </div>
+          <div class="col-12">
+            <label class="pf-label">Saison (optionnel)</label>
+            <input type="text" name="season" class="adm-input w-100"
+                   value="{{ product.season|default:'' }}" placeholder="Ex: Toute l'année" style="padding:12px 14px;">
+          </div>
+        </div>
+      </div>
+
+      <div class="adm-card mb-4">
+        <div class="adm-card-title"><i class="fas fa-toggle-on"></i>Statut</div>
+        <label class="pf-toggle">
+          <input type="checkbox" name="is_available"
+                 {% if not product or product.is_available %}checked{% endif %}
+                 style="accent-color:var(--ao);">
+          <div>
+            <div class="pf-toggle-title">Disponible à la vente</div>
+            <div class="pf-toggle-sub">Visible dans le catalogue public</div>
+          </div>
+        </label>
+        <label class="pf-toggle">
+          <input type="checkbox" name="is_featured"
+                 {% if product and product.is_featured %}checked{% endif %}
+                 style="accent-color:var(--ag);">
+          <div>
+            <div class="pf-toggle-title">Produit en vedette</div>
+            <div class="pf-toggle-sub">Affiché sur la page d'accueil</div>
+          </div>
+        </label>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-direction:column;">
+        <button type="submit" class="btn-adm btn-adm-blue" style="padding:14px;justify-content:center;font-size:.92rem;">
+          <i class="fas fa-save"></i>{{ action }} le produit
+        </button>
+        {% if product %}
+        <a href="{% url 'gestadmin:product_delete' product.pk %}"
+           onclick="return confirm('Supprimer définitivement {{ product.name }} ?')"
+           class="btn-adm btn-adm-red" style="padding:12px;justify-content:center;">
+          <i class="fas fa-trash"></i>Supprimer ce produit
+        </a>
+        {% endif %}
+        <a href="{% url 'gestadmin:products' %}" class="btn-adm pf-cancel" style="padding:12px;justify-content:center;">
+          <i class="fas fa-times"></i>Annuler
+        </a>
+      </div>
+    </div>
+
+  </div>
+</form>
+
+{% endblock %}
+{% endwith %}
+
+{% block extra_js %}
+<script>
+function previewImgUrl(url) {
+  const wrap = document.getElementById('url-preview-wrap');
+  const img  = document.getElementById('url-preview');
+  if (url) {
+    img.src = url;
+    wrap.style.display = 'block';
+    img.onerror = () => { wrap.style.display = 'none'; };
+  } else {
+    wrap.style.display = 'none';
+  }
+}
+</script>
+{% endblock %}

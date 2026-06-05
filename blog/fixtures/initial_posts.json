@@ -1,0 +1,34 @@
+[
+  {"model": "blog.tag", "pk": 1, "fields": {"name": "Nutrition", "slug": "nutrition"}},
+  {"model": "blog.tag", "pk": 2, "fields": {"name": "Recettes", "slug": "recettes"}},
+  {"model": "blog.tag", "pk": 3, "fields": {"name": "Bien-être", "slug": "bien-etre"}},
+  {"model": "blog.tag", "pk": 4, "fields": {"name": "Pêche locale", "slug": "peche-locale"}},
+
+  {"model": "blog.post", "pk": 1, "fields": {
+    "author": null,
+    "title": "Les Fruits de Mer : Votre Allié Bien-être",
+    "slug": "fruits-de-mer-allie-bien-etre",
+    "excerpt": "Découvrez pourquoi les fruits de mer sont un super-aliment incontournable pour votre santé et votre bien-être au quotidien.",
+    "content": "Les fruits de mer sont bien plus qu'un simple aliment : ils sont une source exceptionnelle de nutriments essentiels pour votre organisme.\n\nRiches en protéines de haute qualité, en oméga-3, en zinc, en sélénium et en iode, les crevettes, crabes et homards contribuent à maintenir une santé optimale. Les oméga-3 en particulier jouent un rôle crucial dans la santé cardiovasculaire et la fonction cérébrale.\n\nDjibouti, grâce à sa position géographique exceptionnelle entre la Mer Rouge et le Golfe d'Aden, bénéficie d'une richesse marine unique. Nos fruits de mer sont pêchés quotidiennement dans ces eaux pour vous garantir une fraîcheur incomparable.\n\nComment les consommer ? En salade fraîche avec du citron, en brochettes grillées au charbon, dans un curry épicé djiboutien, ou tout simplement à la vapeur pour préserver tous leurs nutriments.\n\nLa recommandation des nutritionnistes est de consommer des fruits de mer au moins deux fois par semaine pour bénéficier de tous leurs bienfaits.",
+    "cover_image": "", "tags": [3, 1], "is_published": true,
+    "published_at": "2024-01-25T08:00:00Z", "updated_at": "2024-01-25T08:00:00Z"
+  }},
+  {"model": "blog.post", "pk": 2, "fields": {
+    "author": null,
+    "title": "Le Tazard : Poisson Méconnu aux Saveurs Exceptionnelles",
+    "slug": "tazard-poisson-meconnu-saveurs-exceptionnelles",
+    "excerpt": "Le Tazard (Wahoo) est l'un des poissons les plus savoureux de l'Océan Indien. Découvrez ses caractéristiques et comment le cuisiner.",
+    "content": "Le Tazard, connu internationalement sous le nom de Wahoo (Acanthocybium solandri), est un poisson pélagique qui fréquente les eaux chaudes de l'Océan Indien et de la Mer Rouge.\n\nCe poisson est particulièrement apprécié des gastronomes pour sa chair ferme, blanche et délicatement parfumée. Contrairement à certains autres poissons, le Tazard possède très peu d'arêtes, ce qui facilite sa dégustation.\n\nNutritivement, le Tazard est excellent : riche en protéines (environ 23g pour 100g), faible en matières grasses, et source d'oméga-3, de vitamines B12 et de sélénium.\n\nComment cuisiner le Tazard ?\n- Grillé sur charbon avec citron et épices\n- En darnes au four avec tomates et herbes\n- En brochettes marinées à l'huile d'olive et ail\n- En carpaccio pour les amateurs de poisson cru\n\nLe Tazard est disponible toute l'année chez Kaluun, pêché fraîchement dans le Golfe d'Aden.",
+    "cover_image": "", "tags": [2, 4], "is_published": true,
+    "published_at": "2024-01-15T08:00:00Z", "updated_at": "2024-01-15T08:00:00Z"
+  }},
+  {"model": "blog.post", "pk": 3, "fields": {
+    "author": null,
+    "title": "Le Thon : Roi des Océans et Champion de la Nutrition",
+    "slug": "thon-roi-oceans-champion-nutrition",
+    "excerpt": "Le thon est l'un des poissons les plus consommés au monde. Découvrez pourquoi il est un champion nutritionnel et comment le choisir frais.",
+    "content": "Le thon est sans conteste l'un des rois des océans et un champion incontesté de la nutrition. Mais saviez-vous que le thon frais est infiniment supérieur au thon en conserve ?\n\nLe thon frais de Djibouti est pêché dans les eaux pures de la Mer Rouge et du Golfe d'Aden. Ces eaux, parmi les plus poissonneuses au monde, donnent au thon djiboutien des qualités gustatives exceptionnelles.\n\nComposition nutritionnelle du thon frais (100g) :\n- Protéines : 25-30g\n- Oméga-3 : 1.5-2g\n- Vitamine D : 40% des AJR\n- Vitamine B12 : 150% des AJR\n- Sélénium : 90% des AJR\n\nComment reconnaître un thon frais ? La chair doit être d'un rouge vif et brillant, sans odeur forte, ferme au toucher, avec un aspect humide mais pas visqueux.\n\nRecette recommandée : Thon grillé djiboutien\nMarinades avec ail, gingembre, citron et épices somali, puis grillé sur charbon pendant 4-5 minutes de chaque côté. Servir avec du riz basmati et des légumes sautés.\n\nChaque semaine, Kaluun reçoit des arrivages frais de thon directement des pêcheurs du port.",
+    "cover_image": "", "tags": [1, 2, 4], "is_published": true,
+    "published_at": "2024-01-20T08:00:00Z", "updated_at": "2024-01-20T08:00:00Z"
+  }}
+]

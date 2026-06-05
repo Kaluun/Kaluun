@@ -1,0 +1,430 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Catalogue Poissons — KALUUN{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ══════════════════════════════════════
+   CATALOGUE PREMIUM — Design 2025
+   ══════════════════════════════════════ */
+
+/* ── Filtres ── */
+.cat-filters {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  padding: 6px 8px;
+  background: #fff;
+  border: 1.5px solid var(--b-soft);
+  border-radius: 14px;
+  box-shadow: var(--s-xs);
+}
+.cat-btn {
+  display: flex; align-items: center; gap: 7px;
+  padding: 8px 18px; border-radius: 10px;
+  font-family: 'Space Grotesk', sans-serif; font-size: .84rem; font-weight: 600;
+  color: #4A6080; background: transparent; border: none; cursor: pointer;
+  transition: all .22s;
+}
+.cat-btn:hover { background: var(--surf); color: var(--ocean); }
+.cat-btn.on {
+  background: linear-gradient(135deg, #0077B6, #00B4D8);
+  color: #fff;
+  box-shadow: 0 3px 14px rgba(0,87,168,.3);
+}
+.cat-btn i { font-size: .78rem; }
+
+/* ── Barre de recherche ── */
+.search-wrap { position: relative; }
+.search-wrap i {
+  position: absolute; left: 16px; top: 50%;
+  transform: translateY(-50%); color: #9BBCD8; font-size: .9rem;
+  pointer-events: none;
+}
+.search-wrap input {
+  width: 260px; background: #fff; border: 1.5px solid var(--b-soft);
+  color: var(--t-dark); padding: 12px 16px 12px 44px;
+  border-radius: 12px; font-size: .88rem; outline: none;
+  font-family: 'Space Grotesk', sans-serif;
+  transition: all .22s; box-shadow: var(--s-xs);
+  max-width: 100%;
+}
+.search-wrap input::placeholder { color: #9BBCD8; }
+.search-wrap input:focus {
+  border-color: var(--ocean); width: 300px;
+  box-shadow: 0 0 0 3px rgba(0,119,182,.08);
+}
+@media(max-width:575px) {
+  .search-wrap, .search-wrap input, .search-wrap input:focus { width: 100%; }
+  .cat-filters { flex-wrap: nowrap; overflow-x: auto; width: 100%; }
+  .cat-btn { flex-shrink: 0; }
+}
+
+/* ── Grille de produits ── */
+.prod-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(295px, 1fr));
+  gap: 28px;
+}
+
+/* ── Carte produit ── */
+.prod-card {
+  background: #fff;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1.5px solid rgba(0,119,182,.1);
+  box-shadow: 0 2px 16px rgba(0,87,168,.07);
+  transition: transform .38s cubic-bezier(.23,1,.32,1), box-shadow .38s, border-color .3s;
+  position: relative;
+}
+.prod-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(0,150,200,.28);
+  box-shadow: 0 18px 56px rgba(0,87,168,.16), 0 4px 20px rgba(0,87,168,.08);
+}
+
+/* Image */
+.prod-img-wrap {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: var(--surf);
+}
+.prod-img-wrap img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .55s ease;
+}
+.prod-card:hover .prod-img-wrap img { transform: scale(1.08); }
+.prod-img-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(2,38,100,.62) 0%, rgba(2,38,100,.08) 55%, transparent 100%);
+}
+
+/* Badges */
+.prod-badge {
+  position: absolute; top: 14px; left: 14px; z-index: 2;
+  padding: 4px 13px; border-radius: 20px;
+  font-family: 'Space Grotesk', sans-serif; font-size: .66rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .8px;
+}
+.prod-badge.featured {
+  background: linear-gradient(135deg, #0077B6, #00B4D8);
+  color: #fff; box-shadow: 0 3px 10px rgba(0,87,168,.4);
+}
+.prod-badge.low-stock {
+  background: linear-gradient(135deg, #E63946, #FF6B6B);
+  color: #fff; box-shadow: 0 3px 10px rgba(230,57,70,.4);
+  top: auto; bottom: 14px;
+}
+
+/* Bouton aperçu */
+.prod-quick {
+  position: absolute; top: 14px; right: 14px; z-index: 2;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
+  color: var(--ocean); display: flex; align-items: center; justify-content: center;
+  font-size: .82rem; opacity: 0; transform: translateY(-6px);
+  transition: all .25s; text-decoration: none; border: 1px solid rgba(0,119,182,.15);
+}
+.prod-card:hover .prod-quick { opacity: 1; transform: translateY(0); }
+.prod-quick:hover { background: var(--ocean); color: #fff; }
+
+/* Catégorie dans l'image */
+.prod-cat-overlay {
+  position: absolute; bottom: 12px; left: 12px; z-index: 2;
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.18); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.3); border-radius: 20px;
+  padding: 4px 12px;
+  font-family: 'Space Grotesk', sans-serif; font-size: .65rem; font-weight: 700;
+  color: rgba(255,255,255,.95); text-transform: uppercase; letter-spacing: 1px;
+}
+
+/* Corps de la carte */
+.prod-body {
+  padding: 20px 20px 18px;
+}
+.prod-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.15rem; font-weight: 800;
+  color: var(--t-dark); margin-bottom: 7px; line-height: 1.2;
+  letter-spacing: -.3px;
+}
+.prod-name a { color: inherit; text-decoration: none; }
+.prod-name a:hover { color: var(--ocean); }
+
+.prod-meta {
+  display: flex; align-items: center; gap: 6px;
+  font-size: .75rem; color: #7BAECE;
+  font-family: 'Space Grotesk', sans-serif; margin-bottom: 10px;
+}
+.prod-meta i { color: var(--sky); font-size: .7rem; }
+
+.prod-desc {
+  font-size: .82rem; color: #5580A0; line-height: 1.65;
+  margin-bottom: 16px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Prix + Action */
+.prod-footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.prod-price-wrap {}
+.prod-price {
+  font-family: 'Syne', sans-serif; font-size: 1.45rem; font-weight: 800;
+  background: linear-gradient(135deg, #023E8A, #0077B6, #00B4D8);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+.prod-unit {
+  font-size: .68rem; color: #9BBCD8; font-family: 'Space Grotesk', sans-serif;
+  margin-top: 1px;
+}
+
+/* Bouton Ajouter */
+.add-btn {
+  display: flex; align-items: center; gap: 7px;
+  background: linear-gradient(135deg, #0077B6, #00B4D8);
+  color: #fff; padding: 10px 20px; border-radius: 22px;
+  font-family: 'Space Grotesk', sans-serif; font-size: .82rem; font-weight: 800;
+  border: none; cursor: pointer; transition: all .25s;
+  box-shadow: 0 3px 14px rgba(0,87,168,.28);
+  text-decoration: none;
+}
+.add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 22px rgba(0,87,168,.42);
+  color: #fff;
+}
+.add-btn.locked {
+  background: var(--surf); color: #9BBCD8;
+  box-shadow: none; border: 1.5px solid var(--b-soft);
+}
+.add-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+/* Barre stock */
+.stock-bar {
+  height: 3px; background: rgba(0,119,182,.1);
+  border-radius: 2px; margin-top: 14px; overflow: hidden;
+}
+.stock-bar-fill {
+  height: 100%; border-radius: 2px;
+  background: linear-gradient(90deg, #0077B6, #00B4D8);
+  transition: width 1.5s ease;
+}
+
+/* Résultats de recherche */
+.search-result-banner {
+  background: linear-gradient(135deg, rgba(0,87,168,.07), rgba(0,180,216,.05));
+  border: 1.5px solid rgba(0,119,182,.15);
+  border-radius: 12px; padding: 12px 20px;
+  margin-bottom: 28px;
+  font-family: 'Space Grotesk', sans-serif; font-size: .88rem; color: var(--ocean);
+  display: flex; align-items: center; gap: 10px;
+}
+
+/* Empty state */
+.empty-state {
+  grid-column: 1 / -1; text-align: center; padding: 100px 20px;
+}
+.empty-state-icon {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: var(--surf); border: 2px solid var(--b-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; margin: 0 auto 20px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- PAGE HEADER -->
+<div class="k-ph" style="padding:130px 0 50px;">
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="k-eyebrow" style="color:rgba(255,255,255,.75);">
+      <i class="fas fa-fish" style="margin-right:6px;"></i>Notre catalogue
+    </div>
+    <h1 style="font-family:'Syne',sans-serif;font-size:clamp(2.2rem,5vw,3.4rem);font-weight:800;color:#fff;letter-spacing:-1.5px;margin-bottom:10px;">
+      Catalogue
+      <span style="background:linear-gradient(135deg,#fff,#ADE8F4,#90E0EF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Complet</span>
+    </h1>
+    <div class="k-bc mt-1">
+      <a href="{% url 'store:home' %}">Accueil</a><span>›</span><span class="cur">Catalogue</span>
+    </div>
+
+    <!-- Compteur produits -->
+    <div style="display:flex;align-items:center;gap:20px;margin-top:20px;flex-wrap:wrap;">
+      <span style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;padding:5px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:.78rem;font-weight:700;backdrop-filter:blur(8px);">
+        <i class="fas fa-box me-1" style="opacity:.8;"></i>{{ products.count }} poisson{{ products.count|pluralize }} disponible{{ products.count|pluralize }}
+      </span>
+      <span style="background:rgba(0,196,232,.18);border:1px solid rgba(0,196,232,.3);color:rgba(255,255,255,.9);padding:5px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:.78rem;font-weight:700;">
+        <i class="fas fa-truck me-1"></i>Livraison express 24h
+      </span>
+    </div>
+  </div>
+</div>
+
+<section style="padding:40px 0 80px;background:#F8FBFF;min-height:60vh;">
+  <div class="container">
+
+    <!-- ── TOOLBAR ── -->
+    <div class="d-flex flex-wrap gap-3 align-items-start justify-content-between mb-5">
+
+      <!-- Filtres catégories -->
+      <div class="cat-filters">
+        <button class="cat-btn {% if not selected_category %}on{% endif %}" onclick="filterCat(this,'')">
+          <i class="fas fa-border-all"></i> Tous
+        </button>
+        {% for cat in categories %}
+        <button class="cat-btn {% if selected_category.slug == cat.slug %}on{% endif %}"
+                onclick="filterCat(this,'{{ cat.slug }}')">
+          <i class="{{ cat.icon }}"></i> {{ cat.name }}
+        </button>
+        {% endfor %}
+      </div>
+
+      <!-- Recherche -->
+      <form action="{% url 'store:product_list' %}" method="GET" class="search-wrap">
+        <i class="fas fa-search"></i>
+        <input type="search" name="q" placeholder="Chercher un poisson..." value="{{ search_query }}">
+      </form>
+    </div>
+
+    {% if search_query %}
+    <div class="search-result-banner">
+      <i class="fas fa-search"></i>
+      <span>{{ products.count }} résultat{{ products.count|pluralize }} pour « <strong>{{ search_query }}</strong> »</span>
+      <a href="{% url 'store:product_list' %}" style="margin-left:auto;font-size:.82rem;color:var(--sky);">Effacer ×</a>
+    </div>
+    {% endif %}
+
+    <!-- ── GRILLE PRODUITS ── -->
+    <div class="prod-grid" id="product-grid">
+      {% for product in products %}
+      <div class="prod-card aos" data-cat="{{ product.category.slug|default:'' }}" style="transition-delay:{{ forloop.counter0|divisibleby:3 }}00ms;">
+
+        <!-- Image -->
+        <div class="prod-img-wrap">
+          {% if product.get_image_url %}
+          <img src="{{ product.get_image_url }}" alt="{{ product.name }}" loading="lazy"
+               onerror="this.parentElement.style.background='linear-gradient(160deg,#EAF5FF,#C2E3F5)'">
+          {% else %}
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:4rem;background:linear-gradient(160deg,#EAF5FF,#C2E3F5);">🐟</div>
+          {% endif %}
+          <div class="prod-img-overlay"></div>
+
+          <!-- Badge phare -->
+          {% if product.is_featured %}
+          <span class="prod-badge featured"><i class="fas fa-crown" style="font-size:.6rem;"></i> Phare</span>
+          {% endif %}
+
+          <!-- Stock limité -->
+          {% if product.stock < 20 %}
+          <span class="prod-badge low-stock"><i class="fas fa-fire" style="font-size:.6rem;"></i> Stock limité</span>
+          {% endif %}
+
+          <!-- Aperçu -->
+          <a href="{{ product.get_absolute_url }}" class="prod-quick" title="Voir le détail">
+            <i class="fas fa-eye"></i>
+          </a>
+
+          <!-- Catégorie overlay -->
+          <div class="prod-cat-overlay">
+            <i class="{{ product.category.icon|default:'fas fa-fish' }}" style="font-size:.62rem;"></i>
+            {{ product.category.name|default:"Poisson frais" }}
+          </div>
+        </div>
+
+        <!-- Corps -->
+        <div class="prod-body">
+          <div class="prod-name">
+            <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+          </div>
+
+          <div class="prod-meta">
+            <i class="fas fa-map-marker-alt"></i>
+            {{ product.origin }}
+            {% if product.season %}
+            <span style="margin:0 4px;color:rgba(0,119,182,.2);">·</span>
+            <i class="fas fa-calendar-alt" style="color:#F5A623;"></i>
+            {{ product.season }}
+            {% endif %}
+          </div>
+
+          <div class="prod-desc">{{ product.description|truncatewords:20 }}</div>
+
+          <div class="prod-footer">
+            <div class="prod-price-wrap">
+              <div class="prod-price">{{ product.price|floatformat:0 }} FDJ</div>
+              <div class="prod-unit">par {{ product.unit }} · min. {{ product.min_order }} {{ product.unit }}</div>
+            </div>
+
+            {% if user.is_authenticated %}
+            <form action="{% url 'store:cart_add' product.pk %}" method="POST" onsubmit="return addToCart(this)">
+              {% csrf_token %}
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="add-btn" {% if not product.is_available %}disabled{% endif %}>
+                <i class="fas fa-{% if product.is_available %}cart-plus{% else %}times{% endif %}"></i>
+                {% if product.is_available %}Ajouter{% else %}Indispo.{% endif %}
+              </button>
+            </form>
+            {% else %}
+            <a href="{% url 'accounts:login' %}?next={{ request.get_full_path }}" class="add-btn locked">
+              <i class="fas fa-lock"></i>Connexion
+            </a>
+            {% endif %}
+          </div>
+
+          <!-- Barre stock -->
+          <div class="stock-bar">
+            <div class="stock-bar-fill" style="width:{% if product.stock >= 80 %}100{% elif product.stock >= 50 %}70{% elif product.stock >= 25 %}48{% else %}22{% endif %}%"></div>
+          </div>
+        </div>
+      </div>
+
+      {% empty %}
+      <div class="empty-state">
+        <div class="empty-state-icon">🐟</div>
+        <h4 style="font-family:'Syne',sans-serif;font-weight:800;color:var(--t-dark);margin-bottom:10px;">Aucun poisson trouvé</h4>
+        <p style="color:#7BAECE;margin-bottom:28px;max-width:380px;margin-left:auto;margin-right:auto;">Essayez une autre recherche ou parcourez toutes les catégories.</p>
+        <a href="{% url 'store:product_list' %}" class="btn-ghost">Voir tous les poissons</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CTA connexion -->
+{% if not user.is_authenticated %}
+<div style="background:#fff;border-top:1.5px solid var(--b-soft);padding:44px 0;">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#EAF5FF,#C2E3F5);border:1.5px solid var(--b-soft);display:flex;align-items:center;justify-content:center;color:var(--ocean);font-size:1.1rem;">
+          <i class="fas fa-lock"></i>
+        </div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t-dark);font-size:.92rem;">Connectez-vous pour commander</div>
+          <div style="font-size:.78rem;color:#7BAECE;margin-top:2px;">Créez un compte gratuitement en 30 secondes</div>
+        </div>
+      </div>
+      <a href="{% url 'accounts:login' %}" class="btn-solid" style="text-decoration:none;padding:11px 26px;">Se connecter</a>
+      <a href="{% url 'accounts:register' %}" class="btn-ghost" style="text-decoration:none;padding:10px 22px;">Créer un compte</a>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function filterCat(btn, slug) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.prod-card').forEach(c => {
+    c.style.display = (!slug || c.dataset.cat === slug) ? '' : 'none';
+  });
+}
+</script>
+{% endblock %}

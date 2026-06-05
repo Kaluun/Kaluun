@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <radialGradient id="bg" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#5AC8FF"/>
+      <stop offset="60%" stop-color="#2196F3"/>
+      <stop offset="100%" stop-color="#1565C0"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="30%" r="40%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- Cercle fond bleu -->
+  <circle cx="100" cy="100" r="98" fill="url(#bg)"/>
+  <circle cx="100" cy="100" r="98" fill="url(#glow)"/>
+  <!-- Silhouette Djibouti en arrière-plan -->
+  <path d="M90,45 Q95,42 105,50 Q115,60 118,75 Q120,85 115,95 Q110,105 105,110 Q98,118 95,125 Q92,130 90,135 Q88,140 90,145 Q88,148 85,145 Q80,140 78,130 Q75,118 78,108 Q80,98 82,88 Q84,75 85,62 Q87,52 90,45Z" fill="rgba(255,255,255,0.12)"/>
+  <!-- Scooter / livraison -->
+  <!-- Roues -->
+  <circle cx="72" cy="135" r="12" fill="none" stroke="#1A237E" stroke-width="3"/>
+  <circle cx="72" cy="135" r="5" fill="#1A237E"/>
+  <circle cx="128" cy="135" r="12" fill="none" stroke="#1A237E" stroke-width="3"/>
+  <circle cx="128" cy="135" r="5" fill="#1A237E"/>
+  <!-- Châssis -->
+  <path d="M60,130 L80,130 L90,115 L130,115 L138,125 L140,135" fill="none" stroke="#1A237E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="90" y1="115" x2="88" y2="100" stroke="#1A237E" stroke-width="2.5"/>
+  <path d="M85,100 L120,100" stroke="#1A237E" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Guidon -->
+  <path d="M85,100 Q82,95 80,92" stroke="#1A237E" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Siège -->
+  <path d="M108,100 Q115,97 122,100" stroke="#1A237E" stroke-width="3" stroke-linecap="round"/>
+  <!-- Conducteur (tête) -->
+  <circle cx="82" cy="88" r="8" fill="none" stroke="#1A237E" stroke-width="2.5"/>
+  <!-- Glacière sur le rack arrière -->
+  <rect x="107" y="75" width="30" height="22" rx="3" ry="3" fill="#B3E5FC" stroke="#1A237E" stroke-width="2"/>
+  <rect x="107" y="72" width="30" height="5" rx="2" ry="2" fill="#29B6F6" stroke="#1A237E" stroke-width="1.5"/>
+  <!-- Fermoir glacière -->
+  <rect x="118" y="73" width="8" height="3" rx="1" fill="#1A237E"/>
+  <!-- Poisson sur la glacière -->
+  <ellipse cx="122" cy="86" rx="7" ry="4" fill="#FF8F00"/>
+  <path d="M129,86 L133,82 L133,90 Z" fill="#FF8F00"/>
+  <circle cx="119" cy="85" r="1" fill="#1A237E"/>
+  <!-- Ligne de la queue -->
+  <path d="M115,86 Q122,83 129,86 Q122,89 115,86Z" fill="#FF6D00"/>
+  <!-- Texte KALUUN -->
+  <text x="100" y="163" font-family="Arial Black, Arial" font-weight="900" font-size="22" fill="#1A237E" text-anchor="middle" letter-spacing="2">KALUUN</text>
+  <!-- Texte DJIBOUTI -->
+  <text x="100" y="178" font-family="Arial, sans-serif" font-weight="600" font-size="10" fill="#FFFFFF" text-anchor="middle" letter-spacing="3">DJIBOUTI</text>
+</svg>

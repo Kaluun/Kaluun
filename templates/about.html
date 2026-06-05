@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}À propos — KALUUN{% endblock %}
+
+{% block extra_css %}
+<style>
+.histoire-section { padding:0; background:var(--foam); border-top:1px solid var(--b-soft); border-bottom:1px solid var(--b-soft); overflow:hidden; }
+.histoire-inner { display:grid; grid-template-columns:400px 1fr; min-height:680px; }
+.histoire-photo-col { position:relative; overflow:hidden; }
+.histoire-photo-col img { width:100%; height:100%; object-fit:cover; object-position:center top; display:block; transition:transform .6s ease; }
+.histoire-photo-col:hover img { transform:scale(1.02); }
+.histoire-photo-col::after { content:''; position:absolute; bottom:0; left:0; right:0; height:38%; background:linear-gradient(to top, rgba(4,33,80,1) 0%, rgba(4,33,80,.9) 20%, rgba(4,33,80,.5) 55%, transparent 100%); pointer-events:none; }
+.histoire-founder-overlay { position:absolute; bottom:0; left:0; right:0; z-index:2; padding:28px 32px; }
+.histoire-founder-name { font-family:'Syne',sans-serif; font-size:1.45rem; font-weight:800; color:#fff; margin-bottom:8px; text-shadow:0 2px 10px rgba(0,0,0,.5); }
+.histoire-founder-badge { display:inline-block; background:rgba(0,196,232,.2); border:1px solid rgba(0,196,232,.5); color:#00C4E8; font-family:'Space Grotesk',sans-serif; font-size:.75rem; font-weight:700; padding:4px 14px; border-radius:20px; letter-spacing:.5px; backdrop-filter:blur(8px); }
+.histoire-text-col { padding:64px 60px; display:flex; flex-direction:column; justify-content:center; background:var(--foam); }
+.histoire-h2 { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; color:var(--t-dark); margin-bottom:0; letter-spacing:-.3px; }
+.histoire-underline { width:48px; height:3px; background:linear-gradient(90deg,var(--ocean),var(--turquoise)); border-radius:2px; margin:12px 0 28px; }
+.histoire-body { color:var(--t-mid); font-size:.94rem; line-height:1.95; }
+.histoire-body p { margin-bottom:16px; }
+.histoire-body strong { color:var(--t-dark); font-weight:700; }
+.histoire-blockquote { border-left:3px solid var(--ocean); padding:14px 20px; margin:22px 0; background:var(--surf); border-radius:0 8px 8px 0; font-style:italic; color:var(--t-mid); font-size:.93rem; line-height:1.8; }
+@media(max-width:991px){ .histoire-inner{grid-template-columns:1fr} .histoire-photo-col{height:460px} .histoire-text-col{padding:40px 28px} }
+@media(max-width:576px){ .histoire-text-col{padding:32px 20px} .histoire-h2{font-size:1.6rem} }
+
+/* Description section */
+.kaluun-desc-card { background:#fff; border:1px solid var(--b-soft); border-radius:var(--r-lg); padding:28px; box-shadow:var(--s-sm); transition:.25s; }
+.kaluun-desc-card:hover { border-color:var(--b-blue); box-shadow:var(--s-md); transform:translateY(-3px); }
+.kaluun-desc-icon { width:56px; height:56px; border-radius:16px; background:var(--grad-sky); display:flex; align-items:center; justify-content:center; font-size:1.4rem; color:#fff; margin-bottom:16px; box-shadow:var(--s-blue); }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ── PAGE HEADER ── -->
+<div class="k-ph">
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="k-eyebrow" style="color:rgba(255,255,255,.7);">
+      <i class="fas fa-fish" style="margin-right:6px;"></i>Notre histoire
+    </div>
+    <h1>À propos de <em style="background:linear-gradient(135deg,#fff,#90E0EF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-style:normal;">KALUUN</em></h1>
+    <div class="k-bc mt-2">
+      <a href="{% url 'store:home' %}">Accueil</a><span>›</span><span class="cur">À propos</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 1 — QU'EST-CE QUE KALUUN ?
+     ══════════════════════════════════════════════ -->
+<section class="k-sec" style="background:#fff;">
+  <div class="container">
+
+    <!-- Intro headline -->
+    <div class="row align-items-center g-5 mb-5">
+      <div class="col-lg-6 aos">
+        <div class="k-eyebrow">Qui sommes-nous</div>
+        <h2 class="k-h2">La première plateforme de<br>vente de poissons frais<br><em>à Djibouti</em></h2>
+      </div>
+      <div class="col-lg-6 aos aos-delay-1">
+        <p style="font-size:1.05rem;color:var(--t-mid);line-height:1.9;">
+          <strong style="color:var(--t-dark);">KALUUN</strong> est une plateforme web qui digitalise et structure le marché halieutique djiboutien. Nous connectons directement les pêcheurs locaux aux consommateurs, éliminons les intermédiaires et garantissons une fraîcheur incomparable à prix équitable.
+        </p>
+        <p style="font-size:1rem;color:var(--t-light);line-height:1.9;margin-top:16px;">
+          Basée à Djibouti-Ville, KALUUN s'inscrit dans la dynamique de l'<strong style="color:var(--ocean);">économie bleue numérique</strong> — allier technologie, traçabilité et durabilité au service des familles djiboutiennes.
+        </p>
+      </div>
+    </div>
+
+    <!-- Mission, Vision, Objectifs — 3 cards -->
+    <div class="row g-4 mb-5">
+      <div class="col-lg-4 aos">
+        <div class="kaluun-desc-card" style="border-top:3px solid var(--ocean);">
+          <div class="kaluun-desc-icon"><i class="fas fa-bullseye"></i></div>
+          <h5 style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t-dark);margin-bottom:12px;font-size:1.05rem;">Notre Mission</h5>
+          <p style="font-size:.9rem;color:var(--t-mid);line-height:1.8;margin:0;">Rendre les poissons frais, <strong style="color:var(--t-dark);">accessibles et abordables</strong> pour chaque consommateur de Djibouti, tout en soutenant durablement les pêcheurs locaux.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 aos aos-delay-1">
+        <div class="kaluun-desc-card" style="border-top:3px solid var(--sky);">
+          <div class="kaluun-desc-icon" style="background:var(--grad-wave);"><i class="fas fa-eye"></i></div>
+          <h5 style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t-dark);margin-bottom:12px;font-size:1.05rem;">Notre Vision</h5>
+          <p style="font-size:.9rem;color:var(--t-mid);line-height:1.8;margin:0;">Devenir la <strong style="color:var(--t-dark);">première plateforme numérique</strong> de référence pour la distribution de produits halieutiques en Afrique de l'Est.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 aos aos-delay-2">
+        <div class="kaluun-desc-card" style="border-top:3px solid var(--turquoise);">
+          <div class="kaluun-desc-icon" style="background:linear-gradient(135deg,var(--sky),var(--turquoise));"><i class="fas fa-leaf"></i></div>
+          <h5 style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t-dark);margin-bottom:12px;font-size:1.05rem;">Notre Impact</h5>
+          <p style="font-size:.9rem;color:var(--t-mid);line-height:1.8;margin:0;">Créer un <strong style="color:var(--t-dark);">écosystème durable</strong> qui soutient les pêcheurs, réduit les intermédiaires et dynamise l'économie bleue locale.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ce qu'on fait — 4 piliers -->
+    <div style="background:var(--foam);border-radius:var(--r-xl);padding:48px;border:1px solid var(--b-soft);" class="aos">
+      <div class="text-center mb-4">
+        <div class="k-eyebrow" style="justify-content:center;">Comment ça marche</div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:800;color:var(--t-dark);font-size:1.7rem;letter-spacing:-.5px;">Un processus simple en <span style="background:var(--grad-sky);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">4 étapes</span></h3>
+      </div>
+      <div class="row g-4">
+        {% for step in steps|default:"1234" %}
+        {% endfor %}
+        <div class="col-lg-3 col-sm-6">
+          <div style="text-align:center;padding:24px 16px;">
+            <div style="width:60px;height:60px;border-radius:50%;background:var(--grad-sky);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:var(--s-blue);font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;">1</div>
+            <h6 style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t-dark);margin-bottom:8px;">Parcourir le catalogue</h6>
+            <p style="font-size:.82rem;color:var(--t-light);margin:0;line-height:1.7;">Images claires, prix transparents, descriptions détaillées pour chaque produit.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+          <div style="text-align:center;padding:24px 16px;">
+            <div style="width:60px;height:60px;border-radius:50%;background:var(--grad-sky);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:var(--s-blue);font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;">2</div>
+            <h6 style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t-dark);margin-bottom:8px;">Choisir & Commander</h6>
+            <p style="font-size:.82rem;color:var(--t-light);margin:0;line-height:1.7;">Sélectionnez vos poissons, ajoutez au panier et validez en quelques clics.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+          <div style="text-align:center;padding:24px 16px;">
+            <div style="width:60px;height:60px;border-radius:50%;background:var(--grad-sky);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:var(--s-blue);font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;">3</div>
+            <h6 style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t-dark);margin-bottom:8px;">Payer en Mobile Money</h6>
+            <p style="font-size:.82rem;color:var(--t-light);margin:0;line-height:1.7;">Waafi, E-Dahab, CAC Mobile, D-Money, Saba — paiement 100% local et sécurisé.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+          <div style="text-align:center;padding:24px 16px;">
+            <div style="width:60px;height:60px;border-radius:50%;background:var(--grad-sky);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:var(--s-blue);font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;">4</div>
+            <h6 style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t-dark);margin-bottom:8px;">Livraison Express</h6>
+            <p style="font-size:.82rem;color:var(--t-light);margin:0;line-height:1.7;">Votre commande livrée à domicile dans tout Djibouti, chaîne du froid garantie.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS RAPIDES ── -->
+<section style="padding:50px 0;background:#0077B6;">
+  <div class="container">
+    <div class="row g-3 text-center">
+      {% for s in stats %}
+      <div class="col-6 col-md-3 aos" style="transition-delay:{{ forloop.counter0 }}00ms;">
+        <div style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:18px;padding:28px 14px;transition:.3s;" onmouseover="this.style.background='rgba(255,255,255,.22)';this.style.transform='translateY(-3px)'" onmouseout="this.style.background='rgba(255,255,255,.15)';this.style.transform=''">
+          <div style="font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:#fff;line-height:1;">{{ s.num }}</div>
+          <div style="font-size:.82rem;color:rgba(255,255,255,.85);margin-top:8px;font-family:'Space Grotesk',sans-serif;font-weight:600;">{{ s.lbl }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 2 — HISTOIRE DU FONDATEUR
+     ══════════════════════════════════════════════ -->
+<section class="histoire-section">
+  <div class="histoire-inner">
+
+    <!-- Photo fondateur -->
+    <div class="histoire-photo-col">
+      <img src="{% static 'images/team/fondateur.png' %}" alt="Ide Ahmed Abchir, Fondateur KALUUN"
+           onerror="this.src='{% static 'images/kaluun-logo.svg' %}'">
+      <div class="histoire-founder-overlay">
+        <div class="histoire-founder-name">Ide Ahmed Abchir</div>
+        <span class="histoire-founder-badge">Fondateur &amp; CEO · KALUUN</span>
+      </div>
+    </div>
+
+    <!-- Texte histoire -->
+    <div class="histoire-text-col">
+      <div class="k-eyebrow">Notre histoire</div>
+      <h2 class="histoire-h2">Mon Histoire</h2>
+      <div class="histoire-underline"></div>
+
+      <div class="histoire-body">
+        <p>Je m'appelle <strong>Ide Ahmed Abchir</strong>, j'ai 23 ans. Avant d'être fondateur de KALUUN, j'étais simplement un jeune Djiboutien qui observait une réalité frustrante autour de lui.</p>
+
+        <div class="histoire-blockquote">
+          "Nous vivons dans un pays entouré par la mer, riche en ressources maritimes, pourtant accéder à du poisson frais et à un prix juste reste parfois compliqué."
+        </div>
+
+        <p>Entre les intermédiaires, le manque de transparence et les difficultés d'approvisionnement, je me suis souvent demandé : <strong>pourquoi quelque chose d'aussi essentiel doit-il être si compliqué ?</strong></p>
+
+        <p>Cette question est devenue une obsession. J'ai commencé à discuter avec des pêcheurs, à écouter les besoins des consommateurs, à comprendre les défis du marché. Plus j'apprenais, plus une conviction grandissait : il devait exister une meilleure façon de faire. C'est ainsi qu'est née <strong>KALUUN</strong>.</p>
+
+        <p>Ce n'était pas seulement une idée d'entreprise. C'était une <strong>mission</strong> : utiliser la technologie pour rapprocher les pêcheurs des consommateurs, rendre le poisson frais accessible et créer un système plus simple, plus transparent et plus juste.</p>
+
+        <div class="histoire-blockquote" style="border-left-color:var(--turquoise);">
+          "Aujourd'hui, KALUUN est un rêve transformé en action — la preuve qu'à Djibouti aussi, nous pouvons créer des solutions modernes avec un impact réel."
+        </div>
+
+        <p style="margin-bottom:28px;">Bienvenue dans l'univers de <strong>KALUUN</strong>.</p>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="{% url 'store:product_list' %}" class="btn-cyan" style="padding:12px 26px;border-radius:28px;font-size:.88rem;text-decoration:none;">
+            <i class="fas fa-fish"></i>Notre catalogue
+          </a>
+          <a href="{% url 'store:contact' %}" class="btn-ghost" style="padding:12px 22px;border-radius:28px;font-size:.86rem;text-decoration:none;">
+            Nous contacter
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── NOS VALEURS ── -->
+<section class="k-sec" style="background:#fff;">
+  <div class="container">
+    <div class="text-center mb-5 aos">
+      <div class="k-eyebrow" style="justify-content:center;">Nos engagements</div>
+      <h2 class="k-h2">Ce qui nous <em>distingue</em></h2>
+    </div>
+    <div class="row g-4">
+      {% for v in values %}
+      <div class="col-lg-3 col-sm-6 aos" style="transition-delay:{{ forloop.counter0 }}00ms;">
+        <div class="kaluun-desc-card text-center" style="height:100%;">
+          <div class="kaluun-desc-icon" style="margin-left:auto;margin-right:auto;">
+            <i class="{{ v.icon }}"></i>
+          </div>
+          <h5 style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t-dark);margin-bottom:10px;">{{ v.title }}</h5>
+          <p style="font-size:.85rem;color:var(--t-light);margin:0;line-height:1.7;">{{ v.text }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section style="padding:90px 0;background:#0077B6;">
+  <div class="container text-center aos">
+    <div class="k-eyebrow" style="justify-content:center;color:rgba(255,255,255,.7);">Prêt à commander ?</div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;color:#fff;margin:14px auto 16px;max-width:560px;letter-spacing:-1px;">
+      Commandez les meilleurs<br>poissons de <span style="background:linear-gradient(135deg,#90E0EF,#00C4E8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Djibouti</span>
+    </h2>
+    <p style="color:rgba(255,255,255,.6);margin-bottom:40px;font-size:.97rem;max-width:420px;margin-left:auto;margin-right:auto;">
+      Rejoignez 500+ familles et recevez vos poissons ultra-frais livrés à domicile.
+    </p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+      <a href="{% url 'store:product_list' %}" class="btn-cyan" style="padding:14px 36px;font-size:.97rem;text-decoration:none;">
+        <i class="fas fa-fish"></i>Voir le catalogue
+      </a>
+      <a href="{% url 'store:contact' %}" class="btn-ghost" style="padding:14px 28px;text-decoration:none;border-color:rgba(255,255,255,.5);color:#fff;">
+        Nous contacter
+      </a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

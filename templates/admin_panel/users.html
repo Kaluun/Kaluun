@@ -1,0 +1,79 @@
+{% extends 'admin_panel/base_admin.html' %}
+{% block title %}Utilisateurs — Admin KALUUN{% endblock %}
+{% block page_title %}Gestion des utilisateurs{% endblock %}
+
+{% with pending_orders_count=0 %}
+{% block content %}
+<div style="margin-bottom:20px;font-family:'Space Grotesk',sans-serif;font-size:.84rem;color:var(--ats);font-weight:600;">
+  {{ users.count }} utilisateur{{ users.count|pluralize }}
+</div>
+
+<div class="adm-card">
+  <div style="overflow-x:auto;">
+    <table class="adm-table" style="min-width:700px;">
+      <thead>
+        <tr><th>Utilisateur</th><th>Email</th><th>Téléphone</th><th>Inscrit</th><th>Commandes</th><th>Total dépensé</th><th>Statut</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--ag),var(--agl));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:.88rem;font-weight:800;color:var(--an);flex-shrink:0;">{{ user.first_name|first|default:user.username|first|upper }}</div>
+              <div>
+                <div style="font-weight:700;color:var(--at);font-size:.85rem;font-family:'Space Grotesk',sans-serif;">{{ user.get_full_name|default:user.username }}</div>
+                <div style="font-size:.71rem;color:var(--ats);font-family:'Space Grotesk',sans-serif;">@{{ user.username }}</div>
+              </div>
+            </div>
+          </td>
+          <td style="font-size:.82rem;color:var(--atm);font-family:'Space Grotesk',sans-serif;">{{ user.email|default:"—" }}</td>
+          <td style="font-size:.82rem;color:var(--atm);font-family:'Space Grotesk',sans-serif;">{% if user.profile %}{{ user.profile.phone|default:"—" }}{% else %}—{% endif %}</td>
+          <td style="font-size:.78rem;color:var(--ats);font-family:'Space Grotesk',sans-serif;font-weight:600;">{{ user.date_joined|date:"d/m/Y" }}</td>
+          <td>
+            <span style="background:rgba(0,87,168,.08);color:var(--ao);padding:3px 12px;border-radius:20px;font-size:.75rem;font-weight:700;font-family:'Space Grotesk',sans-serif;border:1px solid rgba(0,87,168,.18);">{{ user.order_count }} cmde{{ user.order_count|pluralize }}</span>
+          </td>
+          <td>
+            {% if user.total_spent %}
+            <div style="font-family:'Syne',sans-serif;font-weight:800;background:linear-gradient(135deg,var(--ag),var(--agl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:.92rem;">{{ user.total_spent|floatformat:0 }} FDJ</div>
+            {% else %}
+            <div style="font-size:.8rem;color:var(--ats);font-family:'Space Grotesk',sans-serif;">—</div>
+            {% endif %}
+          </td>
+          <td>
+            {% if user.is_active %}
+            <span class="sb sb-delivered">Actif</span>
+            {% else %}
+            <span class="sb sb-cancelled">Bloqué</span>
+            {% endif %}
+          </td>
+          <td>
+            <div style="display:flex;gap:6px;">
+              <a href="{% url 'gestadmin:user_edit' user.pk %}" class="btn-adm btn-adm-blue" title="Modifier">
+                <i class="fas fa-edit"></i>
+              </a>
+              <form method="POST" action="{% url 'gestadmin:user_toggle' user.pk %}" style="display:inline;">
+                {% csrf_token %}
+                <button class="btn-adm {% if user.is_active %}btn-adm-red{% else %}btn-adm-green{% endif %}"
+                  onclick="return confirm('{% if user.is_active %}Bloquer{% else %}Activer{% endif %} {{ user.username }} ?')"
+                  title="{% if user.is_active %}Bloquer{% else %}Activer{% endif %}">
+                  <i class="fas fa-{% if user.is_active %}ban{% else %}check{% endif %}"></i>
+                </button>
+              </form>
+              <form method="POST" action="{% url 'gestadmin:user_delete' user.pk %}" style="display:inline;">
+                {% csrf_token %}
+                <button class="btn-adm btn-adm-red" onclick="return confirm('Supprimer {{ user.username }} définitivement ?')" title="Supprimer">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--ats);font-family:'Space Grotesk',sans-serif;">Aucun utilisateur.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+{% endwith %}

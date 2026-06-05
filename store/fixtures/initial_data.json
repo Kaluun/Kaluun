@@ -1,0 +1,74 @@
+[
+  {"model": "store.category", "pk": 1, "fields": {"name": "Poissons", "slug": "poissons", "description": "Poissons frais de l'Océan Indien"}},
+  {"model": "store.category", "pk": 2, "fields": {"name": "Fruits de mer", "slug": "fruits-de-mer", "description": "Crevettes, crabes, homards et plus"}},
+  {"model": "store.category", "pk": 3, "fields": {"name": "Poissons séchés", "slug": "poissons-seches", "description": "Poissons séchés traditionnels"}},
+
+  {"model": "store.product", "pk": 1, "fields": {
+    "category": 1, "name": "Thazard", "slug": "thazard",
+    "description": "Le Thazard (ou Wahoo) est un poisson pélagique à chair ferme et savoureuse. Excellent en grillades ou en brochettes.",
+    "price": 1000, "stock": 20, "unit": "kg", "is_featured": true, "is_available": true, "origin": "Golfe d'Aden, Djibouti", "image": "",
+    "created_at": "2024-01-01T08:00:00Z", "updated_at": "2024-01-01T08:00:00Z"
+  }},
+  {"model": "store.product", "pk": 2, "fields": {
+    "category": 1, "name": "Thon", "slug": "thon",
+    "description": "Thon fraîchement pêché, idéal pour les salades, sashimis ou grillades. Riche en oméga-3 et protéines.",
+    "price": 989, "stock": 15, "unit": "kg", "is_featured": true, "is_available": true, "origin": "Mer Rouge, Djibouti", "image": "",
+    "created_at": "2024-01-01T08:00:00Z", "updated_at": "2024-01-01T08:00:00Z"
+  }},
+  {"model": "store.product", "pk": 3, "fields": {
+    "category": 1, "name": "Capitaine", "slug": "capitaine",
+    "description": "Poisson noble à chair blanche et délicate. Parfait pour la cuisson au four ou à la vapeur.",
+    "price": 1200, "stock": 10, "unit": "kg", "is_featured": true, "is_available": true, "origin": "Golfe de Tadjourah", "image": "",
+    "created_at": "2024-01-01T08:00:00Z", "updated_at": "2024-01-01T08:00:00Z"
+  }},
+  {"model": "store.product", "pk": 4, "fields": {
+    "category": 1, "name": "Mérou", "slug": "merou",
+    "description": "Poisson de roche à chair ferme et goûteuse. Très apprécié dans la cuisine djiboutienne.",
+    "price": 1500, "stock": 8, "unit": "kg", "is_featured": false, "is_available": true, "origin": "Récifs de Djibouti", "image": "",
+    "created_at": "2024-01-01T08:00:00Z", "updated_at": "2024-01-01T08:00:00Z"
+  }},
+  {"model": "store.product", "pk": 5, "fields": {
+    "category": 2, "name": "Crevettes royales", "slug": "crevettes-royales",
+    "description": "Grandes crevettes fraîches, parfaites pour les grillades ou les currys.",
+    "price": 2500, "stock": 5, "unit": "kg", "is_featured": true, "is_available": true, "origin": "Côtes de Djibouti", "image": "",
+    "created_at": "2024-01-01T08:00:00Z", "updated_at": "2024-01-01T08:00:00Z"
+  }},
+  {"model": "store.product", "pk": 6, "fields": {
+    "category": 2, "name": "Homard", "slug": "homard",
+    "description": "Homard entier frais, symbole de la gastronomie marine djiboutienne. Idéal pour les grandes occasions.",
+    "price": 4500, "stock": 3, "unit": "pièce", "is_featured": false, "is_available": true, "origin": "Îles de Musha, Djibouti", "image": "",
+    "created_at": "2024-01-01T08:00:00Z", "updated_at": "2024-01-01T08:00:00Z"
+  }},
+
+  {"model": "store.heroslide", "pk": 1, "fields": {
+    "title": "Poissons frais & fruits de mer d'exception",
+    "subtitle": "Pêché ce soir, sur votre table le matin. Livraison express à Djibouti.",
+    "image": "", "cta_text": "Découvrir nos produits", "cta_url": "/produits/", "order": 1, "is_active": true
+  }},
+  {"model": "store.heroslide", "pk": 2, "fields": {
+    "title": "Livraison express à votre domicile",
+    "subtitle": "Commandez avant 18h, recevez vos poissons frais le lendemain matin.",
+    "image": "", "cta_text": "Commander maintenant", "cta_url": "/produits/", "order": 2, "is_active": true
+  }},
+  {"model": "store.heroslide", "pk": 3, "fields": {
+    "title": "La confiance de 500+ familles djiboutiennes",
+    "subtitle": "97% de taux de satisfaction. Rejoignez la communauté Kaluun.",
+    "image": "", "cta_text": "Nous rejoindre", "cta_url": "/comptes/inscription/", "order": 3, "is_active": true
+  }},
+
+  {"model": "store.testimonial", "pk": 1, "fields": {
+    "name": "Amina S.", "role": "Mère de famille",
+    "content": "Enfin des poissons vraiment frais à Djibouti ! La livraison est rapide et les produits sont exactement comme promis. Je recommande à toute ma famille.",
+    "photo": "", "rating": 5, "is_active": true, "created_at": "2024-01-01T08:00:00Z"
+  }},
+  {"model": "store.testimonial", "pk": 2, "fields": {
+    "name": "Hassan M.", "role": "Chef de restaurant",
+    "content": "Qualité constante et prix justes. Kaluun est devenu mon fournisseur principal pour le restaurant. Le Thazard et le Thon sont exceptionnels.",
+    "photo": "", "rating": 5, "is_active": true, "created_at": "2024-01-01T08:00:00Z"
+  }},
+  {"model": "store.testimonial", "pk": 3, "fields": {
+    "name": "Fatima A.", "role": "Nutritionniste",
+    "content": "Je recommande Kaluun à tous mes patients pour une alimentation saine. Les poissons sont frais, sans additifs, et riches en nutriments essentiels.",
+    "photo": "", "rating": 5, "is_active": true, "created_at": "2024-01-01T08:00:00Z"
+  }}
+]
