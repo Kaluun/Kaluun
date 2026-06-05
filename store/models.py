@@ -66,7 +66,10 @@ class Product(models.Model):
 
     def get_image_url(self):
         if self.image:
-            return self.image.url
+            import os
+            from django.conf import settings
+            if os.path.exists(os.path.join(settings.MEDIA_ROOT, str(self.image))):
+                return self.image.url
         if self.image_url:
             return self.image_url
         return None
