@@ -16,6 +16,39 @@
   {% block extra_css %}{% endblock %}
 
   <style>
+    /* ── Notifications dropdown ── */
+    .k-notif-wrap { position: relative; }
+    .k-notif-panel {
+      position: absolute; top: calc(100% + 14px); right: 0;
+      width: 340px; max-width: 88vw; max-height: 420px; overflow-y: auto;
+      background: #fff; border: 1.5px solid rgba(0,119,182,.15);
+      border-radius: 14px; box-shadow: 0 18px 56px rgba(0,87,168,.22);
+      z-index: 999; display: none;
+    }
+    .k-notif-panel.show { display: block; }
+    .k-notif-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; border-bottom: 1px solid rgba(0,119,182,.1);
+      font-family: 'Syne',sans-serif; font-weight: 800; font-size: .9rem; color: #03045E;
+    }
+    .k-notif-readall { background: none; border: none; font-family: 'Space Grotesk',sans-serif; font-size: .74rem; font-weight: 700; color: #0077B6; cursor: pointer; }
+    .k-notif-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 12px 16px; border-bottom: 1px solid rgba(0,119,182,.08);
+      text-decoration: none; transition: background .15s;
+    }
+    .k-notif-item:hover { background: rgba(0,150,255,.06); }
+    .k-notif-item.unread { background: rgba(245,166,35,.07); }
+    .k-notif-ic {
+      width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+      background: rgba(0,119,182,.1); color: #0077B6;
+      display: flex; align-items: center; justify-content: center; font-size: .85rem;
+    }
+    .k-notif-title { font-family: 'Space Grotesk',sans-serif; font-size: .82rem; font-weight: 700; color: #03045E; margin-bottom: 2px; }
+    .k-notif-msg { font-size: .76rem; color: #5C7A99; }
+    .k-notif-time { font-size: .68rem; color: #93A9C2; margin-top: 4px; }
+    .k-notif-empty { padding: 30px 16px; text-align: center; font-size: .82rem; color: #5C7A99; }
+
     /* ── Global mobile resets ── */
     img { max-width: 100%; height: auto; }
     * { -webkit-tap-highlight-color: transparent; }
@@ -93,6 +126,38 @@
         <span id="cart-count-badge" class="k-cart-dot" style="{% if not cart_count %}display:none;{% endif %}">{{ cart_count }}</span>
         <span id="cart-total-badge" style="font-family:'Space Grotesk',sans-serif;font-size:.82rem;font-weight:600;">{{ cart_total|floatformat:0 }} FDJ</span>
       </button>
+
+      <!-- Notifications -->
+      {% if user.is_authenticated %}
+      <div class="k-notif-wrap k-nav-auth-desktop">
+        <button type="button" class="k-cart-btn" id="kNotifBtn" aria-label="Notifications" style="padding:0 12px;">
+          <i class="fas fa-bell"></i>
+          {% if unread_notif_count %}<span class="k-cart-dot">{{ unread_notif_count }}</span>{% endif %}
+        </button>
+        <div class="k-notif-panel" id="kNotifPanel">
+          <div class="k-notif-head">
+            <span><i class="fas fa-bell" style="color:#F5A623;margin-right:6px;"></i>Notifications</span>
+            {% if unread_notif_count %}
+            <form method="POST" action="{% url 'store:notifications_read_all' %}">{% csrf_token %}
+              <button type="submit" class="k-notif-readall">Tout marquer lu</button>
+            </form>
+            {% endif %}
+          </div>
+          {% for n in recent_notifications %}
+          <a href="{% url 'store:notification_read' n.pk %}" class="k-notif-item {% if not n.is_read %}unread{% endif %}">
+            <div class="k-notif-ic"><i class="fas {{ n.icon }}"></i></div>
+            <div>
+              <div class="k-notif-title">{{ n.title }}</div>
+              {% if n.message %}<div class="k-notif-msg">{{ n.message }}</div>{% endif %}
+              <div class="k-notif-time">{{ n.created_at|timesince }}</div>
+            </div>
+          </a>
+          {% empty %}
+          <div class="k-notif-empty"><i class="fas fa-bell-slash mb-2" style="font-size:1.4rem;opacity:.4;display:block;"></i>Aucune notification</div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
 
       <!-- Auth — caché sur mobile (dans le menu hamburger) -->
       {% if user.is_authenticated %}
@@ -422,6 +487,20 @@ function closeCart(){document.getElementById('cart-bg').classList.remove('on');d
 document.getElementById('cart-open').onclick=openCart;
 document.getElementById('cart-close').onclick=closeCart;
 document.getElementById('cart-bg').onclick=closeCart;
+
+// ── Notifications dropdown ──────────────────────────────
+(function() {
+  var btn = document.getElementById('kNotifBtn');
+  var panel = document.getElementById('kNotifPanel');
+  if (!btn || !panel) return;
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    panel.classList.toggle('show');
+  });
+  document.addEventListener('click', function(e) {
+    if (!panel.contains(e.target) && e.target !== btn) panel.classList.remove('show');
+  });
+})();
 
 // ── Toast ─────────────────────────────────────────────────
 function showToast(msg){

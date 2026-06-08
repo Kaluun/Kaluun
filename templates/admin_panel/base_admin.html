@@ -339,6 +339,46 @@
     border: 2px solid var(--abg);
     font-family: var(--fu);
   }
+  .adm-notif-wrap { position: relative; }
+  .adm-notif-panel {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: 340px;
+    max-width: 88vw;
+    max-height: 420px;
+    overflow-y: auto;
+    background: var(--asf, #fff);
+    border: 1.5px solid var(--abdr);
+    border-radius: 14px;
+    box-shadow: 0 18px 56px rgba(0,0,0,.22);
+    z-index: 200;
+    display: none;
+  }
+  .adm-notif-panel.show { display: block; }
+  .adm-notif-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px; border-bottom: 1px solid var(--abdr);
+    font-family: var(--fu); font-weight: 800; font-size: .9rem; color: var(--an);
+  }
+  .adm-notif-head a { font-size: .74rem; font-weight: 700; color: var(--ag); text-decoration: none; }
+  .adm-notif-item {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 12px 16px; border-bottom: 1px solid var(--abdr);
+    text-decoration: none; transition: background .15s;
+  }
+  .adm-notif-item:hover { background: rgba(245,166,35,.07); }
+  .adm-notif-item.unread { background: rgba(0,150,255,.06); }
+  .adm-notif-ic {
+    width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+    background: rgba(245,166,35,.15); color: var(--ag);
+    display: flex; align-items: center; justify-content: center; font-size: .85rem;
+  }
+  .adm-notif-title { font-size: .82rem; font-weight: 700; color: var(--an); margin-bottom: 2px; }
+  .adm-notif-msg { font-size: .76rem; color: var(--ats); }
+  .adm-notif-time { font-size: .68rem; color: var(--ats); margin-top: 4px; }
+  .adm-notif-empty { padding: 30px 16px; text-align: center; font-size: .82rem; color: var(--ats); }
+
   .adm-topbar-user {
     display: flex;
     align-items: center;
@@ -840,19 +880,35 @@
       <div class="adm-topbar-r">
 
         <!-- Notification bell -->
-        {% if pending_orders_count %}
-        <a href="{% url 'gestadmin:orders' %}?status=pending"
-           class="adm-icon-btn"
-           title="{{ pending_orders_count }} commande{% if pending_orders_count > 1 %}s{% endif %} en attente"
-           style="background:rgba(245,166,35,.1);border-color:rgba(245,166,35,.3);">
-          <i class="fas fa-bell" style="color:var(--ag);"></i>
-          <span class="adm-notif-dot">{{ pending_orders_count }}</span>
-        </a>
-        {% else %}
-        <a href="{% url 'gestadmin:orders' %}" class="adm-icon-btn" title="Commandes">
-          <i class="fas fa-bell"></i>
-        </a>
-        {% endif %}
+        <div class="adm-notif-wrap">
+          <button type="button" class="adm-icon-btn" id="admNotifBtn" title="Notifications"
+            style="{% if unread_notif_count %}background:rgba(245,166,35,.1);border-color:rgba(245,166,35,.3);{% endif %}">
+            <i class="fas fa-bell" style="{% if unread_notif_count %}color:var(--ag);{% endif %}"></i>
+            {% if unread_notif_count %}<span class="adm-notif-dot">{{ unread_notif_count }}</span>{% endif %}
+          </button>
+          <div class="adm-notif-panel" id="admNotifPanel">
+            <div class="adm-notif-head">
+              <span><i class="fas fa-bell" style="color:var(--ag);margin-right:6px;"></i>Notifications</span>
+              {% if unread_notif_count %}
+              <form method="POST" action="{% url 'store:notifications_read_all' %}">{% csrf_token %}
+                <button type="submit" style="background:none;border:none;font:inherit;" class="p-0">Tout marquer lu</button>
+              </form>
+              {% endif %}
+            </div>
+            {% for n in recent_notifications %}
+            <a href="{% url 'store:notification_read' n.pk %}" class="adm-notif-item {% if not n.is_read %}unread{% endif %}">
+              <div class="adm-notif-ic"><i class="fas {{ n.icon }}"></i></div>
+              <div>
+                <div class="adm-notif-title">{{ n.title }}</div>
+                {% if n.message %}<div class="adm-notif-msg">{{ n.message }}</div>{% endif %}
+                <div class="adm-notif-time">{{ n.created_at|timesince }}</div>
+              </div>
+            </a>
+            {% empty %}
+            <div class="adm-notif-empty"><i class="fas fa-bell-slash mb-2" style="font-size:1.4rem;opacity:.4;display:block;"></i>Aucune notification</div>
+            {% endfor %}
+          </div>
+        </div>
 
         <!-- External link to store (hidden on very small screens) -->
         <a href="{% url 'store:product_list' %}" class="adm-icon-btn d-none d-sm-flex" target="_blank" title="Voir le catalogue">
@@ -900,6 +956,20 @@
       setTimeout(function() { m.remove(); }, 460);
     });
   }, 4500);
+})();
+
+// Notification dropdown toggle
+(function() {
+  var btn = document.getElementById('admNotifBtn');
+  var panel = document.getElementById('admNotifPanel');
+  if (!btn || !panel) return;
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    panel.classList.toggle('show');
+  });
+  document.addEventListener('click', function(e) {
+    if (!panel.contains(e.target) && e.target !== btn) panel.classList.remove('show');
+  });
 })();
 
 // Admin sidebar toggle with overlay

@@ -75,6 +75,24 @@ class Product(models.Model):
         return None
 
 
+class Notification(models.Model):
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications', verbose_name="Destinataire")
+    title = models.CharField(max_length=200, verbose_name="Titre")
+    message = models.CharField(max_length=300, blank=True, verbose_name="Message")
+    link = models.CharField(max_length=300, blank=True, verbose_name="Lien")
+    icon = models.CharField(max_length=40, default='fa-bell', verbose_name="Icône")
+    is_read = models.BooleanField(default=False, verbose_name="Lu")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Notification"
+        verbose_name_plural = "Notifications"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.title} → {self.recipient}"
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     phone = models.CharField(max_length=20, blank=True, verbose_name="Téléphone")

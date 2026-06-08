@@ -7,6 +7,7 @@ from django.utils import timezone
 from datetime import timedelta
 from .models import Order, Product, Category, ContactMessage, OrderItem, UserProfile, ORDER_STATUS_CHOICES
 from .emails import notify_status_change
+from .notifications import push_status_change
 
 
 LOGIN_URL = '/comptes/connexion/'
@@ -107,6 +108,7 @@ def order_validate(request, pk):
     if note: order.admin_note = note
     order.save()
     notify_status_change(order, 'confirmed')   # ← email client
+    push_status_change(order, 'confirmed')     # ← notification dashboard client
     messages.success(request, f'Commande #{pk} confirmée ✅ — client notifié par email.')
     return redirect(request.META.get('HTTP_REFERER', 'gestadmin:orders'))
 
@@ -119,6 +121,7 @@ def order_reject(request, pk):
     if note: order.admin_note = note
     order.save()
     notify_status_change(order, 'rejected')    # ← email client
+    push_status_change(order, 'rejected')      # ← notification dashboard client
     messages.warning(request, f'Commande #{pk} rejetée — client notifié par email.')
     return redirect(request.META.get('HTTP_REFERER', 'gestadmin:orders'))
 
@@ -135,6 +138,7 @@ def order_set_status(request, pk):
     order.save()
     if new_status:
         notify_status_change(order, new_status)   # ← email client selon statut
+        push_status_change(order, new_status)     # ← notification dashboard client
     messages.success(request, f'Commande #{pk} → {new_status} — client notifié.')
     return redirect(request.META.get('HTTP_REFERER', 'gestadmin:orders'))
 

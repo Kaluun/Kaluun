@@ -18,4 +18,6 @@ urlpatterns = [
     path('panier/vider/', views.cart_clear, name='cart_clear'),
     path('commander/', views.checkout, name='checkout'),
     path('commande/<int:pk>/confirmation/', views.order_confirmation, name='order_confirmation'),
+    path('notifications/<int:pk>/lire/', views.notification_read, name='notification_read'),
+    path('notifications/tout-lire/', views.notifications_read_all, name='notifications_read_all'),
 ]

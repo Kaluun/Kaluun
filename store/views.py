@@ -4,9 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.db.models import Q
-from .models import Product, Category, HeroSlide, Testimonial, Order, OrderItem, UserProfile
+from .models import Product, Category, HeroSlide, Testimonial, Order, OrderItem, UserProfile, Notification
 from .forms import ContactForm, NewsletterForm, CheckoutForm
 from .emails import notify_new_order
+from .notifications import push_new_order
 from blog.models import Post
 
 
@@ -320,6 +321,8 @@ def checkout(request):
 
             # Notifications email — admin + client
             notify_new_order(order)
+            # Notifications dashboard — admin
+            push_new_order(order)
 
             messages.success(request, f'Commande #{order.pk} confirmée ! Notre équipe vous contactera rapidement.')
             return redirect('store:order_confirmation', pk=order.pk)
@@ -335,3 +338,18 @@ def checkout(request):
 def order_confirmation(request, pk):
     order = get_object_or_404(Order, pk=pk)
     return render(request, 'store/order_confirmation.html', {'order': order})
+
+
+@login_required
+def notification_read(request, pk):
+    notif = get_object_or_404(Notification, pk=pk, recipient=request.user)
+    notif.is_read = True
+    notif.save(update_fields=['is_read'])
+    return redirect(notif.link or 'store:home')
+
+
+@login_required
+@require_POST
+def notifications_read_all(request):
+    request.user.notifications.filter(is_read=False).update(is_read=True)
+    return redirect(request.META.get('HTTP_REFERER', 'store:home'))
