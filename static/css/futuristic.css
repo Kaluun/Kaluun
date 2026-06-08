@@ -1047,6 +1047,7 @@ textarea.k-fi { resize: vertical; min-height: 90px; }
 
 /* ── CONTACT ─────────────────────────────────────────────────── */
 .k-ci-box { background: var(--grad-navy); border-radius: var(--r-lg); padding: 36px; }
+.k-sec-ink .k-ci-box h4, .k-sec-dark .k-ci-box h4 { color: #fff !important; }
 .k-ci { display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,.1); }
 .k-ci:last-child { border-bottom: none; }
 .k-ci-ic { width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0; background: rgba(245,166,35,.18); border: 1px solid rgba(245,166,35,.30); display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--gold); }
