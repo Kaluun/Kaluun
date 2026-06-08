@@ -6,7 +6,6 @@ from django.db.models import Sum, Count, Q
 from django.utils import timezone
 from datetime import timedelta
 from .models import Order, Product, Category, ContactMessage, OrderItem, UserProfile, ORDER_STATUS_CHOICES
-from .emails import notify_status_change
 from .notifications import push_status_change
 
 
@@ -107,9 +106,8 @@ def order_validate(request, pk):
     order.status = 'confirmed'
     if note: order.admin_note = note
     order.save()
-    notify_status_change(order, 'confirmed')   # ← email client
     push_status_change(order, 'confirmed')     # ← notification dashboard client
-    messages.success(request, f'Commande #{pk} confirmée ✅ — client notifié par email.')
+    messages.success(request, f'Commande #{pk} confirmée ✅ — client notifié.')
     return redirect(request.META.get('HTTP_REFERER', 'gestadmin:orders'))
 
 
@@ -120,9 +118,8 @@ def order_reject(request, pk):
     order.status = 'rejected'
     if note: order.admin_note = note
     order.save()
-    notify_status_change(order, 'rejected')    # ← email client
     push_status_change(order, 'rejected')      # ← notification dashboard client
-    messages.warning(request, f'Commande #{pk} rejetée — client notifié par email.')
+    messages.warning(request, f'Commande #{pk} rejetée — client notifié.')
     return redirect(request.META.get('HTTP_REFERER', 'gestadmin:orders'))
 
 
@@ -137,7 +134,6 @@ def order_set_status(request, pk):
         order.admin_note = note
     order.save()
     if new_status:
-        notify_status_change(order, new_status)   # ← email client selon statut
         push_status_change(order, new_status)     # ← notification dashboard client
     messages.success(request, f'Commande #{pk} → {new_status} — client notifié.')
     return redirect(request.META.get('HTTP_REFERER', 'gestadmin:orders'))

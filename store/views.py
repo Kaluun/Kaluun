@@ -6,7 +6,6 @@ from django.views.decorators.http import require_POST
 from django.db.models import Q
 from .models import Product, Category, HeroSlide, Testimonial, Order, OrderItem, UserProfile, Notification
 from .forms import ContactForm, NewsletterForm, CheckoutForm
-from .emails import notify_new_order
 from .notifications import push_new_order
 from blog.models import Post
 
@@ -319,9 +318,7 @@ def checkout(request):
 
             request.session['cart'] = {}
 
-            # Notifications email — admin + client
-            notify_new_order(order)
-            # Notifications dashboard — admin
+            # Notifications dashboard — admin (plus rapide que l'email)
             push_new_order(order)
 
             messages.success(request, f'Commande #{order.pk} confirmée ! Notre équipe vous contactera rapidement.')
