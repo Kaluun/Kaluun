@@ -47,7 +47,7 @@ def home(request):
 
 def about(request):
     stats = [
-        {'num': '500+', 'lbl': 'Familles'},
+        {'num': '100%', 'lbl': 'Frais & Local'},
         {'num': '97%', 'lbl': 'Satisfaction'},
         {'num': '15+', 'lbl': 'Espèces'},
         {'num': '24h', 'lbl': 'Livraison'},

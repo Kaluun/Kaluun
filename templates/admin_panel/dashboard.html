@@ -1,6 +1,6 @@
 {% extends 'admin_panel/base_admin.html' %}
 {% load static %}
-{% block title %}Tableau de bord Admin — KALUUN{% endblock %}
+{% block title %}Tableau de bord Admin · KALUUN{% endblock %}
 {% block page_title %}Tableau de bord{% endblock %}
 
 {% with pending_orders_count=pending_orders %}
@@ -47,7 +47,7 @@
 <div class="adm-card mb-4" style="border-color:rgba(255,209,102,.2);background:rgba(255,209,102,.03);">
   <div class="adm-card-title" style="color:#FFD166;">
     <i class="fas fa-exclamation-circle" style="color:#FFD166;"></i>
-    {{ pending_orders }} commande{{ pending_orders|pluralize }} en attente — Action requise
+    {{ pending_orders }} commande{{ pending_orders|pluralize }} en attente : action requise
     <span style="margin-left:auto;font-size:.72rem;font-weight:500;color:var(--ats);">Valider ou rejeter chaque commande</span>
   </div>
   <div style="overflow-x:auto;">

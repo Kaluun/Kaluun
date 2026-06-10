@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Commande Confirmée — KALUUN{% endblock %}
+{% block title %}Commande Confirmée · KALUUN{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -38,7 +38,7 @@
       <div class="order-conf-box" style="background:var(--white);border-radius:var(--r);border:1px solid var(--border-card);overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:24px;">
         <div style="background:var(--pale-blue);padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
           <i class="fas fa-receipt" style="color:var(--ocean-mid);"></i>
-          <span style="font-family:var(--fu);font-weight:700;color:var(--ocean-deep);">Récapitulatif — Commande #{{ order.pk }}</span>
+          <span style="font-family:var(--fu);font-weight:700;color:var(--ocean-deep);">Récapitulatif de la commande #{{ order.pk }}</span>
         </div>
         <div style="padding:20px 22px;">
           <div class="row g-3">

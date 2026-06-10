@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Mon Tableau de Bord — KALUUN{% endblock %}
+{% block title %}Mon Tableau de Bord · KALUUN{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -944,7 +944,7 @@
               {% if last_order %}
               <div class="d-panel mb-4">
                 <div class="d-sec-title">
-                  <i class="fas fa-truck"></i>Suivi — Commande #{{ last_order.pk }}
+                  <i class="fas fa-truck"></i>Suivi de la commande #{{ last_order.pk }}
                   <span class="d-badge b-{{ last_order.status }}" style="margin-left:auto;">{{ last_order.get_status_display }}</span>
                 </div>
                 <div>

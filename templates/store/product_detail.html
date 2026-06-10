@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}{{ product.name }} — KALUUN{% endblock %}
+{% block title %}{{ product.name }} · KALUUN{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -102,7 +102,7 @@
           </div>
           {% if product.is_available %}
           <span style="background:rgba(0,230,118,.1);color:var(--green);padding:6px 16px;border-radius:20px;font-size:.78rem;font-weight:700;border:1px solid rgba(0,230,118,.2);font-family:'Space Grotesk',sans-serif;">
-            <i class="fas fa-check-circle me-1"></i>En stock — {{ product.stock }} {{ product.unit }}
+            <i class="fas fa-check-circle me-1"></i>En stock : {{ product.stock }} {{ product.unit }}
           </span>
           {% else %}
           <span style="background:rgba(255,71,87,.1);color:var(--red);padding:6px 16px;border-radius:20px;font-size:.78rem;font-weight:700;border:1px solid rgba(255,71,87,.2);font-family:'Space Grotesk',sans-serif;">
@@ -183,7 +183,7 @@
           </div>
           <div>
             <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#023E8A;font-size:.9rem;">Livraison express disponible</div>
-            <div style="font-size:.78rem;color:#5580A0;margin-top:2px;">Commandez avant 18h — livraison le lendemain matin dans tout Djibouti.</div>
+            <div style="font-size:.78rem;color:#5580A0;margin-top:2px;">Commandez avant 18h pour une livraison le lendemain matin dans tout Djibouti.</div>
           </div>
         </div>
 
