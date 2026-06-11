@@ -209,7 +209,7 @@ function orderViaWhatsapp() {
   {% if request.user.profile.address %}lines.push('Adresse : {{ request.user.profile.address|escapejs }}{% if request.user.profile.wilaya %}, {{ request.user.profile.wilaya|escapejs }}{% endif %}');{% endif %}
   {% endif %}
   const msg = lines.join('\n');
-  window.open('https://wa.me/25377173237?text=' + encodeURIComponent(msg), '_blank');
+  location.href = 'https://wa.me/25377173237?text=' + encodeURIComponent(msg);
 }
 </script>
 {% endblock %}
