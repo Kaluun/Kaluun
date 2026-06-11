@@ -18,6 +18,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             UserProfile.objects.get_or_create(user=user)
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, user)
             messages.success(request, f'Bienvenue {user.first_name or user.username} ! Votre compte est créé.')
             return redirect('accounts:dashboard')
