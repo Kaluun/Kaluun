@@ -291,12 +291,46 @@
 
 <!-- Bouton WhatsApp flottant -->
 <a href="https://wa.me/25377173237?text=Bonjour%20KALUUN%2C%20je%20souhaite%20passer%20une%20commande." target="_blank" rel="noopener"
+   onclick="return whatsappFabClick(event)"
    aria-label="Contacter KALUUN sur WhatsApp"
    style="position:fixed;bottom:24px;left:20px;z-index:9998;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(37,211,102,.45);transition:transform .25s, box-shadow .25s;"
    onmouseover="this.style.transform='scale(1.08)';this.style.boxShadow='0 8px 30px rgba(37,211,102,.6)'"
    onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 6px 24px rgba(37,211,102,.45)'">
   <i class="fab fa-whatsapp" style="color:#fff;font-size:1.7rem;"></i>
 </a>
+<script>
+window.KALUUN_USER = {% if user.is_authenticated %}{
+  name: "{{ request.user.get_full_name|default:request.user.username|escapejs }}",
+  phone: "{% if request.user.profile.phone %}{{ request.user.profile.phone|escapejs }}{% endif %}",
+  address: "{% if request.user.profile.address %}{{ request.user.profile.address|escapejs }}{% if request.user.profile.wilaya %}, {{ request.user.profile.wilaya|escapejs }}{% endif %}{% endif %}"
+}{% else %}null{% endif %};
+
+function whatsappFabClick(e) {
+  e.preventDefault();
+  fetch('{% url "store:cart_json" %}').then(r => r.json()).then(data => {
+    let lines;
+    if (data.items && data.items.length) {
+      lines = ['Bonjour KALUUN, je souhaite commander :', ''];
+      data.items.forEach(it => lines.push('• ' + it.name + ' x' + it.quantity + ' — ' + it.subtotal + ' FDJ'));
+      lines.push('');
+      lines.push('Total : ' + data.total + ' FDJ');
+      if (window.KALUUN_USER) {
+        lines.push('');
+        lines.push('Mes coordonnées :');
+        lines.push('Nom : ' + window.KALUUN_USER.name);
+        if (window.KALUUN_USER.phone) lines.push('Téléphone : ' + window.KALUUN_USER.phone);
+        if (window.KALUUN_USER.address) lines.push('Adresse : ' + window.KALUUN_USER.address);
+      }
+    } else {
+      lines = ['Bonjour KALUUN, je souhaite passer une commande.'];
+    }
+    location.href = 'https://wa.me/25377173237?text=' + encodeURIComponent(lines.join('\n'));
+  }).catch(() => {
+    location.href = 'https://wa.me/25377173237?text=' + encodeURIComponent('Bonjour KALUUN, je souhaite passer une commande.');
+  });
+  return false;
+}
+</script>
 
 <!-- Toast notification -->
 <div id="k-toast" style="position:fixed;bottom:30px;right:24px;z-index:9999;transform:translateY(160px);transition:transform .35s cubic-bezier(.23,1,.32,1);max-width:340px;">
