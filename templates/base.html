@@ -660,7 +660,7 @@ function cartUpdate(itemId, delta) {
   formData.append('quantity', newQty);
 
   fetch(`/panier/modifier/${itemId}/`, {method:'POST', body:formData})
-  .then(()=>location.reload());
+  .then(()=>updateCartAfterChange());
 }
 
 // ── Cart remove ───────────────────────────────────────────
@@ -668,7 +668,22 @@ function cartRemove(itemId) {
   const fd = new FormData();
   fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
   fetch(`/panier/retirer/${itemId}/`, {method:'POST', body:fd})
-  .then(()=>location.reload());
+  .then(()=>updateCartAfterChange());
+}
+
+// ── Met à jour badges + panel sans recharger la page ───────
+function updateCartAfterChange() {
+  fetch('/panier/json/')
+  .then(r=>r.json())
+  .then(data=>{
+    ['cart-count-badge','panel-cart-count'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el){el.textContent=data.count;el.style.display=data.count>0?'flex':'none';}
+    });
+    const tb = document.getElementById('cart-total-badge');
+    if(tb) tb.textContent = data.total+' FDJ';
+  });
+  refreshCartPanel();
 }
 
 // ── AOS ───────────────────────────────────────────────────
