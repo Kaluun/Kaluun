@@ -152,6 +152,11 @@
             <i class="fas fa-sign-in-alt"></i>Se connecter pour commander
           </a>
           {% endif %}
+          <button type="button" onclick="orderViaWhatsapp()"
+            style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:15px;border-radius:var(--r-sm);font-size:.95rem;font-weight:700;font-family:'Space Grotesk',sans-serif;margin-top:12px;background:#25D366;color:#fff;border:none;cursor:pointer;transition:.2s;"
+            onmouseover="this.style.filter='brightness(1.08)'" onmouseout="this.style.filter='none'">
+            <i class="fab fa-whatsapp" style="font-size:1.2rem;"></i>Commander via WhatsApp
+          </button>
           <div style="text-align:center;margin-top:14px;font-size:.75rem;color:var(--t30);font-family:'Space Grotesk',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;">
             <i class="fas fa-shield-alt" style="color:var(--cyan);"></i>Commande 100% sécurisée
           </div>
@@ -186,6 +191,25 @@ function changeQty(btn, delta) {
     inp.value = val;
     inp.form.submit();
   }
+}
+
+// ── Commande via WhatsApp : panier + coordonnées du client ──
+function orderViaWhatsapp() {
+  const lines = ['Bonjour KALUUN, je souhaite commander :', ''];
+  {% for item in cart_items %}
+  lines.push('• {{ item.name|escapejs }} x{{ item.quantity }} — {{ item.subtotal|floatformat:0 }} FDJ');
+  {% endfor %}
+  lines.push('');
+  lines.push('Total : {{ total|floatformat:0 }} FDJ');
+  {% if user.is_authenticated %}
+  lines.push('');
+  lines.push('Mes coordonnées :');
+  lines.push('Nom : {{ request.user.get_full_name|default:request.user.username|escapejs }}');
+  {% if request.user.profile.phone %}lines.push('Téléphone : {{ request.user.profile.phone|escapejs }}');{% endif %}
+  {% if request.user.profile.address %}lines.push('Adresse : {{ request.user.profile.address|escapejs }}{% if request.user.profile.wilaya %}, {{ request.user.profile.wilaya|escapejs }}{% endif %}');{% endif %}
+  {% endif %}
+  const msg = lines.join('\n');
+  window.open('https://wa.me/25377173237?text=' + encodeURIComponent(msg), '_blank');
 }
 </script>
 {% endblock %}
