@@ -1356,8 +1356,12 @@ button, a, input[type="submit"], .k-nav-item, .adm-nav-item { min-height: 44px; 
 @media(max-width:400px) {
   .k-nav { padding: 0 10px; }
   .k-nav-inner { gap: 6px; }
-  .k-logo-text { display: none; }
+  .k-logo-text { font-size: .92rem; letter-spacing: .5px; }
   .k-logo img  { width: 34px; height: 34px; }
+  .k-cart-btn { padding: 7px 9px; }
+}
+@media(max-width:340px) {
+  .k-logo-text { display: none; }
 }
 
 /* ── Hero section mobile ── */
@@ -1368,9 +1372,10 @@ button, a, input[type="submit"], .k-nav-item, .adm-nav-item { min-height: 44px; 
   .k-hero-h1  { font-size: 1.75rem !important; letter-spacing: -.3px; }
   .k-hero-sub { font-size: .85rem; max-width: 100%; }
   .k-hero-stats { gap: 0; padding-top: 12px; }
-  .k-hstat { padding: 0 10px; }
-  .k-hstat-n { font-size: 1.3rem; }
-  .k-hstat-l { font-size: .6rem; }
+  .k-hstat { padding: 0 8px; min-width: 0; flex: 1 1 0; }
+  .k-hstat:last-child { padding-left: 8px; padding-right: 0; flex: 1 1 0; }
+  .k-hstat-n { font-size: 1.2rem; white-space: nowrap; }
+  .k-hstat-l { font-size: .58rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .k-hero-ctas { flex-direction: column; gap: 8px; margin-top: 16px; }
   .cta-primary, .cta-secondary { width: 100%; justify-content: center; padding: 13px 18px; font-size: .88rem; }
   .hero-badge { font-size: .65rem; padding: 5px 14px; }

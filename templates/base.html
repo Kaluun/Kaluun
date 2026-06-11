@@ -289,6 +289,15 @@
   </div>
 </div>
 
+<!-- Bouton WhatsApp flottant -->
+<a href="https://wa.me/25377173237?text=Bonjour%20KALUUN%2C%20je%20souhaite%20passer%20une%20commande." target="_blank" rel="noopener"
+   aria-label="Contacter KALUUN sur WhatsApp"
+   style="position:fixed;bottom:24px;left:20px;z-index:9998;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(37,211,102,.45);transition:transform .25s, box-shadow .25s;"
+   onmouseover="this.style.transform='scale(1.08)';this.style.boxShadow='0 8px 30px rgba(37,211,102,.6)'"
+   onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 6px 24px rgba(37,211,102,.45)'">
+  <i class="fab fa-whatsapp" style="color:#fff;font-size:1.7rem;"></i>
+</a>
+
 <!-- Toast notification -->
 <div id="k-toast" style="position:fixed;bottom:30px;right:24px;z-index:9999;transform:translateY(160px);transition:transform .35s cubic-bezier(.23,1,.32,1);max-width:340px;">
   <div style="background:rgba(13,22,40,.95);backdrop-filter:blur(20px);border:1px solid rgba(0,230,118,.3);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 40px rgba(0,0,0,.5);">
@@ -340,7 +349,7 @@
           <a href="#"><i class="fab fa-instagram"></i></a>
           <a href="#"><i class="fab fa-twitter"></i></a>
           <a href="#"><i class="fab fa-youtube"></i></a>
-          <a href="#"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://wa.me/25377173237?text=Bonjour%20KALUUN%2C%20j%27ai%20une%20question." target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
         </div>
         <form action="{% url 'store:home' %}" method="POST" class="k-f-nl mt-3">
           {% csrf_token %}<input type="hidden" name="newsletter" value="1">
@@ -366,7 +375,7 @@
         <div class="k-fh">Contact</div>
         <ul class="k-f-ci list-unstyled">
           <li><i class="fas fa-map-marker-alt"></i>Port de pêche, Djibouti</li>
-          <li><i class="fas fa-phone-alt"></i><a href="tel:+25377150789">+253 77 15 07 89</a></li>
+          <li><i class="fas fa-phone-alt"></i><a href="tel:+25377173237">+253 77 17 32 37</a></li>
           <li><i class="fas fa-envelope"></i><a href="mailto:kaluunexpresse@gmail.com">kaluunexpresse@gmail.com</a></li>
           <li><i class="fas fa-clock"></i>Lun–Sam : 6h00–20h00</li>
         </ul>
@@ -383,8 +392,8 @@
           <a href="{% url 'store:contact' %}" style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:rgba(255,255,255,.7);font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:600;transition:.2s;" onmouseover="this.style.background='rgba(0,150,255,.15)';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='rgba(255,255,255,.7)'">
             <i class="fas fa-headset" style="color:#00CFFF;width:16px;"></i>Nous contacter
           </a>
-          <a href="tel:+25377150789" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:linear-gradient(135deg,#0072CE,#00CFFF);border-radius:10px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:800;transition:.2s;margin-top:4px;">
-            <i class="fas fa-phone-alt" style="width:16px;"></i>+253 77 15 07 89
+          <a href="tel:+25377173237" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:linear-gradient(135deg,#0072CE,#00CFFF);border-radius:10px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:800;transition:.2s;margin-top:4px;">
+            <i class="fas fa-phone-alt" style="width:16px;"></i>+253 77 17 32 37
           </a>
         </div>
       </div>
