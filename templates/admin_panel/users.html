@@ -48,12 +48,12 @@
           </td>
           <td>
             <div style="display:flex;gap:6px;">
-              <a href="{% url 'gestadmin:user_edit' user.pk %}" class="btn-adm btn-adm-blue" title="Modifier">
+              <a href="{% url 'gestadmin:user_edit' user.pk %}" class="btn-adm btn-adm-sm btn-adm-blue" title="Modifier">
                 <i class="fas fa-edit"></i>
               </a>
               <form method="POST" action="{% url 'gestadmin:user_toggle' user.pk %}" style="display:inline;">
                 {% csrf_token %}
-                <button class="btn-adm {% if user.is_active %}btn-adm-red{% else %}btn-adm-green{% endif %}"
+                <button class="btn-adm btn-adm-sm {% if user.is_active %}btn-adm-red{% else %}btn-adm-green{% endif %}"
                   onclick="return confirm('{% if user.is_active %}Bloquer{% else %}Activer{% endif %} {{ user.username }} ?')"
                   title="{% if user.is_active %}Bloquer{% else %}Activer{% endif %}">
                   <i class="fas fa-{% if user.is_active %}ban{% else %}check{% endif %}"></i>
@@ -61,7 +61,7 @@
               </form>
               <form method="POST" action="{% url 'gestadmin:user_delete' user.pk %}" style="display:inline;">
                 {% csrf_token %}
-                <button class="btn-adm btn-adm-red" onclick="return confirm('Supprimer {{ user.username }} définitivement ?')" title="Supprimer">
+                <button class="btn-adm btn-adm-sm btn-adm-red" onclick="return confirm('Supprimer {{ user.username }} définitivement ?')" title="Supprimer">
                   <i class="fas fa-trash"></i>
                 </button>
               </form>

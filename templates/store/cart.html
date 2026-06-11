@@ -39,10 +39,10 @@
 
       <!-- ── ARTICLES ── -->
       <div class="col-lg-8">
-        <div style="background:var(--glass);border-radius:var(--r-lg);border:1px solid var(--b-glass);overflow:hidden;backdrop-filter:blur(8px);">
+        <div style="background:var(--glass);border-radius:var(--r-lg);border:1px solid rgba(255,255,255,.10);overflow:hidden;backdrop-filter:blur(8px);">
           <!-- Header -->
-          <div style="padding:18px 24px;border-bottom:1px solid var(--b-glass);display:flex;align-items:center;justify-content:space-between;">
-            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t90);font-size:1rem;">
+          <div style="padding:18px 24px;border-bottom:1px solid rgba(255,255,255,.10);display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t100);font-size:1rem;">
               <i class="fas fa-shopping-bag" style="color:var(--cyan);margin-right:8px;"></i>
               {{ cart_items|length }} article{{ cart_items|length|pluralize }}
             </span>
@@ -54,10 +54,10 @@
           </div>
 
           {% for item in cart_items %}
-          <div class="cart-item-flex" style="display:flex;align-items:center;gap:16px;padding:18px 24px;border-bottom:1px solid var(--b-glass);transition:.2s;"
-               onmouseover="this.style.background='var(--gb)'" onmouseout="this.style.background=''">
+          <div class="cart-item-flex" style="display:flex;align-items:center;gap:16px;padding:18px 24px;border-bottom:1px solid rgba(255,255,255,.10);transition:.2s;"
+               onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background=''">
             <!-- Image -->
-            <div style="width:72px;height:72px;border-radius:12px;overflow:hidden;flex-shrink:0;border:1px solid var(--b-glass);">
+            <div style="width:72px;height:72px;border-radius:12px;overflow:hidden;flex-shrink:0;border:1px solid rgba(255,255,255,.10);">
               {% if item.image %}
               <img src="{{ item.image }}" alt="{{ item.name }}" style="width:100%;height:100%;object-fit:cover;"
                    onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;background:var(--glass);display:flex;align-items:center;justify-content:center;font-size:1.5rem;\'>🐟</div>'">
@@ -67,28 +67,28 @@
             </div>
             <!-- Nom + prix unitaire -->
             <div style="flex:1;min-width:0;">
-              <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t90);font-size:.95rem;">{{ item.name }}</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t100);font-size:.95rem;">{{ item.name }}</div>
               <div style="font-size:.8rem;color:var(--t40);margin-top:3px;font-family:'Space Grotesk',sans-serif;">{{ item.price|floatformat:0 }} FDJ / kg</div>
             </div>
             <!-- Quantité -->
             <form action="{% url 'store:cart_update' item.id %}" method="POST" style="display:flex;align-items:center;gap:6px;">
               {% csrf_token %}
-              <div style="display:flex;align-items:center;background:var(--glass);border:1px solid var(--b-glass);border-radius:10px;overflow:hidden;">
+              <div style="display:flex;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;overflow:hidden;">
                 <button type="button" onclick="changeQty(this,-1)"
-                  style="width:34px;height:38px;background:transparent;border:none;cursor:pointer;color:var(--t50);font-size:.9rem;transition:.2s;border-right:1px solid var(--b-glass);"
-                  onmouseover="this.style.background='var(--gb)';this.style.color='var(--cyan)'"
-                  onmouseout="this.style.background='transparent';this.style.color='var(--t50)'">−</button>
+                  style="width:34px;height:38px;background:transparent;border:none;cursor:pointer;color:var(--t40);font-size:.9rem;transition:.2s;border-right:1px solid rgba(255,255,255,.12);"
+                  onmouseover="this.style.background='rgba(255,255,255,.08)';this.style.color='var(--cyan)'"
+                  onmouseout="this.style.background='transparent';this.style.color='var(--t40)'">−</button>
                 <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="99"
                   style="width:48px;text-align:center;border:none;padding:0;height:38px;font-family:'Syne',sans-serif;font-weight:800;color:var(--t100);font-size:.95rem;background:transparent;outline:none;"
                   onchange="this.form.submit()">
                 <button type="button" onclick="changeQty(this,1)"
-                  style="width:34px;height:38px;background:transparent;border:none;cursor:pointer;color:var(--t50);font-size:.9rem;transition:.2s;border-left:1px solid var(--b-glass);"
-                  onmouseover="this.style.background='var(--gb)';this.style.color='var(--cyan)'"
-                  onmouseout="this.style.background='transparent';this.style.color='var(--t50)'">+</button>
+                  style="width:34px;height:38px;background:transparent;border:none;cursor:pointer;color:var(--t40);font-size:.9rem;transition:.2s;border-left:1px solid rgba(255,255,255,.12);"
+                  onmouseover="this.style.background='rgba(255,255,255,.08)';this.style.color='var(--cyan)'"
+                  onmouseout="this.style.background='transparent';this.style.color='var(--t40)'">+</button>
               </div>
               <button type="submit"
-                style="background:var(--gb);border:1px solid var(--b-cyan);color:var(--cyan);border-radius:8px;padding:8px 12px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:.2s;"
-                onmouseover="this.style.background='var(--blue)';this.style.color='#fff'" onmouseout="this.style.background='var(--gb)';this.style.color='var(--cyan)'">
+                style="background:rgba(144,224,239,.10);border:1px solid rgba(144,224,239,.3);color:var(--cyan);border-radius:8px;padding:8px 12px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:.2s;"
+                onmouseover="this.style.background='rgba(144,224,239,.22)'" onmouseout="this.style.background='rgba(144,224,239,.10)'">
                 <i class="fas fa-sync-alt"></i>
               </button>
             </form>
@@ -101,9 +101,9 @@
             <form action="{% url 'store:cart_remove' item.id %}" method="POST">
               {% csrf_token %}
               <button type="submit"
-                style="background:none;border:none;color:var(--t30);cursor:pointer;padding:8px;border-radius:8px;transition:.2s;"
+                style="background:none;border:none;color:rgba(255,255,255,.35);cursor:pointer;padding:8px;border-radius:8px;transition:.2s;"
                 onmouseover="this.style.color='var(--red)';this.style.background='rgba(255,71,87,.1)'"
-                onmouseout="this.style.color='var(--t30)';this.style.background='none'">
+                onmouseout="this.style.color='rgba(255,255,255,.35)';this.style.background='none'">
                 <i class="fas fa-trash-alt"></i>
               </button>
             </form>
@@ -113,8 +113,8 @@
           <!-- Continuer -->
           <div style="padding:16px 24px;">
             <a href="{% url 'store:product_list' %}"
-              style="display:inline-flex;align-items:center;gap:8px;color:var(--t50);font-family:'Space Grotesk',sans-serif;font-size:.87rem;font-weight:600;transition:.2s;"
-              onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--t50)'">
+              style="display:inline-flex;align-items:center;gap:8px;color:var(--t40);font-family:'Space Grotesk',sans-serif;font-size:.87rem;font-weight:600;transition:.2s;"
+              onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--t40)'">
               <i class="fas fa-arrow-left"></i>Continuer mes achats
             </a>
           </div>
@@ -123,24 +123,24 @@
 
       <!-- ── RÉSUMÉ ── -->
       <div class="col-lg-4">
-        <div class="cart-summary-sticky" style="background:var(--glass);border-radius:var(--r-lg);border:1px solid var(--b-glass);padding:28px;position:sticky;top:90px;backdrop-filter:blur(8px);">
-          <h5 style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t90);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--b-glass);display:flex;align-items:center;gap:8px;">
+        <div class="cart-summary-sticky" style="background:var(--glass);border-radius:var(--r-lg);border:1px solid rgba(255,255,255,.10);padding:28px;position:sticky;top:90px;backdrop-filter:blur(8px);">
+          <h5 style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t100);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.10);display:flex;align-items:center;gap:8px;">
             <i class="fas fa-receipt" style="color:var(--cyan);"></i>Récapitulatif
           </h5>
           {% for item in cart_items %}
-          <div style="display:flex;justify-content:space-between;font-size:.84rem;padding:8px 0;color:var(--t50);border-bottom:1px solid var(--b-glass);">
+          <div style="display:flex;justify-content:space-between;font-size:.84rem;padding:8px 0;color:var(--t40);border-bottom:1px solid rgba(255,255,255,.08);">
             <span>{{ item.name }} <span style="color:var(--t30);">× {{ item.quantity }}</span></span>
-            <span style="font-weight:700;color:var(--t70);">{{ item.subtotal|floatformat:0 }} FDJ</span>
+            <span style="font-weight:700;color:var(--t100);">{{ item.subtotal|floatformat:0 }} FDJ</span>
           </div>
           {% endfor %}
           <!-- Livraison -->
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--b-glass);">
-            <span style="font-size:.84rem;color:var(--t50);">Livraison</span>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08);">
+            <span style="font-size:.84rem;color:var(--t40);">Livraison</span>
             <span style="color:var(--green);font-weight:700;font-size:.84rem;font-family:'Space Grotesk',sans-serif;">Gratuite</span>
           </div>
           <!-- Total -->
-          <div style="background:var(--gb);border:1px solid var(--b-cyan);border-radius:var(--r-sm);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;margin:16px 0 20px;box-shadow:0 0 20px var(--cyan-glow);">
-            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t90);">Total</span>
+          <div style="background:rgba(144,224,239,.08);border:1px solid var(--b-cyan);border-radius:var(--r-sm);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;margin:16px 0 20px;box-shadow:0 0 20px var(--cyan-glow);">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--t100);">Total</span>
             <span style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,var(--t100),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">{{ total|floatformat:0 }} FDJ</span>
           </div>
           {% if user.is_authenticated %}
@@ -162,10 +162,10 @@
     {% else %}
     <!-- ── PANIER VIDE ── -->
     <div style="text-align:center;padding:100px 20px;">
-      <div style="width:100px;height:100px;border-radius:50%;background:var(--glass);border:1px solid var(--b-glass);display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin:0 auto 28px;box-shadow:0 0 40px var(--cyan-glow);">
+      <div style="width:100px;height:100px;border-radius:50%;background:var(--glass);border:1px solid rgba(255,255,255,.10);display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin:0 auto 28px;box-shadow:0 0 40px var(--cyan-glow);">
         <i class="fas fa-shopping-bag" style="color:var(--cyan);font-size:2.5rem;opacity:.4;"></i>
       </div>
-      <h3 style="font-family:'Syne',sans-serif;font-weight:800;color:var(--t90);margin-bottom:10px;">Votre panier est vide</h3>
+      <h3 style="font-family:'Syne',sans-serif;font-weight:800;color:var(--t100);margin-bottom:10px;">Votre panier est vide</h3>
       <p style="color:var(--t40);margin-bottom:36px;max-width:400px;margin-left:auto;margin-right:auto;line-height:1.8;">Découvrez nos poissons frais et commencez votre sélection.</p>
       <a href="{% url 'store:product_list' %}" class="btn-cyan" style="padding:15px 40px;border-radius:30px;text-decoration:none;font-size:1rem;">
         <i class="fas fa-fish"></i>Explorer le catalogue

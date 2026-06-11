@@ -290,15 +290,18 @@
 </div>
 
 <!-- Toast notification -->
-<div id="k-toast" style="position:fixed;bottom:30px;right:24px;z-index:9999;transform:translateY(120px);transition:transform .35s cubic-bezier(.23,1,.32,1);max-width:340px;">
+<div id="k-toast" style="position:fixed;bottom:30px;right:24px;z-index:9999;transform:translateY(160px);transition:transform .35s cubic-bezier(.23,1,.32,1);max-width:340px;">
   <div style="background:rgba(13,22,40,.95);backdrop-filter:blur(20px);border:1px solid rgba(0,230,118,.3);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 40px rgba(0,0,0,.5);">
     <div style="width:38px;height:38px;border-radius:10px;background:rgba(0,230,118,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
       <i class="fas fa-check" style="color:#00E676;font-size:.9rem;"></i>
     </div>
-    <div>
+    <div style="flex:1;min-width:0;">
       <div id="toast-msg" style="font-family:'Space Grotesk',sans-serif;font-size:.88rem;font-weight:600;color:#fff;"></div>
       <div style="font-size:.75rem;color:rgba(255,255,255,.4);margin-top:2px;">Ajouté au panier</div>
     </div>
+    <button onclick="openCart();" style="flex-shrink:0;background:linear-gradient(135deg,#0072CE,#00CFFF);border:none;border-radius:8px;padding:9px 14px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:700;white-space:nowrap;cursor:pointer;transition:.2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+      <i class="fas fa-shopping-bag" style="margin-right:5px;"></i>Panier
+    </button>
   </div>
 </div>
 
@@ -508,7 +511,7 @@ function showToast(msg){
   document.getElementById('toast-msg').textContent=msg;
   t.style.transform='translateY(0)';
   clearTimeout(t._tid);
-  t._tid=setTimeout(()=>{t.style.transform='translateY(120px)';},3000);
+  t._tid=setTimeout(()=>{t.style.transform='translateY(160px)';},4000);
 }
 
 // ── AJAX add to cart ──────────────────────────────────────
@@ -534,14 +537,11 @@ function addToCart(form) {
       const tb = document.getElementById('cart-total-badge');
       if(tb) tb.textContent = data.cart_total+' FDJ';
 
-      // Toast
+      // Toast (avec bouton "Panier")
       showToast(data.product_name+' ajouté au panier !');
 
-      // Recharger le contenu du panel panier
+      // Recharger le contenu du panel panier (sans l'ouvrir)
       refreshCartPanel();
-
-      // Ouvrir le panier
-      setTimeout(openCart, 200);
     }
   })
   .catch(()=>{form.submit();})
