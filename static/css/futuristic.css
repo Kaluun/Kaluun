@@ -1104,7 +1104,7 @@ textarea.k-fi { resize: vertical; min-height: 90px; }
 .k-f-ci { list-style: none; padding: 0; }
 .k-f-ci li { display: flex; gap: 10px; color: rgba(255,255,255,.50); font-size: .85rem; margin-bottom: 10px; align-items: flex-start; }
 .k-f-ci i { color: var(--gold); flex-shrink: 0; margin-top: 2px; }
-.k-f-ci a { color: rgba(255,255,255,.50); }
+.k-f-ci a, .k-f-ci span { color: rgba(255,255,255,.50); min-width: 0; overflow-wrap: anywhere; }
 .k-f-ci a:hover { color: rgba(255,255,255,.9); }
 .k-fb-line { border-top: 1px solid rgba(255,255,255,.08); padding: 22px 0; margin-top: 60px; }
 .k-fb-line p { color: rgba(255,255,255,.30); font-size: .8rem; margin: 0; }
