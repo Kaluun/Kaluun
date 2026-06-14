@@ -14,9 +14,9 @@ services:
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
-        value: "kaluun.onrender.com"
+        value: "kaluun.onrender.com,kaluundjib.com,www.kaluundjib.com"
       - key: SITE_URL
-        value: "https://kaluun.onrender.com"
+        value: "https://kaluundjib.com"
       - key: EMAIL_HOST_USER
         value: "kaluunexpresse@gmail.com"
       - key: KALUUN_EMAIL_PASSWORD
