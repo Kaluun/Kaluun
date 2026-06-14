@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}{{ product.name }} · KALUUN{% endblock %}
+{% block meta_description %}{{ product.name }} frais à {{ product.price|floatformat:0 }} FDJ/{{ product.unit }} - {{ product.description|truncatewords:25|default:"Livraison rapide à Djibouti, fraîcheur garantie." }}{% endblock %}
+{% block og_title %}{{ product.name }} · KALUUN{% endblock %}
+{% block og_description %}{{ product.description|truncatewords:25|default:"Poisson frais, pêché à Djibouti, livré chez vous en 24h." }}{% endblock %}
+{% if product.get_image_url %}{% block og_image %}{% if 'http' in product.get_image_url %}{{ product.get_image_url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{{ product.get_image_url }}{% endif %}{% endblock %}{% endif %}
 
 {% block extra_css %}
 <style>

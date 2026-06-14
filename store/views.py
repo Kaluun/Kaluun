@@ -10,6 +10,11 @@ from .notifications import push_new_order
 from blog.models import Post
 
 
+def robots_txt(request):
+    sitemap_url = request.build_absolute_uri('/sitemap.xml')
+    return render(request, 'robots.txt', {'sitemap_url': sitemap_url}, content_type='text/plain')
+
+
 def home(request):
     slides = HeroSlide.objects.filter(is_active=True)
     featured_products = Product.objects.filter(is_featured=True, is_available=True)[:6]

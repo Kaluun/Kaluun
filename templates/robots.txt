@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /gestion/
+Disallow: /admin/
+Disallow: /comptes/
+Disallow: /panier/
+Disallow: /commander/
+Disallow: /commande/
+
+Sitemap: {{ sitemap_url }}
