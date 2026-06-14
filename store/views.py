@@ -332,8 +332,9 @@ def checkout(request):
     })
 
 
+@login_required
 def order_confirmation(request, pk):
-    order = get_object_or_404(Order, pk=pk)
+    order = get_object_or_404(Order, pk=pk, user=request.user)
     return render(request, 'store/order_confirmation.html', {'order': order})
 
 
