@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_POST
 from django.db.models import Q
 from .models import Product, Category, HeroSlide, Testimonial, Order, OrderItem, UserProfile, Notification
@@ -13,6 +13,10 @@ from blog.models import Post
 def robots_txt(request):
     sitemap_url = request.build_absolute_uri('/sitemap.xml')
     return render(request, 'robots.txt', {'sitemap_url': sitemap_url}, content_type='text/plain')
+
+
+def google_site_verification(request):
+    return HttpResponse('google-site-verification: googlee3aa1616e98b6e27.html', content_type='text/html')
 
 
 def home(request):

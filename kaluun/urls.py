@@ -16,6 +16,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
     path('robots.txt', store_views.robots_txt, name='robots_txt'),
+    path('googlee3aa1616e98b6e27.html', store_views.google_site_verification, name='google_site_verification'),
     path('', include('store.urls')),
     path('comptes/', include('accounts.urls')),
     path('gestion/', include('store.admin_urls')),
