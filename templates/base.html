@@ -90,7 +90,6 @@
     #preloader {
       background: linear-gradient(160deg, #023E8A 0%, #0077B6 40%, #00B4D8 100%);
     }
-    .pl-name { color: #fff !important; -webkit-text-fill-color: #fff !important; }
     .pl-bar { background: rgba(255,255,255,.2) !important; }
     .pl-fill { background: linear-gradient(90deg, #fff, #90E0EF) !important; }
   </style>
@@ -220,7 +219,7 @@
   <!-- Logo dans le menu mobile -->
   <img src="{% static 'images/logo-light.png' %}" width="80" alt="Kaluun"
        style="border-radius:50%;margin-bottom:8px;box-shadow:0 0 24px rgba(0,150,255,.4);object-fit:cover;">
-  <div style="font-family:'Syne',sans-serif;font-weight:800;color:#fff;letter-spacing:3px;font-size:1.1rem;margin-bottom:20px;">KALUUN</div>
+  <div style="font-family:'Russo One',sans-serif;font-weight:400;letter-spacing:4px;text-transform:uppercase;font-size:1.2rem;margin-bottom:20px;background:linear-gradient(110deg,#FFD060 0%,#fff 22%,#FFE8B8 40%,#F5A623 60%,#fff 80%,#FFD060 100%);background-size:250% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 12px rgba(245,166,35,.35));animation:k-logo-shine 5s linear infinite;">KALUUN</div>
 
   <!-- Liens navigation -->
   <a href="{% url 'store:home' %}" class="k-nl" onclick="closeMnav()"><i class="fas fa-home" style="width:20px;margin-right:8px;color:#F5A623;"></i>Accueil</a>
