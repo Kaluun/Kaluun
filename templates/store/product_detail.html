@@ -3,7 +3,7 @@
 {% block title %}{{ product.name }} · KALUUN{% endblock %}
 {% block meta_description %}{{ product.name }} frais à {{ product.price|floatformat:0 }} FDJ/{{ product.unit }} - {{ product.description|truncatewords:25|default:"Livraison rapide à Djibouti, fraîcheur garantie." }}{% endblock %}
 {% block og_title %}{{ product.name }} · KALUUN{% endblock %}
-{% block og_description %}{{ product.description|truncatewords:25|default:"Poisson frais, pêché à Djibouti, livré chez vous en 24h." }}{% endblock %}
+{% block og_description %}{{ product.description|truncatewords:25|default:"Poisson frais, pêché à Djibouti, livré chez vous en 1h gratuitement." }}{% endblock %}
 {% if product.get_image_url %}{% block og_image %}{% if 'http' in product.get_image_url %}{{ product.get_image_url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{{ product.get_image_url }}{% endif %}{% endblock %}{% endif %}
 
 {% block extra_css %}
@@ -81,7 +81,7 @@
             <i class="fas fa-shield-alt"></i>Certifié
           </span>
           <span style="display:inline-flex;align-items:center;gap:6px;background:#FFF8EC;border:1.5px solid rgba(245,166,35,.3);color:#C17D00;padding:7px 14px;border-radius:20px;font-size:.76rem;font-weight:700;font-family:'Space Grotesk',sans-serif;">
-            <i class="fas fa-truck"></i>Livraison 24h
+            <i class="fas fa-truck"></i>Livraison 1h · Gratuite
           </span>
         </div>
       </div>
@@ -198,7 +198,7 @@
             <div style="font-size:.72rem;color:#5580A0;margin-top:3px;font-family:'Space Grotesk',sans-serif;font-weight:600;">Satisfaction</div>
           </div>
           <div style="flex:1;text-align:center;padding:12px;border-right:1.5px solid rgba(0,119,182,.1);">
-            <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#0077B6,#00B4D8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">24h</div>
+            <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#0077B6,#00B4D8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">1h</div>
             <div style="font-size:.72rem;color:#5580A0;margin-top:3px;font-family:'Space Grotesk',sans-serif;font-weight:600;">Livraison</div>
           </div>
           <div style="flex:1;text-align:center;padding:12px;">
