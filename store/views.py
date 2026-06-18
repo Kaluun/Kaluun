@@ -7,6 +7,7 @@ from django.db.models import Q
 from .models import Product, Category, HeroSlide, Testimonial, Order, OrderItem, UserProfile, Notification
 from .forms import ContactForm, NewsletterForm, CheckoutForm
 from .notifications import push_new_order
+from .whatsapp import notify_new_order as wa_new_order
 from blog.models import Post
 
 
@@ -327,8 +328,9 @@ def checkout(request):
 
             request.session['cart'] = {}
 
-            # Notifications dashboard — admin (plus rapide que l'email)
+            # Notifications dashboard + WhatsApp
             push_new_order(order)
+            wa_new_order(order)
 
             messages.success(request, f'Commande #{order.pk} confirmée ! Notre équipe vous contactera rapidement.')
             return redirect('store:order_confirmation', pk=order.pk)

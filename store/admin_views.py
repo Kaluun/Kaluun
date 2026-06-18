@@ -7,6 +7,7 @@ from django.utils import timezone
 from datetime import timedelta
 from .models import Order, Product, Category, ContactMessage, OrderItem, UserProfile, ORDER_STATUS_CHOICES
 from .notifications import push_status_change
+from .whatsapp import notify_status_change as wa_status
 
 
 LOGIN_URL = '/comptes/connexion/'
@@ -106,7 +107,8 @@ def order_validate(request, pk):
     order.status = 'confirmed'
     if note: order.admin_note = note
     order.save()
-    push_status_change(order, 'confirmed')     # ← notification dashboard client
+    push_status_change(order, 'confirmed')
+    wa_status(order, 'confirmed')
     messages.success(request, f'Commande #{pk} confirmée ✅ — client notifié.')
     return redirect(request.META.get('HTTP_REFERER', 'gestadmin:orders'))
 
@@ -118,7 +120,8 @@ def order_reject(request, pk):
     order.status = 'rejected'
     if note: order.admin_note = note
     order.save()
-    push_status_change(order, 'rejected')      # ← notification dashboard client
+    push_status_change(order, 'rejected')
+    wa_status(order, 'rejected')
     messages.warning(request, f'Commande #{pk} rejetée — client notifié.')
     return redirect(request.META.get('HTTP_REFERER', 'gestadmin:orders'))
 
@@ -134,7 +137,8 @@ def order_set_status(request, pk):
         order.admin_note = note
     order.save()
     if new_status:
-        push_status_change(order, new_status)     # ← notification dashboard client
+        push_status_change(order, new_status)
+        wa_status(order, new_status)
     messages.success(request, f'Commande #{pk} → {new_status} — client notifié.')
     return redirect(request.META.get('HTTP_REFERER', 'gestadmin:orders'))
 

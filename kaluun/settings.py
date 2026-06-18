@@ -143,6 +143,15 @@ EMAIL_HOST_PASSWORD = os.environ.get('KALUUN_EMAIL_PASSWORD', '')
 
 DEFAULT_FROM_EMAIL = f'KALUUN Djibouti <{EMAIL_HOST_USER}>'
 ADMIN_EMAIL = os.environ.get('EMAIL_HOST_USER', 'kaluunexpresse@gmail.com')
+
+# ── WHATSAPP CLOUD API (Meta) ─────────────────────────────────
+WHATSAPP_TOKEN            = os.environ.get('WHATSAPP_TOKEN', '')
+WHATSAPP_PHONE_NUMBER_ID  = os.environ.get('WHATSAPP_PHONE_NUMBER_ID', '')
+WHATSAPP_ADMIN_PHONE      = os.environ.get('WHATSAPP_ADMIN_PHONE', '')   # ex: 25377XXXXXX
+WA_TPL_ORDER_CONFIRM      = os.environ.get('WA_TPL_ORDER_CONFIRM', 'kaluun_nouvelle_commande')
+WA_TPL_STATUS_CHANGE      = os.environ.get('WA_TPL_STATUS_CHANGE', 'kaluun_statut_commande')
+WA_TPL_ADMIN_NEW_ORDER    = os.environ.get('WA_TPL_ADMIN_NEW_ORDER', 'kaluun_admin_nouvelle_commande')
+
 SITE_NAME = 'KALUUN'
 SITE_URL = os.environ.get('SITE_URL', 'http://127.0.0.1:8000')
 
