@@ -67,13 +67,26 @@ TEMPLATES = [
 WSGI_APPLICATION = 'kaluun.wsgi.application'
 
 # ── BASE DE DONNÉES ───────────────────────────────────────────
-# Sur Render : DATABASE_URL est fourni automatiquement par PostgreSQL
-# En local   : SQLite par défaut
-DATABASE_URL = os.environ.get('DATABASE_URL')
-if DATABASE_URL:
+_DB_HOST = os.environ.get('DB_HOST', '')
+_DATABASE_URL = os.environ.get('DATABASE_URL', '')
+
+if _DB_HOST:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DB_NAME', 'postgres'),
+            'USER': os.environ.get('DB_USER', 'postgres'),
+            'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+            'HOST': _DB_HOST,
+            'PORT': os.environ.get('DB_PORT', '5432'),
+            'OPTIONS': {'sslmode': 'require'},
+            'CONN_MAX_AGE': 600,
+        }
+    }
+elif _DATABASE_URL:
     DATABASES = {
         'default': dj_database_url.config(
-            default=DATABASE_URL,
+            default=_DATABASE_URL,
             conn_max_age=600,
             ssl_require=True,
         )
