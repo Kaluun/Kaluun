@@ -20,12 +20,18 @@ class Command(BaseCommand):
             self.stderr.write('Erreur: OLD_DB_URL non défini')
             return
 
-        self.stdout.write('Connexion à l ancienne base...')
-        try:
-            src = psycopg2.connect(old_url, connect_timeout=15)
-            src.autocommit = True
-        except Exception as e:
-            self.stderr.write(f'Impossible de se connecter: {e}')
+        self.stdout.write(f'Connexion à l ancienne base...')
+        src = None
+        for sslmode in ['prefer', 'require', 'allow', 'disable']:
+            try:
+                src = psycopg2.connect(old_url, connect_timeout=15, sslmode=sslmode)
+                src.autocommit = True
+                self.stdout.write(f'Connecté avec sslmode={sslmode}')
+                break
+            except Exception as e:
+                self.stdout.write(f'sslmode={sslmode} échoué: {e}')
+        if src is None:
+            self.stderr.write('ECHEC: impossible de se connecter à OLD_DB_URL')
             return
 
         cur = src.cursor(cursor_factory=psycopg2.extras.DictCursor)
